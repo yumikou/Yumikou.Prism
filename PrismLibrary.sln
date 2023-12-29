@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6286A6DF-99F9-4E38-BDF9-B7999607488B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wpf", "Wpf", "{E4A6CD64-C2D1-421D-A72A-79C15B7F842A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Avalonia", "Avalonia", "{080E5422-A6C4-42B9-A7E6-8DEE061BED55}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Containers", "Containers", "{07B9417E-3EA0-4ABF-A4C0-962C6887A2CE}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Prism.DryIoc.Shared", "src\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.shproj", "{6E7EC81D-DA39-4C4F-A898-0148558C34F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prism.Core", "src\Prism.Core\Prism.Core.csproj", "{D22E5A97-B0E4-47AA-A1B4-5459BAF32327}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prism.Wpf", "src\Wpf\Prism.Wpf\Prism.Wpf.csproj", "{1B3CE9D1-A1E3-4F90-90CE-983F3F6F3C61}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prism.DryIoc.Wpf", "src\Wpf\Prism.DryIoc.Wpf\Prism.DryIoc.Wpf.csproj", "{5A11D4BD-E8B7-4AF0-A883-012D75CEE9B4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D22E5A97-B0E4-47AA-A1B4-5459BAF32327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D22E5A97-B0E4-47AA-A1B4-5459BAF32327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D22E5A97-B0E4-47AA-A1B4-5459BAF32327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D22E5A97-B0E4-47AA-A1B4-5459BAF32327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3CE9D1-A1E3-4F90-90CE-983F3F6F3C61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3CE9D1-A1E3-4F90-90CE-983F3F6F3C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3CE9D1-A1E3-4F90-90CE-983F3F6F3C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3CE9D1-A1E3-4F90-90CE-983F3F6F3C61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A11D4BD-E8B7-4AF0-A883-012D75CEE9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A11D4BD-E8B7-4AF0-A883-012D75CEE9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A11D4BD-E8B7-4AF0-A883-012D75CEE9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A11D4BD-E8B7-4AF0-A883-012D75CEE9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E4A6CD64-C2D1-421D-A72A-79C15B7F842A} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
+		{080E5422-A6C4-42B9-A7E6-8DEE061BED55} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
+		{07B9417E-3EA0-4ABF-A4C0-962C6887A2CE} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
+		{6E7EC81D-DA39-4C4F-A898-0148558C34F4} = {07B9417E-3EA0-4ABF-A4C0-962C6887A2CE}
+		{D22E5A97-B0E4-47AA-A1B4-5459BAF32327} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
+		{1B3CE9D1-A1E3-4F90-90CE-983F3F6F3C61} = {E4A6CD64-C2D1-421D-A72A-79C15B7F842A}
+		{5A11D4BD-E8B7-4AF0-A883-012D75CEE9B4} = {E4A6CD64-C2D1-421D-A72A-79C15B7F842A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6EB85636-B6BB-4F3E-8F9E-A132C8700B3F}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{5a11d4bd-e8b7-4af0-a883-012d75cee9b4}*SharedItemsImports = 5
+		src\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{6e7ec81d-da39-4c4f-a898-0148558c34f4}*SharedItemsImports = 13
+	EndGlobalSection
+EndGlobal

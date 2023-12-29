@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net40;net45;net46;net47;net6.0</TargetFrameworks>
+    <AssemblyName>Prism</AssemblyName>
+    <PackageId>Prism.Core</PackageId>
+    <RootNamespace>Prism</RootNamespace>
+    <!-- Summary is not actually supported at this time. Including the summary for future support. -->
+    <!--<Summary>Prism provides an implementation of a collection of design patterns that are helpful in writing well structured and maintainable applications.</Summary>-->
+    <Description>Prism is a fully open source version of the Prism guidance originally produced by Microsoft Patterns &amp; Practices.  Prism provides an implementation of a collection of design patterns that are helpful in writing well structured and maintainable XAML applications, including MVVM, dependency injection, commanding, event aggregation, and more. Prism's core functionality is a shared code base in a Portable Class Library targeting these platforms; WPF, and Xamarin Forms. Features that need to be platform specific are implemented in the respective libraries for the target platform.</Description>
+    <PackageTags>prism;wpf;xamarin;mvvm;xaml</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net40'"> 
+    <UseWPF>true</UseWPF> <!-- 从net45开始ICommand被迁移到System.dll，而net40还在PresentationCore.dll中，因此需要打开UseWPF -->
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+      <PackageReference Include="AsyncBridge" Version="0.3.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net40' or '$(TargetFramework)'=='net45' or '$(TargetFramework)'=='net46'">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" /> <!-- net47开始默认支持ValueTuple -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+  </ItemGroup>
+
+</Project>
