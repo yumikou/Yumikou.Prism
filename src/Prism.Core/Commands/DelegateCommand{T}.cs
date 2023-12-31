@@ -57,18 +57,17 @@ namespace Prism.Commands
             if (executeMethod == null || canExecuteMethod == null)
                 throw new ArgumentNullException(nameof(executeMethod), Resources.DelegateCommandDelegatesCannotBeNull);
 
-            TypeInfo genericTypeInfo = typeof(T).GetTypeInfo();
-
+            Type typeFromHandle = typeof(T);
             // DelegateCommand allows object or Nullable<>.  
             // note: Nullable<> is a struct so we cannot use a class constraint.
-            if (genericTypeInfo.IsValueType)
+            if (typeFromHandle.IsValueType)
             {
-                if ((!genericTypeInfo.IsGenericType) || (!typeof(Nullable<>).GetTypeInfo().IsAssignableFrom(genericTypeInfo.GetGenericTypeDefinition().GetTypeInfo())))
+                if (!typeFromHandle.IsGenericType || !typeof(Nullable<>).IsAssignableFrom(typeFromHandle.GetGenericTypeDefinition()))
                 {
                     throw new InvalidCastException(Resources.DelegateCommandInvalidGenericPayloadType);
                 }
             }
-
+            
             _executeMethod = executeMethod;
             _canExecuteMethod = canExecuteMethod;
         }

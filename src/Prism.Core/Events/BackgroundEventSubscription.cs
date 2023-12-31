@@ -1,5 +1,8 @@
 using System;
 using System.Threading.Tasks;
+#if NET40
+using Task = System.Threading.Tasks.TaskEx;
+#endif
 
 namespace Prism.Events
 {

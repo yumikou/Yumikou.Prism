@@ -38,7 +38,7 @@ namespace Prism.Commands
 
         private void GenerateNextNode()
         {
-            var nextProperty = PropertyInfo.GetValue(_inpcObject);
+            var nextProperty = PropertyInfo.GetValue(_inpcObject, null);
             if (nextProperty == null) return;
             if (!(nextProperty is INotifyPropertyChanged nextInpcObject))
                 throw new InvalidOperationException("Trying to subscribe PropertyChanged listener in object that " +

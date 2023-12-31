@@ -269,7 +269,7 @@ namespace Prism.DryIoc
         /// <param name="type">The service <see cref="Type"/></param>
         /// <returns>The resolved Service <see cref="Type"/></returns>
         public object Resolve(Type type) =>
-            Resolve(type, Array.Empty<(Type, object)>());
+            Resolve(type, ArrayEx.Empty<(Type, object)>());
 
         /// <summary>
         /// Resolves a given <see cref="Type"/>
@@ -278,7 +278,7 @@ namespace Prism.DryIoc
         /// <param name="name">The service name/key used when registering the <see cref="Type"/></param>
         /// <returns>The resolved Service <see cref="Type"/></returns>
         public object Resolve(Type type, string name) =>
-            Resolve(type, name, Array.Empty<(Type, object)>());
+            Resolve(type, name, ArrayEx.Empty<(Type, object)>());
 
         /// <summary>
         /// Resolves a given <see cref="Type"/>
@@ -396,10 +396,10 @@ namespace Prism.DryIoc
             }
 
             public object Resolve(Type type) =>
-                Resolve(type, Array.Empty<(Type, object)>());
+                Resolve(type, ArrayEx.Empty<(Type, object)>());
 
             public object Resolve(Type type, string name) =>
-                Resolve(type, name, Array.Empty<(Type, object)>());
+                Resolve(type, name, ArrayEx.Empty<(Type, object)>());
 
             public object Resolve(Type type, params (Type Type, object Instance)[] parameters)
             {

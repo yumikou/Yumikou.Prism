@@ -36,7 +36,7 @@ namespace Prism.Events
             else
             {
                 _weakReference = new WeakReference(@delegate.Target);
-                _method = @delegate.GetMethodInfo();
+                _method = @delegate.Method;
                 _delegateType = @delegate.GetType();
             }
         }
@@ -76,19 +76,19 @@ namespace Prism.Events
             {
                 return !_method.IsStatic && !_weakReference.IsAlive;
             }
-            return _weakReference.Target == @delegate.Target && Equals(_method, @delegate.GetMethodInfo());
+            return _weakReference.Target == @delegate.Target && Equals(_method, @delegate.Method);
         }
 
         private Delegate TryGetDelegate()
         {
             if (_method.IsStatic)
             {
-                return _method.CreateDelegate(_delegateType, null);
+                return Delegate.CreateDelegate(this._delegateType, null, this._method);
             }
             object target = _weakReference.Target;
             if (target != null)
             {
-                return _method.CreateDelegate(_delegateType, target);
+                return Delegate.CreateDelegate(this._delegateType, target, this._method);
             }
             return null;
         }
