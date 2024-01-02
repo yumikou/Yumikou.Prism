@@ -11,8 +11,11 @@
     <PackageTags>prism;dryioc;mvvm;wpf;xaml</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <PackageReference Include="DryIoc.dll" Version="4.8.8" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net40'">
+    <PackageReference Include="DryIoc.dll" Version="5.4.3" />
   </ItemGroup>
 
   <ItemGroup>

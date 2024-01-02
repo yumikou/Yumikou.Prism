@@ -25,7 +25,9 @@ namespace Prism.DryIoc
                                                          .With(Made.Of(FactoryMethod.ConstructorWithResolvableArguments))
                                                          .WithFuncAndLazyWithoutRegistration()
                                                          .WithTrackingDisposableTransients()
-                                                         .WithoutFastExpressionCompiler()
+#if NET40
+                                                         .WithoutFastExpressionCompiler() //net45_or_greater don't support this
+#endif
                                                          .WithFactorySelector(Rules.SelectLastRegisteredFactory());
 
         /// <summary>

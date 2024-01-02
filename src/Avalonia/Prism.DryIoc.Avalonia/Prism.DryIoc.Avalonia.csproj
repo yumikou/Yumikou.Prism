@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Prism.DryIoc</RootNamespace>
+    <TargetFrameworks>net461;netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
+    <Description>This extension is used to build Prism.Avalonia applications based on DryIoc. Users must install the Prism.Avalonia NuGet package as well.</Description>
+    <PackageTags>prism;mvvm;xaml;avalonia;dryioc;dependencyinjection;navigation;dialog;prismavalonia;</PackageTags>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DryIoc.dll" Version="5.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Prism.Avalonia\Prism.Avalonia.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems" Label="Shared" />
+
+</Project>
