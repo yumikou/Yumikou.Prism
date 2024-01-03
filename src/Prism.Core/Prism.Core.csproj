@@ -11,8 +11,8 @@
     <PackageTags>prism;wpf;xamarin;mvvm;xaml</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net40'"> 
-    <UseWPF>true</UseWPF> <!-- 从net45开始ICommand被迁移到System.dll，而net40还在PresentationCore.dll中，因此需要打开UseWPF -->
+  <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
+    <UseWPF>true</UseWPF> <!-- 从net45开始ICommand被迁移到System.dll，而net40还在PresentationCore.dll中 -->
   </PropertyGroup>
   
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">

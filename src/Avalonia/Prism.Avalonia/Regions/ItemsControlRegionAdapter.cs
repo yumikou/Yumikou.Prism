@@ -47,6 +47,8 @@ namespace Prism.Regions
                 {
                     region.Add(childItem);
                 }
+                // Control must be empty before setting ItemsSource
+                regionTarget.Items.Clear();
             }
 
             // Avalonia v11-Preview5 needs IRegion implement IList. Enforcing it to return AvaloniaList<object> fixes this.
