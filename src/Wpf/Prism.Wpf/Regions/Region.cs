@@ -352,9 +352,9 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="target">The target.</param>
         /// <param name="navigationCallback">A callback to execute when the navigation request is completed.</param>
-        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback)
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationType navigationType = NavigationType.Navigate)
         {
-            this.RequestNavigate(target, navigationCallback, null);
+            this.RequestNavigate(target, navigationCallback, null, navigationType);
         }
 
         /// <summary>
@@ -363,9 +363,9 @@ namespace Prism.Regions
         /// <param name="target">The target.</param>
         /// <param name="navigationCallback">A callback to execute when the navigation request is completed.</param>
         /// <param name="navigationParameters">The navigation parameters specific to the navigation request.</param>
-        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters)
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate)
         {
-            this.NavigationService.RequestNavigate(target, navigationCallback, navigationParameters);
+            this.NavigationService.RequestNavigate(target, navigationCallback, navigationParameters, navigationType);
         }
 
         private void InnerAdd(object view, string viewName, IRegionManager scopedRegionManager)

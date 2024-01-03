@@ -22,7 +22,7 @@ namespace Prism.Regions
         /// Convenience overloads for this method can be found as extension methods on the 
         /// <see cref="NavigationAsyncExtensions"/> class.
         /// </remarks>
-        void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback);
+        void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// Initiates navigation to the target specified by the <see cref="Uri"/>.
@@ -34,6 +34,6 @@ namespace Prism.Regions
         /// Convenience overloads for this method can be found as extension methods on the 
         /// <see cref="NavigationAsyncExtensions"/> class.
         /// </remarks>
-        void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters);
+        void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate);
     }
 }

@@ -367,7 +367,7 @@ namespace Prism.Regions
             }
             else
             {
-                navigationCallback(new NavigationResult(new NavigationContext(null, source), false));
+                navigationCallback(new NavigationResult(new NavigationContext(null, source, NavigationType.Navigate), false));
             }
         }
 
@@ -423,7 +423,7 @@ namespace Prism.Regions
             }
             else
             {
-                navigationCallback(new NavigationResult(new NavigationContext(null, target, navigationParameters), false));
+                navigationCallback(new NavigationResult(new NavigationContext(null, target, navigationParameters, NavigationType.Navigate), false));
             }
         }
 

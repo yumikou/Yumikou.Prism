@@ -87,9 +87,9 @@ namespace Prism.Regions
         /// <param name="target">The target.</param>
         /// <param name="navigationCallback">A callback to execute when the navigation request is completed.</param>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Exception is marshalled to callback")]
-        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback)
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationType navigationType = NavigationType.Navigate)
         {
-            RequestNavigate(target, navigationCallback, null);
+            RequestNavigate(target, navigationCallback, null, navigationType);
         }
 
         /// <summary>
@@ -98,22 +98,22 @@ namespace Prism.Regions
         /// <param name="target">The target.</param>
         /// <param name="navigationCallback">A callback to execute when the navigation request is completed.</param>
         /// <param name="navigationParameters">The navigation parameters specific to the navigation request.</param>
-        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters)
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate)
         {
             if (navigationCallback == null)
                 throw new ArgumentNullException(nameof(navigationCallback));
 
             try
             {
-                DoNavigate(target, navigationCallback, navigationParameters);
+                DoNavigate(target, navigationCallback, navigationParameters, navigationType);
             }
             catch (Exception e)
             {
-                NotifyNavigationFailed(new NavigationContext(this, target), navigationCallback, e);
+                NotifyNavigationFailed(new NavigationContext(this, target, navigationParameters, navigationType), navigationCallback, e);
             }
         }
 
-        private void DoNavigate(Uri source, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters)
+        private void DoNavigate(Uri source, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -121,7 +121,7 @@ namespace Prism.Regions
             if (Region == null)
                 throw new InvalidOperationException(Resources.NavigationServiceHasNoRegion);
 
-            _currentNavigationContext = new NavigationContext(this, source, navigationParameters);
+            _currentNavigationContext = new NavigationContext(this, source, navigationParameters, navigationType);
 
             // starts querying the active views
             RequestCanNavigateFromOnCurrentlyActiveView(

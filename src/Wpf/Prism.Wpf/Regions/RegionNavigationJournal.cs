@@ -78,7 +78,7 @@ namespace Prism.Regions
                             this.backStack.Pop();
                             this.CurrentEntry = entry;
                         }
-                    });
+                    }, NavigationType.GoBack);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Prism.Regions
                             this.forwardStack.Pop();
                             this.CurrentEntry = entry;
                         }
-                    });
+                    }, NavigationType.GoForward);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Prism.Regions
             this.forwardStack.Clear();
         }
 
-        private void InternalNavigate(IRegionNavigationJournalEntry entry, Action<bool> callback)
+        private void InternalNavigate(IRegionNavigationJournalEntry entry, Action<bool> callback, NavigationType navigationType)
         {
             this.isNavigatingInternal = true;
             this.NavigationTarget.RequestNavigate(
@@ -155,7 +155,7 @@ namespace Prism.Regions
                         callback(nr.Result.Value);
                     }
                 },
-                entry.Parameters);
+                entry.Parameters, navigationType);
         }
     }
 }

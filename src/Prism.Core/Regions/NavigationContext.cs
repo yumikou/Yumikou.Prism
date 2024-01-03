@@ -15,7 +15,7 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="uri">The Uri.</param>
-        public NavigationContext(IRegionNavigationService navigationService, Uri uri) : this(navigationService, uri, null)
+        public NavigationContext(IRegionNavigationService navigationService, Uri uri, NavigationType navigationType) : this(navigationService, uri, null, navigationType)
         {
         }
 
@@ -26,11 +26,12 @@ namespace Prism.Regions
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="navigationParameters">The navigation parameters.</param>
         /// <param name="uri">The Uri.</param>
-        public NavigationContext(IRegionNavigationService navigationService, Uri uri, NavigationParameters navigationParameters)
+        public NavigationContext(IRegionNavigationService navigationService, Uri uri, NavigationParameters navigationParameters, NavigationType navigationType)
         {
             NavigationService = navigationService;
             Uri = uri;
             Parameters = uri != null ? UriParsingHelper.ParseQuery(uri) : null;
+            NavigationType = navigationType;
             GetNavigationParameters(navigationParameters);
         }
 
@@ -51,6 +52,8 @@ namespace Prism.Regions
         /// </summary>
         /// <value>The URI query.</value>
         public NavigationParameters Parameters { get; private set; }
+
+        public NavigationType NavigationType { get; private set; }
 
         private void GetNavigationParameters(NavigationParameters navigationParameters)
         {
