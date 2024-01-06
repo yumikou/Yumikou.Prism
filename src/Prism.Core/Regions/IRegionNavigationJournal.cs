@@ -44,7 +44,7 @@ namespace Prism.Regions
         /// <summary>
         /// Navigates to the most recent entry in the back navigation history, or does nothing if no entry exists in back navigation.
         /// </summary>
-        void GoBack();
+        void GoBack(); //TODO: Add a isAnimation paramer 
 
         /// <summary>
         /// Navigates to the most recent entry in the forward navigation history, or does nothing if no entry exists in forward navigation.

@@ -2,13 +2,23 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>net40;net45;net46;net47;netcoreapp3.1;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net40;net45;net46;net47;netcoreapp3.1;net6.0-windows;net8.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <RootNamespace>Prism.DryIoc</RootNamespace>
-    <PackageId>Prism.DryIoc</PackageId>
-    <!--<Summary>DryIoc extensions for Prism.</Summary>-->
-    <Description>Use these extensions to build Prism applications based on DryIoc.</Description>
-    <PackageTags>prism;dryioc;mvvm;wpf;xaml</PackageTags>
+    <PackageId>Yumikou.Prism.DryIoc.Wpf</PackageId>
+    <Title>Yumikou.Prism.DryIoc.Wpf</Title>
+    <Authors>yumikou</Authors>
+    <Description>
+      Based on prism 8.1.97 and prism.avalonia 8.1.97.11000.
+      some minor changes:
+      (1) Compatible with .net framework4.0.
+      (2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation
+    </Description>
+    <PackageTags>prism;mvvm;xaml;stack;navigation;dialog;dryioc;</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>8.2.0</Version>
+    <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yumikou/PrismLibrary</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">

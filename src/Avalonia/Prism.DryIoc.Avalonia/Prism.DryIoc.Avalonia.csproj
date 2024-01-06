@@ -3,9 +3,20 @@
   <PropertyGroup>
     <RootNamespace>Prism.DryIoc</RootNamespace>
     <TargetFrameworks>net461;netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
-    <Description>This extension is used to build Prism.Avalonia applications based on DryIoc. Users must install the Prism.Avalonia NuGet package as well.</Description>
-    <PackageTags>prism;mvvm;xaml;avalonia;dryioc;dependencyinjection;navigation;dialog;prismavalonia;</PackageTags>
-    
+    <PackageId>Yumikou.Prism.DryIoc.Avalonia</PackageId>
+    <Title>Yumikou.Prism.DryIoc.Avalonia</Title>
+    <Authors>yumikou</Authors>
+    <Description>
+      Based on prism 8.1.97 and prism.avalonia 8.1.97.11000.
+      some minor changes:
+      (1) Compatible with .net framework4.0.
+      (2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation
+    </Description>
+    <PackageTags>prism;mvvm;xaml;avalonia;stack;navigation;dialog;dryioc</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>8.2.0</Version>
+    <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yumikou/PrismLibrary</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

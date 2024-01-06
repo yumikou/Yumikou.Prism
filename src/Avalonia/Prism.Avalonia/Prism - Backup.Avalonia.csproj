@@ -5,14 +5,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Prism</RootNamespace>
     <TargetFrameworks>net461;netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
-    <PackageId>Yumikou.Prism.Avalonia</PackageId>
-    <Title>Yumikou.Prism.Avalonia</Title>
+    <Title>Yumikou.Wpf.Controls</Title>
     <Authors>yumikou</Authors>
     <Description>Based on prism 8.1.97 and prism.avalonia 8.1.97.11000. 
-some minor changes: 
-(1) Compatible with .net framework4.0. 
-(2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation</Description>
-    <PackageTags>prism;mvvm;xaml;avalonia;stack;navigation;dialog;</PackageTags>
+some minor changes: (1) Compatible with .net framework4.0. (2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation</Description>
+    <PackageTags>prism;mvvm;xaml;avalonia;navigation;dialog;prismavalonia;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>8.2.0</Version>
     <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>

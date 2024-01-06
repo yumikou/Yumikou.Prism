@@ -4,13 +4,22 @@
   <PropertyGroup>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Prism</RootNamespace>
-    <TargetFrameworks>net40;net45;net46;net47;netcoreapp3.1;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net40;net45;net46;net47;netcoreapp3.1;net6.0-windows;net8.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
-    <!--<Summary>Prism libraries related to user interface composition, regions, and modularity for WPF.</Summary>-->
-    <Description>Prism is a fully open source version of the Prism guidance originally produced by Microsoft Patterns &amp; Practices. Prism provides an implementation of a collection of design patterns that are helpful in writing well structured, maintainable, and testable XAML applications, including MVVM, dependency injection, commanding, event aggregation, and more. Prism's core functionality is a shared library targeting the .NET Framework and .NET Standard. Features that need to be platform specific are implemented in the respective libraries for the target platform (WPF, Uno Platform, and Xamarin Forms).
-
-Prism.Wpf helps you more easily design and build rich, flexible, and easy to maintain Windows Presentation Foundation (WPF) desktop applications. This library provides user interface composition as well as modularity support.</Description>
-    <PackageTags>prism;mvvm;xaml;wpf</PackageTags>
+    <PackageId>Yumikou.Prism.Wpf</PackageId>
+    <Title>Yumikou.Prism.Wpf</Title>
+    <Authors>yumikou</Authors>
+    <Description>
+      Based on prism 8.1.97 and prism.avalonia 8.1.97.11000.
+      some minor changes:
+      (1) Compatible with .net framework4.0.
+      (2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation
+    </Description>
+    <PackageTags>prism;mvvm;xaml;stack;navigation;dialog;</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>8.2.0</Version>
+    <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yumikou/PrismLibrary</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
