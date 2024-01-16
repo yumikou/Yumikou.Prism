@@ -34,11 +34,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prism.DryIoc.Avalonia", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StackNavigation", "StackNavigation", "{B63053A5-0C54-4752-9F11-ED6E4F88CC17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackNavigation.Wpf", "samples\StackNavigation\StackNavigation.Wpf\StackNavigation.Wpf.csproj", "{626F3394-0F99-48BD-87BC-24CD37FC0F20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackNavigation.Wpf", "samples\StackNavigation\StackNavigation.Wpf\StackNavigation.Wpf.csproj", "{626F3394-0F99-48BD-87BC-24CD37FC0F20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackNavigation.Avalonia", "samples\StackNavigation\StackNavigation.Avalonia\StackNavigation.Avalonia.csproj", "{E7EDE4B6-58B6-4578-83FB-978CEE84A69C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackNavigation.Avalonia", "samples\StackNavigation\StackNavigation.Avalonia\StackNavigation.Avalonia.csproj", "{E7EDE4B6-58B6-4578-83FB-978CEE84A69C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackNavigation.ViewModel", "samples\StackNavigation\StackNavigation.ViewModel\StackNavigation.ViewModel.csproj", "{9EDC67BD-002F-4A5D-B3AA-7A77F8F07F1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackNavigation.ViewModel", "samples\StackNavigation\StackNavigation.ViewModel\StackNavigation.ViewModel.csproj", "{9EDC67BD-002F-4A5D-B3AA-7A77F8F07F1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InteractionDialog", "InteractionDialog", "{F2D32873-D1EC-4F80-A44D-D272641074F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractionDialog.ViewModel", "samples\InteractionDialog\InteractionDialog.ViewModel\InteractionDialog.ViewModel.csproj", "{AD1533B8-313E-4F44-96E5-3F426BFF13D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +82,10 @@ Global
 		{9EDC67BD-002F-4A5D-B3AA-7A77F8F07F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EDC67BD-002F-4A5D-B3AA-7A77F8F07F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EDC67BD-002F-4A5D-B3AA-7A77F8F07F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD1533B8-313E-4F44-96E5-3F426BFF13D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD1533B8-313E-4F44-96E5-3F426BFF13D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD1533B8-313E-4F44-96E5-3F426BFF13D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD1533B8-313E-4F44-96E5-3F426BFF13D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +104,8 @@ Global
 		{626F3394-0F99-48BD-87BC-24CD37FC0F20} = {B63053A5-0C54-4752-9F11-ED6E4F88CC17}
 		{E7EDE4B6-58B6-4578-83FB-978CEE84A69C} = {B63053A5-0C54-4752-9F11-ED6E4F88CC17}
 		{9EDC67BD-002F-4A5D-B3AA-7A77F8F07F1D} = {B63053A5-0C54-4752-9F11-ED6E4F88CC17}
+		{F2D32873-D1EC-4F80-A44D-D272641074F8} = {9D5ACEDE-FDFF-463F-8B81-AC958E30D232}
+		{AD1533B8-313E-4F44-96E5-3F426BFF13D5} = {F2D32873-D1EC-4F80-A44D-D272641074F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EB85636-B6BB-4F3E-8F9E-A132C8700B3F}

@@ -15,7 +15,7 @@
       (1) Compatible with .net framework4.0.
       (2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation
     </Description>
-    <PackageTags>prism;mvvm;xaml;stack;navigation;dialog;dryioc;</PackageTags>
+    <PackageTags>prism;mvvm;xaml;stack;navigation;dialog;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>8.2.0</Version>
     <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>
