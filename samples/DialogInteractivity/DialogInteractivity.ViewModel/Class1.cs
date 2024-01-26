@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InteractionDialog.ViewModel
+namespace DialogInteractivity.ViewModel
 {
     public class Class1
     {

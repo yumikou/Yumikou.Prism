@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace InteractionDialog.Avalonia
+namespace DialogInteractivity.Avalonia
 {
     public partial class MainWindow : Window
     {

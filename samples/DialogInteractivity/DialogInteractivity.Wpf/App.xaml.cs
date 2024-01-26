@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace InteractionDialog.Wpf
+namespace DialogInteractivity.Wpf
 {
     /// <summary>
     /// Interaction logic for App.xaml

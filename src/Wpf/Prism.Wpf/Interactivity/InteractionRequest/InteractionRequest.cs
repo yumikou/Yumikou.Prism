@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Threading.Tasks;
 using Prism.Common;
@@ -9,9 +7,7 @@ namespace Prism.Interactivity.InteractionRequest
     /// <summary>
     /// Implementation of the <see cref="IInteractionRequest"/> interface.
     /// </summary>
-    [Obsolete("Please use the new IDialogService for an improved dialog experience.")]
-    public class InteractionRequest<T> : IInteractionRequest
-        where T : INotification
+    public class InteractionRequest : IInteractionRequest
     {
         /// <summary>
         /// Fired when interaction is needed.
@@ -23,9 +19,9 @@ namespace Prism.Interactivity.InteractionRequest
         /// </summary>
         /// <param name="context">The context for the interaction request.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
-        public void Raise(T context)
+        public void Raise(Object paramter)
         {
-            this.Raise(context, c => { });
+            this.Raise(paramter, null);
         }
 
         /// <summary>
@@ -34,12 +30,12 @@ namespace Prism.Interactivity.InteractionRequest
         /// <param name="context">The context for the interaction request.</param>
         /// <param name="callback">The callback to execute when the interaction is completed.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
-        public void Raise(T context, Action<T> callback)
+        public void Raise(Object paramter, Action<Object> callback)
         {
             var handler = this.Raised;
             if (handler != null)
             {
-                handler(this, new InteractionRequestedEventArgs(context, () => { if(callback != null) callback(context); } ));
+                handler(this, new InteractionRequestedEventArgs(paramter, callback));
             }
         }
     }

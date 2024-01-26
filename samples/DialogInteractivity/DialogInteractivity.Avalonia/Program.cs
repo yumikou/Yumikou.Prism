@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace InteractionDialog.Avalonia
+namespace DialogInteractivity.Avalonia
 {
     internal class Program
     {
