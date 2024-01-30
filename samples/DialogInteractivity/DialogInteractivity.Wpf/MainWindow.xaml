@@ -3,10 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:local="clr-namespace:DialogInteractivity.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <behaviors:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding DialogInteractionRequest}">
+            <prism:PopupDialogAction></prism:PopupDialogAction>
+        </prism:InteractionRequestTrigger>
+    </behaviors:Interaction.Triggers>
     <Grid>
-
+        <prism:DialogServiceControl IsShow="{Binding IsShowDialog}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsOwnerEnabled="False" IsModal="False" DialogName="MyDialogView">
+            <behaviors:Interaction.Triggers>
+                <behaviors:EventTrigger EventName="Closed">
+                    <prism:InvokeCommandAction Command="{Binding UseDialogServiceControlClosedCommand}"></prism:InvokeCommandAction>
+                </behaviors:EventTrigger>
+            </behaviors:Interaction.Triggers>
+        </prism:DialogServiceControl>
+        
+        <StackPanel>
+            <Button Command="{Binding UseDialogServiceControlCommand}">Use DialogServiceControl</Button>
+            <Button Command="{Binding UseDialogServiceCommand}">Use DialogService</Button>
+            <Button Command="{Binding UseDialogInteractionRequestCommand}">Use DialogInteractionRequest</Button>
+        </StackPanel>
     </Grid>
 </Window>

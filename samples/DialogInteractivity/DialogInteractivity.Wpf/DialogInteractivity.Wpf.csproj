@@ -8,4 +8,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Wpf\Prism.DryIoc.Wpf\Prism.DryIoc.Wpf.csproj" />
+    <ProjectReference Include="..\DialogInteractivity.ViewModel\DialogInteractivity.ViewModel.csproj" />
+  </ItemGroup>
+
 </Project>

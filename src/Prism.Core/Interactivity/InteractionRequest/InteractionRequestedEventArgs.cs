@@ -7,23 +7,23 @@ namespace Prism.Interactivity.InteractionRequest
     /// <summary>
     /// Event args for the <see cref="IInteractionRequest.Raised"/> event.
     /// </summary>
-    public class InteractionRequestedEventArgs : EventArgs
+    public class InteractionRequestedEventArgs<T, K> : EventArgs
     {
         public InteractionRequestedEventArgs() { }
 
-        public InteractionRequestedEventArgs(Object paramter)
+        public InteractionRequestedEventArgs(T paramter)
         {
             this.Parameter = paramter;
         }
 
-        public InteractionRequestedEventArgs(Object paramter, Action<Object> callback)
+        public InteractionRequestedEventArgs(T paramter, Action<K> callback)
         {
             this.Parameter = paramter;
             this.Callback = callback;
         }
 
-        public Object Parameter { get; private set; }
+        public T Parameter { get; private set; }
 
-        public Action<Object> Callback { get; private set; }
+        public Action<K> Callback { get; private set; }
     }
 }

@@ -7,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml.Linq;
+using System.Security.Cryptography;
 
 namespace Prism.Services.Dialogs
 {
-    public class DialogServiceControl : DependencyObject
+    public class DialogServiceControl : FrameworkElement
     {
         private readonly IContainerExtension _containerExtension;
-        protected IDialogWindow _dialogWindow;
-        private bool _isShowChangedEnable = true;
-        private static readonly object _unsetOwner = new object();
+        private IDialogWindow _dialogWindow;
+        private bool _isShowChangedEnabled = true;
 
         public event EventHandler<DialogResultEventArgs> Closed;
 
@@ -29,11 +29,11 @@ namespace Prism.Services.Dialogs
                 "IsShow",
                 typeof(bool),
                 typeof(DialogServiceControl),
-                new PropertyMetadata(false, OnIsShowPropertyChanged));
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnIsShowPropertyChanged));
 
         private static void OnIsShowPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (sender is DialogServiceControl dsc && dsc._isShowChangedEnable && e.NewValue is bool isShow)
+            if (sender is DialogServiceControl dsc && dsc._isShowChangedEnabled && e.NewValue is bool isShow)
             {
                 if (isShow)
                 {
@@ -100,7 +100,7 @@ namespace Prism.Services.Dialogs
                 "Result",
                 typeof(IDialogResult),
                 typeof(DialogServiceControl),
-                new PropertyMetadata(null));
+                new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
         /// DependencyProperty for <see cref="Owner" /> property.
@@ -110,7 +110,17 @@ namespace Prism.Services.Dialogs
                 "Owner",
                 typeof(Window),
                 typeof(DialogServiceControl),
-                new PropertyMetadata(_unsetOwner));
+                new PropertyMetadata(null));
+
+        /// <summary>
+        /// DependencyProperty for <see cref="IsOwnerEnabled" /> property.
+        /// </summary>
+        public static readonly DependencyProperty IsOwnerEnabledProperty =
+            DependencyProperty.Register(
+                "IsOwnerEnabled",
+                typeof(bool),
+                typeof(DialogServiceControl),
+                new PropertyMetadata(true));
 
         /// <summary>
         /// DependencyProperty for <see cref="DialogState" /> property.
@@ -120,7 +130,7 @@ namespace Prism.Services.Dialogs
                 "DialogState",
                 typeof(DialogState),
                 typeof(DialogServiceControl),
-                new PropertyMetadata(DialogState.Closed));
+                new FrameworkPropertyMetadata(DialogState.Closed, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         #endregion
 
@@ -178,6 +188,12 @@ namespace Prism.Services.Dialogs
             set { SetValue(OwnerProperty, value); }
         }
 
+        public bool IsOwnerEnabled
+        {
+            get { return (bool)GetValue(IsOwnerEnabledProperty); }
+            set { SetValue(IsOwnerEnabledProperty, value); }
+        }
+
         public DialogState DialogState
         {
             get { return (DialogState)GetValue(DialogStateProperty); }
@@ -186,32 +202,39 @@ namespace Prism.Services.Dialogs
 
         public DialogServiceControl()
         {
+            this.Visibility = Visibility.Collapsed;
             _containerExtension = ContainerLocator.Current;
         }
 
         protected void SetCurrentIsShow(bool isShow)
         {
-            _isShowChangedEnable = false;
+            _isShowChangedEnabled = false;
             SetCurrentValue(IsShowProperty, isShow);
-            _isShowChangedEnable = true;
+            _isShowChangedEnabled = true;
         }
 
         protected virtual void Open()
         {
             if (DialogState != DialogState.Closed) { throw new InvalidOperationException("The dialog must be closed before opening."); }
 
-            SetCurrentValue(DialogStateProperty, DialogState.Opening);
+            SetCurrentValue(ResultProperty, null);
+            SetCurrentIsShow(true);
+            SetCurrentValue(DialogStateProperty, DialogState.Opened);
             _dialogWindow = CreateDialogWindow(WindowName);
             ConfigureDialogWindowEvents(_dialogWindow);
             ConfigureDialogWindowContent(DialogName, _dialogWindow, Parameters);
+            
             ShowDialogWindow(_dialogWindow, IsModal);
         }
 
         protected virtual void Close()
         {
-            if (DialogState != DialogState.Opened) { throw new InvalidOperationException("The dialog has been closed."); }
+            if (DialogState != DialogState.Loaded) { throw new InvalidOperationException("The dialog has been closed."); }
 
-            _dialogWindow.Close();
+            this.Dispatcher.BeginInvoke(() =>
+            {
+                _dialogWindow?.Close();
+            });
         }
 
         /// <summary>
@@ -222,9 +245,19 @@ namespace Prism.Services.Dialogs
         protected virtual void ShowDialogWindow(IDialogWindow dialogWindow, bool isModal)
         {
             if (isModal)
-                dialogWindow.ShowDialog();
+            {
+                this.Dispatcher.BeginInvoke(() =>
+                {
+                    dialogWindow.ShowDialog();
+                });
+            }
             else
-                dialogWindow.Show();
+            {
+                this.Dispatcher.BeginInvoke(() =>
+                {
+                    dialogWindow.Show();
+                });
+            } 
         }
 
         /// <summary>
@@ -277,7 +310,7 @@ namespace Prism.Services.Dialogs
             Action<IDialogResult> requestCloseHandler = null;
             requestCloseHandler = (o) =>
             {
-                SetCurrentValue(ResultProperty, o);
+                dialogWindow.Result = o;
                 Close();
             };
 
@@ -286,46 +319,44 @@ namespace Prism.Services.Dialogs
             {
                 dialogWindow.Loaded -= loadedHandler;
                 dialogWindow.GetDialogViewModel().RequestClose += requestCloseHandler;
-                SetCurrentIsShow(true);
-                SetCurrentValue(DialogStateProperty, DialogState.Opened);
+                SetCurrentValue(DialogStateProperty, DialogState.Loaded);
             };
             dialogWindow.Loaded += loadedHandler;
 
             CancelEventHandler closingHandler = null;
             closingHandler = (o, e) =>
             {
+                var lastDialogState = DialogState;
+                SetCurrentIsShow(false);
                 SetCurrentValue(DialogStateProperty, DialogState.Closing);
                 if (!dialogWindow.GetDialogViewModel().CanCloseDialog())
                 {
                     SetCurrentIsShow(true);
-                    SetCurrentValue(DialogStateProperty, DialogState.Opened);
+                    SetCurrentValue(DialogStateProperty, lastDialogState);
                     e.Cancel = true;
-                }    
+                }
             };
             dialogWindow.Closing += closingHandler;
 
             EventHandler closedHandler = null;
             closedHandler = (o, e) =>
             {
+                _dialogWindow = null;
                 dialogWindow.Closed -= closedHandler;
                 dialogWindow.Closing -= closingHandler;
                 dialogWindow.GetDialogViewModel().RequestClose -= requestCloseHandler;
-
                 dialogWindow.GetDialogViewModel().OnDialogClosed();
+
+                if (dialogWindow.Result == null)
+                {
+                    dialogWindow.Result = new DialogResult();
+                }
+                SetCurrentValue(DialogStateProperty, DialogState.Closed);
+                SetCurrentValue(ResultProperty, dialogWindow.Result);
+                Closed?.Invoke(this, new DialogResultEventArgs(Result));
 
                 dialogWindow.DataContext = null;
                 dialogWindow.Content = null;
-                _dialogWindow = null;
-
-                //优先级 Result > dialogWindow.Result
-                if (Result == null)
-                {
-                    SetCurrentValue(ResultProperty, dialogWindow.Result ?? new DialogResult());
-                }
-                SetCurrentIsShow(false);
-                SetCurrentValue(DialogStateProperty, DialogState.Closed);
-                Closed?.Invoke(this, new DialogResultEventArgs(Result));
-                SetCurrentValue(ResultProperty, null);
             };
             dialogWindow.Closed += closedHandler;
         }
@@ -352,16 +383,17 @@ namespace Prism.Services.Dialogs
             window.Content = dialogContent;
             window.DataContext = viewModel; //we want the host window and the dialog to share the same data context
 
-            if (Owner != _unsetOwner)
+            if (IsOwnerEnabled)
             {
-                window.Owner = Owner;
+                if (Owner != null)
+                {
+                    window.Owner = Owner;
+                }
+                else if (window.Owner == null)
+                {
+                    window.Owner = Window.GetWindow(this);
+                }
             }
-            else if (window.Owner == null)
-            {
-                window.Owner = Window.GetWindow(this);
-            }
-
-            // window.Owner = Application.Current?.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
         }
     }
 }

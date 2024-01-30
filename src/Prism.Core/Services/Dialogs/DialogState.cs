@@ -8,8 +8,8 @@ namespace Prism.Services.Dialogs
     public enum DialogState
     {
         Closed,
-        Opening,
         Opened,
+        Loaded,
         Closing
     }
 }

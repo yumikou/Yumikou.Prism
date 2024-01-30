@@ -12,11 +12,11 @@ namespace Prism.Interactivity.InteractionRequest
     /// is required so views associated with the view models can materialize the user interaction using an appropriate
     /// mechanism.
     /// </remarks>
-    public interface IInteractionRequest
+    public interface IInteractionRequest<T, K>
     {
         /// <summary>
         /// Fired when the interaction is needed.
         /// </summary>
-        event EventHandler<InteractionRequestedEventArgs> Raised;
+        event EventHandler<InteractionRequestedEventArgs<T, K>> Raised;
     }
 }
