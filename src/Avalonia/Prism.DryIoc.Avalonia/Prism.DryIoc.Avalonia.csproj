@@ -8,13 +8,15 @@
     <Authors>yumikou</Authors>
     <Description>
       Based on prism 8.1.97 and prism.avalonia 8.1.97.11000.
-      some minor changes:
+      some changes:
       (1) Compatible with .net framework4.0.
-      (2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation
+      (2) Add NavigationType to NavigationContext, which can easily use Region to implement stack navigation.
+      (3) Reintroduced the more general InteractionRequest.
+      (4) Extracted the DialogServiceControl from DialogService and supports the use of binding to manage dialogs.
     </Description>
-    <PackageTags>prism;mvvm;xaml;avalonia;stack;navigation;dialog;dryioc</PackageTags>
+    <PackageTags>prism;mvvm;xaml;avalonia;stack;navigation;dialog;dryioc;interactionrequest;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>8.2.0</Version>
+    <Version>8.2.1</Version>
     <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yumikou/PrismLibrary</RepositoryUrl>
   </PropertyGroup>
