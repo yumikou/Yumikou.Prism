@@ -1,18 +1,22 @@
 ﻿using Prism.Ioc;
 using Prism.Common;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Xml.Linq;
-using System.Security.Cryptography;
-using System.Collections.ObjectModel;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
+using Avalonia.Interactivity;
+using Avalonia.Styling;
+using DynamicData;
+using Avalonia.Markup.Xaml.XamlIl.Runtime;
+using Avalonia.Markup.Xaml;
 
 namespace Prism.Services.Dialogs
 {
-    public class DialogServiceControl : FrameworkElement
+    public class DialogServiceControl : Control
     {
         private readonly IContainerExtension _containerExtension;
         private IDialogWindow _dialogWindow;
@@ -25,14 +29,10 @@ namespace Prism.Services.Dialogs
         /// <summary>
         /// DependencyProperty for <see cref="IsShow" /> property.
         /// </summary>
-        public static readonly DependencyProperty IsShowProperty =
-            DependencyProperty.Register(
-                "IsShow",
-                typeof(bool),
-                typeof(DialogServiceControl),
-                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnIsShowPropertyChanged));
+        public static readonly StyledProperty<bool> IsShowProperty =
+            AvaloniaProperty.Register<DialogServiceControl, bool>("IsShow", false, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        private static void OnIsShowPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void OnIsShowPropertyChanged(AvaloniaObject sender, AvaloniaPropertyChangedEventArgs e)
         {
             if (sender is DialogServiceControl dsc && dsc._isShowChangedEnabled && e.NewValue is bool isShow)
             {
@@ -48,90 +48,58 @@ namespace Prism.Services.Dialogs
         }
 
         /// <summary>
-        /// Determines if the content should be shown in a modal window or not.
+        /// DependencyProperty for <see cref="IsModal" /> property.
         /// </summary>
-        public static readonly DependencyProperty IsModalProperty =
-            DependencyProperty.Register(
-                "IsModal",
-                typeof(bool),
-                typeof(DialogServiceControl),
-                new PropertyMetadata(false));
+        public static readonly StyledProperty<bool> IsModalProperty =
+            AvaloniaProperty.Register<DialogServiceControl, bool>("IsModal", false);
 
         /// <summary>
         /// DependencyProperty for <see cref="DialogName" /> property.
         /// </summary>
-        public static readonly DependencyProperty DialogNameProperty =
-            DependencyProperty.Register(
-                "DialogName",
-                typeof(string),
-                typeof(DialogServiceControl),
-                new PropertyMetadata(null));
+        public static readonly StyledProperty<string> DialogNameProperty =
+            AvaloniaProperty.Register<DialogServiceControl, string>("DialogName", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="WindowName" /> property.
         /// </summary>
-        public static readonly DependencyProperty WindowNameProperty =
-            DependencyProperty.Register(
-                "WindowName",
-                typeof(string),
-                typeof(DialogServiceControl),
-                new PropertyMetadata(null));
+        public static readonly StyledProperty<string> WindowNameProperty =
+            AvaloniaProperty.Register<DialogServiceControl, string>("WindowName", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="WindowStyle" /> property.
         /// </summary>
-        public static readonly DependencyProperty WindowStyleProperty =
-            Dialog.WindowStyleProperty.AddOwner(typeof(DialogServiceControl));
+        public static readonly StyledProperty<Style> WindowStyleProperty =
+            Dialog.WindowStyleProperty.AddOwner<DialogServiceControl>();
 
         /// <summary>
         /// DependencyProperty for <see cref="Parameters" /> property.
         /// </summary>
-        public static readonly DependencyProperty ParametersProperty =
-            DependencyProperty.Register(
-                "Parameters",
-                typeof(IDialogParameters),
-                typeof(DialogServiceControl),
-                new PropertyMetadata(null));
+        public static readonly StyledProperty<IDialogParameters> ParametersProperty =
+            AvaloniaProperty.Register<DialogServiceControl, IDialogParameters>("Parameters", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="Result" /> property.
         /// </summary>
-        public static readonly DependencyProperty ResultProperty =
-            DependencyProperty.Register(
-                "Result",
-                typeof(IDialogResult),
-                typeof(DialogServiceControl),
-                new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly StyledProperty<IDialogResult> ResultProperty =
+            AvaloniaProperty.Register<DialogServiceControl, IDialogResult>("Result", null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         /// <summary>
         /// DependencyProperty for <see cref="Owner" /> property.
         /// </summary>
-        public static readonly DependencyProperty OwnerProperty =
-            DependencyProperty.Register(
-                "Owner",
-                typeof(Window),
-                typeof(DialogServiceControl),
-                new PropertyMetadata(null));
+        public static readonly StyledProperty<Window> OwnerProperty =
+            AvaloniaProperty.Register<DialogServiceControl, Window>("Owner", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="IsOwnerEnabled" /> property.
         /// </summary>
-        public static readonly DependencyProperty IsOwnerEnabledProperty =
-            DependencyProperty.Register(
-                "IsOwnerEnabled",
-                typeof(bool),
-                typeof(DialogServiceControl),
-                new PropertyMetadata(true));
+        public static readonly StyledProperty<bool> IsOwnerEnabledProperty =
+            AvaloniaProperty.Register<DialogServiceControl, bool>("IsOwnerEnabled", true);
 
         /// <summary>
         /// DependencyProperty for <see cref="DialogState" /> property.
         /// </summary>
-        public static readonly DependencyProperty DialogStateProperty =
-            DependencyProperty.Register(
-                "DialogState",
-                typeof(DialogState),
-                typeof(DialogServiceControl),
-                new FrameworkPropertyMetadata(DialogState.Closed, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly StyledProperty<DialogState> DialogStateProperty =
+            AvaloniaProperty.Register<DialogServiceControl, DialogState>("DialogState", DialogState.Closed, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         #endregion
 
@@ -141,7 +109,9 @@ namespace Prism.Services.Dialogs
         public bool IsShow
         {
             get { return (bool)GetValue(IsShowProperty); }
-            set { SetValue(IsShowProperty, value); }
+            set { 
+                SetValue(IsShowProperty, value);
+            }
         }
 
         /// <summary>
@@ -167,7 +137,7 @@ namespace Prism.Services.Dialogs
 
         public Style WindowStyle
         {
-            get { return (Style)GetValue(WindowStyleProperty); }
+            get { return GetValue(WindowStyleProperty); }
             set { SetValue(WindowStyleProperty, value); }
         }
 
@@ -201,9 +171,15 @@ namespace Prism.Services.Dialogs
             protected set { SetValue(DialogStateProperty, value); }
         }
 
+        static DialogServiceControl()
+        {
+            IsShowProperty.Changed.Subscribe(args => OnIsShowPropertyChanged(args?.Sender, args));
+        }
+
         public DialogServiceControl()
         {
-            this.Visibility = Visibility.Collapsed;
+            this.IsVisible = false;
+            
             _containerExtension = ContainerLocator.Current;
         }
 
@@ -232,10 +208,7 @@ namespace Prism.Services.Dialogs
         {
             if (DialogState != DialogState.Loaded) { throw new InvalidOperationException("The dialog has been closed."); }
 
-            this.Dispatcher.BeginInvoke(() =>
-            {
-                _dialogWindow?.Close();
-            });
+            _dialogWindow?.Close();
         }
 
         /// <summary>
@@ -245,32 +218,34 @@ namespace Prism.Services.Dialogs
         /// <param name="isModal">If true; dialog is shown as a modal</param>
         protected virtual void ShowDialogWindow(IDialogWindow dialogWindow, bool isModal)
         {
+            Window ownerWindow = null;
             if (IsOwnerEnabled)
             {
                 if (Owner != null)
                 {
-                    dialogWindow.Owner = Owner;
+                    ownerWindow = Owner;
                 }
                 else if (dialogWindow.Owner == null)
                 {
-                    dialogWindow.Owner = Window.GetWindow(this);
+                    ownerWindow = Window.GetTopLevel(this) as Window;
                 }
             }
 
             if (isModal)
             {
-                this.Dispatcher.BeginInvoke(() =>
-                {
-                    dialogWindow.ShowDialog();
-                });
+                dialogWindow.ShowDialog(ownerWindow);
             }
             else
             {
-                this.Dispatcher.BeginInvoke(() =>
+                if (ownerWindow != null)
+                {
+                    dialogWindow.Show(ownerWindow);
+                }
+                else
                 {
                     dialogWindow.Show();
-                });
-            } 
+                }
+            }
         }
 
         /// <summary>
@@ -300,7 +275,7 @@ namespace Prism.Services.Dialogs
             }
 
             var content = _containerExtension.Resolve<object>(dialogName);
-            if (!(content is FrameworkElement dialogContent))
+            if (!(content is Avalonia.Controls.Control dialogContent))
                 throw new NullReferenceException("A dialog's content must be a FrameworkElement");
 
             MvvmHelpers.AutowireViewModel(dialogContent);
@@ -327,7 +302,7 @@ namespace Prism.Services.Dialogs
                 Close();
             };
 
-            RoutedEventHandler loadedHandler = null;
+            EventHandler<RoutedEventArgs> loadedHandler = null;
             loadedHandler = (o, e) =>
             {
                 dialogWindow.Loaded -= loadedHandler;
@@ -336,7 +311,7 @@ namespace Prism.Services.Dialogs
             };
             dialogWindow.Loaded += loadedHandler;
 
-            CancelEventHandler closingHandler = null;
+            EventHandler<WindowClosingEventArgs> closingHandler = null;
             closingHandler = (o, e) =>
             {
                 var lastDialogState = DialogState;
@@ -380,21 +355,47 @@ namespace Prism.Services.Dialogs
         /// <param name="window">The hosting window.</param>
         /// <param name="dialogContent">The dialog to show.</param>
         /// <param name="viewModel">The dialog's ViewModel.</param>
-        protected virtual void ConfigureDialogWindowProperties(IDialogWindow window, FrameworkElement dialogContent, IDialogAware viewModel)
+        protected virtual void ConfigureDialogWindowProperties(IDialogWindow window, Avalonia.Controls.Control dialogContent, IDialogAware viewModel)
         {
+            var dialogWindowStyle = Dialog.GetWindowStyle(dialogContent);
+            if (dialogWindowStyle != null)
+            {
+                window.Styles?.Add(dialogWindowStyle);
+            }
             if (WindowStyle != null)
             {
-                window.Style = WindowStyle;
-            }
-            else
-            {
-                var windowStyle = Dialog.GetWindowStyle(dialogContent);
-                if (windowStyle != null)
-                    window.Style = windowStyle;
+                window.Styles?.Add(WindowStyleClone(WindowStyle));
             }
 
             window.Content = dialogContent;
             window.DataContext = viewModel; //we want the host window and the dialog to share the same data context
+        }
+
+        protected Style WindowStyleClone(Style source)
+        {
+            if (source == null) { return null; }
+            
+            Style resultStyle = new Style();
+            resultStyle.Selector = source.Selector;
+
+            foreach (var ani in source.Animations)
+            {
+                resultStyle.Animations.Add(ani);
+            }
+            foreach (var chi in source.Children)
+            {
+                resultStyle.Children.Add(chi);
+            }
+            foreach (var res in source.Resources)
+            {
+                resultStyle.Resources.Add(res);
+            }
+            foreach (var set in source.Setters)
+            {
+                resultStyle.Setters.Add(set);
+            }
+            
+            return resultStyle;
         }
     }
 }

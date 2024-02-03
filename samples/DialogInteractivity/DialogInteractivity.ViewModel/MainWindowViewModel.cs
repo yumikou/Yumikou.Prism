@@ -14,6 +14,7 @@ namespace DialogInteractivity.ViewModel
         public DelegateCommand UseDialogServiceControlClosedCommand { get; set; }
 
         public DelegateCommand UseDialogServiceCommand { get; set; }
+
         public DelegateCommand UseDialogInteractionRequestCommand { get; set; }
 
         public MainWindowViewModel(IDialogService dialogService)

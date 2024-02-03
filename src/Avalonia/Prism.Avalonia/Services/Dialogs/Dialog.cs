@@ -12,8 +12,8 @@ namespace Prism.Services.Dialogs
     {
         /// <summary>Identifies the WindowStyle attached property.</summary>
         /// <remarks>This attached property is used to specify the style of a <see cref="IDialogWindow"/>.</remarks>
-        public static readonly AvaloniaProperty WindowStyleProperty =
-            AvaloniaProperty.RegisterAttached<AvaloniaObject, Style>("WindowStyle", typeof(Dialog));
+        public static readonly StyledProperty<Style> WindowStyleProperty =
+            AvaloniaProperty.RegisterAttached<Dialog, AvaloniaObject, Style>("WindowStyle");
 
         /// <summary>Identifies the WindowStartupLocation attached property.</summary>
         /// <remarks>This attached property is used to specify the startup location of a <see cref="IDialogWindow"/>.</remarks>
@@ -22,7 +22,7 @@ namespace Prism.Services.Dialogs
                 name: "WindowStartupLocation",
                 ownerType: typeof(Dialog));
 
-        public Dialog()
+        static Dialog()
         {
             WindowStartupLocationProperty.Changed.Subscribe(args => OnWindowStartupLocationChanged(args?.Sender, args));
         }
@@ -34,7 +34,7 @@ namespace Prism.Services.Dialogs
         /// <returns>The <see cref="WindowStyleProperty"/> attached to the <paramref name="obj"/> element.</returns>
         public static Style GetWindowStyle(AvaloniaObject obj)
         {
-            return (Style)obj.GetValue(WindowStyleProperty);
+            return obj.GetValue(WindowStyleProperty);
         }
 
         /// <summary>

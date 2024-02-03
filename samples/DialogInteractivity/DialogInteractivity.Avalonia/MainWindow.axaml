@@ -2,8 +2,36 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DialogInteractivity.Avalonia.MainWindow"
+        x:Name="mainWindow"
         Title="DialogInteractivity.Avalonia">
-    Welcome to Avalonia!
+  <i:Interaction.Behaviors>
+    <prism:InteractionRequestTriggerBehavior SourceObject="{Binding DialogInteractionRequest}">
+      <prism:PopupDialogAction Owner="{Binding ElementName=mainWindow}"></prism:PopupDialogAction>
+    </prism:InteractionRequestTriggerBehavior>
+  </i:Interaction.Behaviors>
+  <Grid>
+    <prism:DialogServiceControl IsShow="{Binding IsShowDialog}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsOwnerEnabled="False" IsModal="False" DialogName="MyDialogView">
+      <prism:DialogServiceControl.WindowStyle>
+        <Style Selector="Window">
+          <Setter Property="Background" Value="Yellow" />
+        </Style>
+      </prism:DialogServiceControl.WindowStyle>
+      <i:Interaction.Behaviors>
+        <ia:EventTriggerBehavior EventName="Closed">
+          <ia:InvokeCommandAction Command="{Binding UseDialogServiceControlClosedCommand}"></ia:InvokeCommandAction>
+        </ia:EventTriggerBehavior>
+      </i:Interaction.Behaviors>
+    </prism:DialogServiceControl>
+    <StackPanel>
+      <Button Command="{Binding UseDialogServiceControlCommand}">Use DialogServiceControl</Button>
+      <Button Command="{Binding UseDialogServiceCommand}">Use DialogService</Button>
+      <Button Command="{Binding UseDialogInteractionRequestCommand}">Use DialogInteractionRequest</Button>
+    </StackPanel>
+  </Grid>
 </Window>

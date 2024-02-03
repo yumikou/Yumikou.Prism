@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Styling;
 
 namespace Prism.Services.Dialogs
@@ -31,6 +32,11 @@ namespace Prism.Services.Dialogs
         void Show();
 
         /// <summary>
+        /// Show a non-modal dialog.
+        /// </summary>
+        void Show(Window owner);
+
+        /// <summary>
         /// Show a modal dialog.
         /// </summary>
         /// <returns></returns>
@@ -51,7 +57,7 @@ namespace Prism.Services.Dialogs
         ///     Window > WindowBase > TopLevel > Control > InputElement > Interactive > layout > Visual > StyledElement.Initialized
         /// </remarks>
         //// WPF: event RoutedEventHandler Loaded;
-        event EventHandler Opened;
+        event EventHandler<RoutedEventArgs> Loaded;
 
         /// <summary>
         /// Called when the window is closed.
@@ -76,5 +82,7 @@ namespace Prism.Services.Dialogs
         // WPF: Window > ContentControl > FrameworkElement
         // Ava: Window > WindowBase > TopLevel > ContentControl > TemplatedControl > Control
         //Style Style { get; set; }
+
+        Styles Styles { get; }
     }
 }

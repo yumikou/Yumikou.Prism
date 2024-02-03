@@ -1,42 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using Prism.Interactivity.InteractionRequest;
+﻿using Prism.Interactivity.InteractionRequest;
 using Prism.Services.Dialogs;
 using System.Xml.Linq;
-#if NET40
-using System.Windows.Interactivity;
-#else
-using Microsoft.Xaml.Behaviors;
-#endif
+using Avalonia.Xaml.Interactivity;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Styling;
 
 namespace Prism.Interactivity
 {
-    public class PopupDialogAction : TriggerAction<FrameworkElement>
+    public class PopupDialogAction : AvaloniaObject, IAction
     {
         /// <summary>
         /// DependencyProperty for <see cref="WindowStyle" /> property.
         /// </summary>
-        public static readonly DependencyProperty WindowStyleProperty =
-            DialogServiceControl.WindowStyleProperty.AddOwner(typeof(PopupDialogAction));
+        public static readonly StyledProperty<Style> WindowStyleProperty =
+            DialogServiceControl.WindowStyleProperty.AddOwner<PopupDialogAction>();
 
         /// <summary>
         /// DependencyProperty for <see cref="Owner" /> property.
         /// </summary>
-        public static readonly DependencyProperty OwnerProperty =
-            DialogServiceControl.OwnerProperty.AddOwner(typeof(PopupDialogAction));
+        public static readonly StyledProperty<Window> OwnerProperty =
+            DialogServiceControl.OwnerProperty.AddOwner<PopupDialogAction>();
 
         /// <summary>
         /// DependencyProperty for <see cref="IsOwnerEnabled" /> property.
         /// </summary>
-        public static readonly DependencyProperty IsOwnerEnabledProperty =
-            DialogServiceControl.IsOwnerEnabledProperty.AddOwner(typeof(PopupDialogAction));
+        public static readonly StyledProperty<bool> IsOwnerEnabledProperty =
+            DialogServiceControl.IsOwnerEnabledProperty.AddOwner<PopupDialogAction>();
 
         public Style WindowStyle
         {
-            get { return (Style)GetValue(WindowStyleProperty); }
+            get { return GetValue(WindowStyleProperty); }
             set { SetValue(WindowStyleProperty, value); }
         }
 
@@ -52,7 +46,7 @@ namespace Prism.Interactivity
             set { SetValue(IsOwnerEnabledProperty, value); }
         }
 
-        protected override void Invoke(object parameter)
+        public object Execute(object sender, object parameter)
         {
             if (parameter is InteractionRequestedEventArgs<DialogNotification, IDialogResult> args && args.Parameter is not null)
             {
@@ -67,9 +61,9 @@ namespace Prism.Interactivity
                     {
                         dialogServiceControl.Owner = Owner;
                     }
-                    else if (this.AssociatedObject is not null)
+                    else
                     {
-                        dialogServiceControl.Owner = Window.GetWindow(this.AssociatedObject);
+                        //dialogServiceControl.Owner= // avalonia的triggerAction无法获取AssociatedObject，因此无法自动查找所在的Window
                     }
                 }
                 dialogServiceControl.IsModal = args.Parameter.IsModal;
@@ -79,7 +73,9 @@ namespace Prism.Interactivity
                 };
 
                 dialogServiceControl.IsShow = true;
+                return true;
             }
+            return false;
         }
     }
 }
