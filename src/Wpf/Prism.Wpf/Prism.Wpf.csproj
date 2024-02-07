@@ -19,7 +19,7 @@
     </Description>
     <PackageTags>prism;mvvm;xaml;stack;navigation;dialog;interactionrequest;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>8.2.1</Version>
+    <Version>8.2.2</Version>
     <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yumikou/PrismLibrary</RepositoryUrl>
   </PropertyGroup>
