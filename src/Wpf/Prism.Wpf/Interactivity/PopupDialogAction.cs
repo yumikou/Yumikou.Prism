@@ -78,7 +78,7 @@ namespace Prism.Interactivity
                     args.Callback?.Invoke(o.DialogResult);
                 };
 
-                dialogServiceControl.IsShow = true;
+                dialogServiceControl.Open(args.Parameter.IsBlocked);
             }
         }
     }

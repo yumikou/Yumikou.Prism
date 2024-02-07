@@ -44,13 +44,13 @@ namespace DialogInteractivity.ViewModel
             set { SetProperty<IDialogResult>(ref _dialogResult, value); }
         }
 
-        private bool _isShowDialog = false;
-        public bool IsShowDialog
+        private bool _isShow = false;
+        public bool IsShow
         {
-            get { return _isShowDialog; }
+            get { return _isShow; }
             set
             {
-                SetProperty<bool>(ref _isShowDialog, value);
+                SetProperty<bool>(ref _isShow, value);
             }
         }
 
@@ -58,7 +58,7 @@ namespace DialogInteractivity.ViewModel
         {
             DialogParameters = new DialogParameters();
             DialogParameters.Add("Title", "UseDialogServiceControl");
-            IsShowDialog = !IsShowDialog;
+            IsShow = !IsShow;
         }
 
         private void OnUseDialogServiceControlClosed()

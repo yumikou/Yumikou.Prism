@@ -16,7 +16,7 @@
     </prism:InteractionRequestTriggerBehavior>
   </i:Interaction.Behaviors>
   <Grid>
-    <prism:DialogServiceControl IsShow="{Binding IsShowDialog}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsOwnerEnabled="False" IsModal="False" DialogName="MyDialogView">
+    <prism:DialogServiceControl IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsOwnerEnabled="False" IsModal="False" DialogName="MyDialogView">
       <prism:DialogServiceControl.WindowStyle>
         <Style Selector="Window">
           <Setter Property="Background" Value="Yellow" />

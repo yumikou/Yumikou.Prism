@@ -15,7 +15,7 @@
         </prism:InteractionRequestTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
-        <prism:DialogServiceControl IsShow="{Binding IsShowDialog}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsOwnerEnabled="False" IsModal="False" DialogName="MyDialogView">
+        <prism:DialogServiceControl IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsModal="False" DialogName="MyDialogView">
             <behaviors:Interaction.Triggers>
                 <behaviors:EventTrigger EventName="Closed">
                     <prism:InvokeCommandAction Command="{Binding UseDialogServiceControlClosedCommand}"></prism:InvokeCommandAction>

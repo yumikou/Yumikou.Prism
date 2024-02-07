@@ -77,6 +77,16 @@ namespace Prism.Services.Dialogs
             ShowDialogInternal(name, parameters, callback, true, windowName);
         }
 
+        public Task<IDialogResult> ShowDialogAsync(string name, IDialogParameters parameters)
+        {
+            return ShowDialogInternalAsync(name, parameters, true);
+        }
+
+        public Task<IDialogResult> ShowDialogAsync(string name, IDialogParameters parameters, string windowName)
+        {
+            return ShowDialogInternalAsync(name, parameters, true, windowName);
+        }
+
         void ShowDialogInternal(string name, IDialogParameters parameters, Action<IDialogResult> callback, bool isModal, string windowName = null)
         {
             DialogServiceControl dialogServiceControl = new DialogServiceControl();
@@ -89,7 +99,24 @@ namespace Prism.Services.Dialogs
             {
                 callback?.Invoke(args.DialogResult);
             };
-            dialogServiceControl.IsShow = true;
+            dialogServiceControl.Open(true);
+        }
+
+        Task<IDialogResult> ShowDialogInternalAsync(string name, IDialogParameters parameters, bool isModal, string windowName = null)
+        {
+            TaskCompletionSource<IDialogResult> tcs = new TaskCompletionSource<IDialogResult>();
+            DialogServiceControl dialogServiceControl = new DialogServiceControl();
+            dialogServiceControl.WindowName = windowName;
+            dialogServiceControl.DialogName = name;
+            dialogServiceControl.Parameters = parameters;
+            dialogServiceControl.Owner = GetActiveWindow();
+            dialogServiceControl.IsModal = isModal;
+            dialogServiceControl.Closed += (sender, args) =>
+            {
+                tcs.SetResult(args.DialogResult);
+            };
+            dialogServiceControl.Open(false);
+            return tcs.Task;
         }
 
         private static Window GetActiveWindow()

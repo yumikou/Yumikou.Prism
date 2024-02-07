@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Prism.Services.Dialogs
 {
@@ -48,6 +49,11 @@ namespace Prism.Services.Dialogs
         public static void ShowDialog(this IDialogService dialogService, string name, Action<IDialogResult> callback)
         {
             dialogService.ShowDialog(name, new DialogParameters(), callback);
+        }
+
+        public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name)
+        {
+            return dialogService.ShowDialogAsync(name, new DialogParameters());
         }
     }
 }

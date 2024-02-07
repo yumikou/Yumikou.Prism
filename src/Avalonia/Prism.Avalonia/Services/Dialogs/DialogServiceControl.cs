@@ -20,25 +20,26 @@ namespace Prism.Services.Dialogs
     {
         private readonly IContainerExtension _containerExtension;
         private IDialogWindow _dialogWindow;
-        private bool _isShowChangedEnabled = true;
+        private bool _isShowAsyncChangedEnabled = true;
+        private DispatcherFrame _modalDialogDispatcherFrame;
 
         public event EventHandler<DialogResultEventArgs> Closed;
 
         #region DependencyProperty
 
         /// <summary>
-        /// DependencyProperty for <see cref="IsShow" /> property.
+        /// DependencyProperty for <see cref="IsShowAsync" /> property.
         /// </summary>
-        public static readonly StyledProperty<bool> IsShowProperty =
-            AvaloniaProperty.Register<DialogServiceControl, bool>("IsShow", false, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
+        public static readonly StyledProperty<bool> IsShowAsyncProperty =
+            AvaloniaProperty.Register<DialogServiceControl, bool>("IsShowAsync", false, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-        private static void OnIsShowPropertyChanged(AvaloniaObject sender, AvaloniaPropertyChangedEventArgs e)
+        private static void OnIsShowAsyncPropertyChanged(AvaloniaObject sender, AvaloniaPropertyChangedEventArgs e)
         {
-            if (sender is DialogServiceControl dsc && dsc._isShowChangedEnabled && e.NewValue is bool isShow)
+            if (sender is DialogServiceControl dsc && dsc._isShowAsyncChangedEnabled && e.NewValue is bool isShow)
             {
                 if (isShow)
                 {
-                    dsc.Open();
+                    dsc.Open(false);
                 }
                 else
                 {
@@ -106,11 +107,11 @@ namespace Prism.Services.Dialogs
         /// <summary>
         /// Dialog is show.
         /// </summary>
-        public bool IsShow
+        public bool IsShowAsync
         {
-            get { return (bool)GetValue(IsShowProperty); }
+            get { return (bool)GetValue(IsShowAsyncProperty); }
             set { 
-                SetValue(IsShowProperty, value);
+                SetValue(IsShowAsyncProperty, value);
             }
         }
 
@@ -173,7 +174,7 @@ namespace Prism.Services.Dialogs
 
         static DialogServiceControl()
         {
-            IsShowProperty.Changed.Subscribe(args => OnIsShowPropertyChanged(args?.Sender, args));
+            IsShowAsyncProperty.Changed.Subscribe(args => OnIsShowAsyncPropertyChanged(args?.Sender, args));
         }
 
         public DialogServiceControl()
@@ -183,28 +184,28 @@ namespace Prism.Services.Dialogs
             _containerExtension = ContainerLocator.Current;
         }
 
-        protected void SetCurrentIsShow(bool isShow)
+        protected void SetCurrentIsShowAsync(bool isShow)
         {
-            _isShowChangedEnabled = false;
-            SetCurrentValue(IsShowProperty, isShow);
-            _isShowChangedEnabled = true;
+            _isShowAsyncChangedEnabled = false;
+            SetCurrentValue(IsShowAsyncProperty, isShow);
+            _isShowAsyncChangedEnabled = true;
         }
 
-        protected virtual void Open()
+        public virtual void Open(bool isBlockedModal)
         {
             if (DialogState != DialogState.Closed) { throw new InvalidOperationException("The dialog must be closed before opening."); }
 
             SetCurrentValue(ResultProperty, null);
-            SetCurrentIsShow(true);
+            SetCurrentIsShowAsync(true);
             SetCurrentValue(DialogStateProperty, DialogState.Opening);
             _dialogWindow = CreateDialogWindow(WindowName);
             ConfigureDialogWindowEvents(_dialogWindow);
             ConfigureDialogWindowContent(DialogName, _dialogWindow, Parameters);
             
-            ShowDialogWindow(_dialogWindow, IsModal);
+            ShowDialogWindow(_dialogWindow, IsModal, isBlockedModal);
         }
 
-        protected virtual void Close()
+        public virtual void Close()
         {
             if (DialogState != DialogState.Loaded) { throw new InvalidOperationException("The dialog has been closed."); }
 
@@ -216,7 +217,7 @@ namespace Prism.Services.Dialogs
         /// </summary>
         /// <param name="dialogWindow">The dialog window to show.</param>
         /// <param name="isModal">If true; dialog is shown as a modal</param>
-        protected virtual void ShowDialogWindow(IDialogWindow dialogWindow, bool isModal)
+        protected virtual void ShowDialogWindow(IDialogWindow dialogWindow, bool isModal, bool isBlockedModal)
         {
             Window ownerWindow = null;
             if (IsOwnerEnabled)
@@ -233,7 +234,16 @@ namespace Prism.Services.Dialogs
 
             if (isModal)
             {
-                dialogWindow.ShowDialog(ownerWindow);
+                if (isBlockedModal)
+                {
+                    _modalDialogDispatcherFrame = new DispatcherFrame();
+                    dialogWindow.ShowDialog(ownerWindow);
+                    Dispatcher.UIThread.PushFrame(_modalDialogDispatcherFrame);
+                }
+                else
+                {
+                    dialogWindow.ShowDialog(ownerWindow);
+                }
             }
             else
             {
@@ -315,11 +325,11 @@ namespace Prism.Services.Dialogs
             closingHandler = (o, e) =>
             {
                 var lastDialogState = DialogState;
-                SetCurrentIsShow(false);
+                SetCurrentIsShowAsync(false);
                 SetCurrentValue(DialogStateProperty, DialogState.Closing);
                 if (!dialogWindow.GetDialogViewModel().CanCloseDialog())
                 {
-                    SetCurrentIsShow(true);
+                    SetCurrentIsShowAsync(true);
                     SetCurrentValue(DialogStateProperty, lastDialogState);
                     e.Cancel = true;
                 }
@@ -345,6 +355,11 @@ namespace Prism.Services.Dialogs
 
                 dialogWindow.DataContext = null;
                 dialogWindow.Content = null;
+                if (_modalDialogDispatcherFrame != null)
+                {
+                    _modalDialogDispatcherFrame.Continue = false;
+                    _modalDialogDispatcherFrame = null;
+                }
             };
             dialogWindow.Closed += closedHandler;
         }

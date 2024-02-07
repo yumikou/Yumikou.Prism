@@ -16,29 +16,29 @@ namespace Prism.Services.Dialogs
     {
         private readonly IContainerExtension _containerExtension;
         private IDialogWindow _dialogWindow;
-        private bool _isShowChangedEnabled = true;
+        private bool _isShowAsyncChangedEnabled = true;
 
         public event EventHandler<DialogResultEventArgs> Closed;
 
         #region DependencyProperty
 
         /// <summary>
-        /// DependencyProperty for <see cref="IsShow" /> property.
+        /// DependencyProperty for <see cref="IsShowAsync" /> property.
         /// </summary>
-        public static readonly DependencyProperty IsShowProperty =
+        public static readonly DependencyProperty IsShowAsyncProperty =
             DependencyProperty.Register(
-                "IsShow",
+                "IsShowAsync",
                 typeof(bool),
                 typeof(DialogServiceControl),
-                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnIsShowPropertyChanged));
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnIsShowAsyncPropertyChanged));
 
-        private static void OnIsShowPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void OnIsShowAsyncPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (sender is DialogServiceControl dsc && dsc._isShowChangedEnabled && e.NewValue is bool isShow)
+            if (sender is DialogServiceControl dsc && dsc._isShowAsyncChangedEnabled && e.NewValue is bool isShow)
             {
                 if (isShow)
                 {
-                    dsc.Open();
+                    dsc.Open(false);
                 }
                 else
                 {
@@ -138,10 +138,10 @@ namespace Prism.Services.Dialogs
         /// <summary>
         /// Dialog is show.
         /// </summary>
-        public bool IsShow
+        public bool IsShowAsync
         {
-            get { return (bool)GetValue(IsShowProperty); }
-            set { SetValue(IsShowProperty, value); }
+            get { return (bool)GetValue(IsShowAsyncProperty); }
+            set { SetValue(IsShowAsyncProperty, value); }
         }
 
         /// <summary>
@@ -207,35 +207,35 @@ namespace Prism.Services.Dialogs
             _containerExtension = ContainerLocator.Current;
         }
 
-        protected void SetCurrentIsShow(bool isShow)
+        protected void SetCurrentIsShowAsync(bool isShow)
         {
-            _isShowChangedEnabled = false;
-            SetCurrentValue(IsShowProperty, isShow);
-            _isShowChangedEnabled = true;
+            _isShowAsyncChangedEnabled = false;
+            SetCurrentValue(IsShowAsyncProperty, isShow);
+            _isShowAsyncChangedEnabled = true;
         }
 
-        protected virtual void Open()
+        public virtual void Open(bool isBlockedModal)
         {
             if (DialogState != DialogState.Closed) { throw new InvalidOperationException("The dialog must be closed before opening."); }
 
             SetCurrentValue(ResultProperty, null);
-            SetCurrentIsShow(true);
+            SetCurrentIsShowAsync(true);
             SetCurrentValue(DialogStateProperty, DialogState.Opening);
             _dialogWindow = CreateDialogWindow(WindowName);
             ConfigureDialogWindowEvents(_dialogWindow);
             ConfigureDialogWindowContent(DialogName, _dialogWindow, Parameters);
             
-            ShowDialogWindow(_dialogWindow, IsModal);
+            ShowDialogWindow(_dialogWindow, IsModal, isBlockedModal);
         }
 
-        protected virtual void Close()
+        public virtual void Close()
         {
             if (DialogState != DialogState.Loaded) { throw new InvalidOperationException("The dialog has been closed."); }
 
-            this.Dispatcher.BeginInvoke(() =>
-            {
+            //this.Dispatcher.BeginInvoke(() =>
+            //{
                 _dialogWindow?.Close();
-            });
+            //});
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Prism.Services.Dialogs
         /// </summary>
         /// <param name="dialogWindow">The dialog window to show.</param>
         /// <param name="isModal">If true; dialog is shown as a modal</param>
-        protected virtual void ShowDialogWindow(IDialogWindow dialogWindow, bool isModal)
+        protected virtual void ShowDialogWindow(IDialogWindow dialogWindow, bool isModal, bool isBlockedModal)
         {
             if (IsOwnerEnabled)
             {
@@ -259,17 +259,21 @@ namespace Prism.Services.Dialogs
 
             if (isModal)
             {
-                this.Dispatcher.BeginInvoke(() =>
+                if (isBlockedModal)
                 {
                     dialogWindow.ShowDialog();
-                });
+                }
+                else
+                {
+                    this.Dispatcher.BeginInvoke(() =>
+                    {
+                        dialogWindow.ShowDialog();
+                    });
+                }
             }
             else
             {
-                this.Dispatcher.BeginInvoke(() =>
-                {
-                    dialogWindow.Show();
-                });
+                dialogWindow.Show();
             } 
         }
 
@@ -340,11 +344,11 @@ namespace Prism.Services.Dialogs
             closingHandler = (o, e) =>
             {
                 var lastDialogState = DialogState;
-                SetCurrentIsShow(false);
+                SetCurrentIsShowAsync(false);
                 SetCurrentValue(DialogStateProperty, DialogState.Closing);
                 if (!dialogWindow.GetDialogViewModel().CanCloseDialog())
                 {
-                    SetCurrentIsShow(true);
+                    SetCurrentIsShowAsync(true);
                     SetCurrentValue(DialogStateProperty, lastDialogState);
                     e.Cancel = true;
                 }

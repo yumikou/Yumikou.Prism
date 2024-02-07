@@ -14,6 +14,8 @@ namespace Prism.Interactivity.InteractionRequest
 
         public bool IsModal { get; set; }
 
+        public bool IsBlocked { get; set; }
+
         public string WindowName { get; set; }
     }
 }
