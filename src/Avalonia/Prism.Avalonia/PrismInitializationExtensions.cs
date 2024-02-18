@@ -55,6 +55,7 @@ namespace Prism
             //// regionAdapterMappings.RegisterMapping<Selector, SelectorRegionAdapter>();
             regionAdapterMappings.RegisterMapping<ItemsControl, ItemsControlRegionAdapter>();
             regionAdapterMappings.RegisterMapping<ContentControl, ContentControlRegionAdapter>();
+            regionAdapterMappings.RegisterMapping<TransitioningContentControl, TransitioningContentControlRegionAdapter>();
         }
 
         internal static void RunModuleManager(IContainerProvider containerProvider)

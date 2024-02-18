@@ -7,6 +7,7 @@ namespace Prism.Regions
     public enum NavigationType
     {
         Navigate,
+        Init,
         GoBack,
         GoForward
     }

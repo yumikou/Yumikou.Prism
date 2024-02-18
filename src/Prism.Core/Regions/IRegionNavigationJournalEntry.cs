@@ -18,5 +18,7 @@ namespace Prism.Regions
         /// Gets or sets the NavigationParameters instance.
         /// </summary>
         NavigationParameters Parameters { get; set; }
+
+        WeakReference<object> ViewReference { get; set; }
     }
 }

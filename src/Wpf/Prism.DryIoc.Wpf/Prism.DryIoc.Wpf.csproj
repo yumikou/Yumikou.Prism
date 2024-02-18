@@ -16,7 +16,7 @@
       (3) Reintroduced the more general InteractionRequest.
       (4) Extracted the DialogServiceControl from DialogService and supports the use of binding to manage dialogs.
     </Description>
-    <PackageTags>prism;mvvm;xaml;stack;navigation;dialog;dryioc;interactionrequest;</PackageTags>
+    <PackageTags>prism;mvvm;xaml;net40;stack;navigation;dialog;dryioc;interactionrequest;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>8.2.2</Version>
     <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>

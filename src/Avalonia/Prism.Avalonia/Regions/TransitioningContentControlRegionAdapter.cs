@@ -1,23 +1,21 @@
-using Avalonia.Controls;
-using Avalonia.Data;
-using Prism.Properties;
+﻿using Avalonia.Controls;
 using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Prism.Properties;
+using System.Collections.Specialized;
 
 namespace Prism.Regions
 {
-    /// <summary>
-    /// Adapter that creates a new <see cref="SingleActiveRegion"/> and monitors its
-    /// active view to set it on the adapted <see cref="ContentControl"/>.
-    /// </summary>
-    public class ContentControlRegionAdapter : RegionAdapterBase<ContentControl>
+    public class TransitioningContentControlRegionAdapter : RegionAdapterBase<TransitioningContentControl>
     {
         /// <summary>
         /// Initializes a new instance of <see cref="ContentControlRegionAdapter"/>.
         /// </summary>
         /// <param name="regionBehaviorFactory">The factory used to create the region behaviors to attach to the created regions.</param>
-        public ContentControlRegionAdapter(IRegionBehaviorFactory regionBehaviorFactory)
+        public TransitioningContentControlRegionAdapter(IRegionBehaviorFactory regionBehaviorFactory)
             : base(regionBehaviorFactory)
         {
         }
@@ -27,7 +25,7 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="region">The new region being used.</param>
         /// <param name="regionTarget">The object to adapt.</param>
-        protected override void Adapt(IRegion region, ContentControl regionTarget)
+        protected override void Adapt(IRegion region, TransitioningContentControl regionTarget)
         {
             if (regionTarget == null)
                 throw new ArgumentNullException(nameof(regionTarget));
@@ -38,11 +36,11 @@ namespace Prism.Regions
             if (contentIsSet)
                 throw new InvalidOperationException(Resources.ContentControlHasContentException);
 
-            region.ActiveViews.CollectionChanged += delegate
+            ((SingleActiveRegion)region).NavigationActiveViewChanged += (s, a) =>
             {
-                regionTarget.Content = region.ActiveViews.FirstOrDefault();
+                regionTarget.Content = a.ActiveView;
             };
-
+           
             region.Views.CollectionChanged +=
                 (sender, e) =>
                 {
