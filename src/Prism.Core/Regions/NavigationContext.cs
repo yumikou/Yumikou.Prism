@@ -15,7 +15,7 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="uri">The Uri.</param>
-        public NavigationContext(IRegionNavigationService navigationService, Uri uri, NavigationType navigationType) : this(navigationService, uri, null, navigationType)
+        public NavigationContext(IRegionNavigationService navigationService, Uri uri, NavigationType navigationType) : this(navigationService, uri, null, null, navigationType)
         {
         }
 
@@ -26,11 +26,12 @@ namespace Prism.Regions
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="navigationParameters">The navigation parameters.</param>
         /// <param name="uri">The Uri.</param>
-        public NavigationContext(IRegionNavigationService navigationService, Uri uri, NavigationParameters navigationParameters, NavigationType navigationType)
+        public NavigationContext(IRegionNavigationService navigationService, Uri uri, NavigationParameters navigationParameters, WeakReference associatedView, NavigationType navigationType)
         {
             NavigationService = navigationService;
             Uri = uri;
             Parameters = uri != null ? UriParsingHelper.ParseQuery(uri) : null;
+            AssociatedView = associatedView;
             NavigationType = navigationType;
             GetNavigationParameters(navigationParameters);
         }
@@ -54,6 +55,8 @@ namespace Prism.Regions
         public NavigationParameters Parameters { get; private set; }
 
         public NavigationType NavigationType { get; private set; }
+
+        public WeakReference AssociatedView { get; private set; }
 
         private void GetNavigationParameters(NavigationParameters navigationParameters)
         {

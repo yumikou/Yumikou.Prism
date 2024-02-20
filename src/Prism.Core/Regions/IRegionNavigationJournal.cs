@@ -39,12 +39,12 @@ namespace Prism.Regions
         /// <remarks>
         /// This is set by the owner of this journal.
         /// </remarks>
-        INavigateAsync NavigationTarget { get; set; }
+        IRegionNavigationService NavigationTarget { get; set; }
 
         /// <summary>
         /// Navigates to the most recent entry in the back navigation history, or does nothing if no entry exists in back navigation.
         /// </summary>
-        void GoBack(); //TODO: Add a isAnimation paramer 
+        void GoBack();
 
         /// <summary>
         /// Navigates to the most recent entry in the forward navigation history, or does nothing if no entry exists in forward navigation.
@@ -56,7 +56,7 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="entry">The entry to record.</param>
         /// <param name="persistInHistory">Keep Navigation object in memory when OnNavigationFrom is called</param>
-        void RecordNavigation(IRegionNavigationJournalEntry entry, bool persistInHistory);
+        void RecordNavigation(IRegionNavigationJournalEntry entry, NavigationType navigationType);
 
         /// <summary>
         /// Clears the journal of current, back, and forward navigation histories.

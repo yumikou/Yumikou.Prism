@@ -82,7 +82,7 @@ namespace Prism.Regions
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Exception is marshalled to callback")]
         public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationType navigationType = NavigationType.Navigate)
         {
-            RequestNavigate(target, navigationCallback, null, navigationType);
+            RequestNavigate(target, navigationCallback, null, null, navigationType);
         }
 
         /// <summary>
@@ -91,22 +91,22 @@ namespace Prism.Regions
         /// <param name="target">The target.</param>
         /// <param name="navigationCallback">A callback to execute when the navigation request is completed.</param>
         /// <param name="navigationParameters">The navigation parameters specific to the navigation request.</param>
-        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate)
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, WeakReference associatedView, NavigationType navigationType = NavigationType.Navigate)
         {
             if (navigationCallback == null)
                 throw new ArgumentNullException(nameof(navigationCallback));
 
             try
             {
-                DoNavigate(target, navigationCallback, navigationParameters, navigationType);
+                DoNavigate(target, navigationCallback, navigationParameters, associatedView, navigationType);
             }
             catch (Exception e)
             {
-                NotifyNavigationFailed(new NavigationContext(this, target, navigationParameters, navigationType), navigationCallback, e);
+                NotifyNavigationFailed(new NavigationContext(this, target, navigationParameters, associatedView, navigationType), navigationCallback, e);
             }
         }
 
-        private void DoNavigate(Uri source, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType)
+        private void DoNavigate(Uri source, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, WeakReference associatedView, NavigationType navigationType)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -114,7 +114,7 @@ namespace Prism.Regions
             if (Region == null)
                 throw new InvalidOperationException(Resources.NavigationServiceHasNoRegion);
 
-            _currentNavigationContext = new NavigationContext(this, source, navigationParameters, navigationType);
+            _currentNavigationContext = new NavigationContext(this, source, navigationParameters, associatedView, navigationType);
 
             // starts querying the active views
             RequestCanNavigateFromOnCurrentlyActiveView(
@@ -222,16 +222,17 @@ namespace Prism.Regions
                 // Raise the navigating event just before activating the view.
                 RaiseNavigating(navigationContext);
 
-                Region.Activate(view);
+                Region.Activate(view, navigationContext.NavigationType);
 
                 // Update the navigation journal before notifying others of navigation
                 IRegionNavigationJournalEntry journalEntry = _container.Resolve<IRegionNavigationJournalEntry>();
                 journalEntry.Uri = navigationContext.Uri;
                 journalEntry.Parameters = navigationContext.Parameters;
-
                 bool persistInHistory = PersistInHistory(view);
+                journalEntry.IsPersistInHistory = persistInHistory;
+                journalEntry.AssociatedView = new WeakReference(view);
 
-                Journal.RecordNavigation(journalEntry, persistInHistory);
+                Journal.RecordNavigation(journalEntry, navigationContext.NavigationType);
 
                 // The view can be informed of navigation
                 Action<INavigationAware> action = (n) => n.OnNavigatedTo(navigationContext);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Prism.Regions
 {
@@ -11,8 +12,6 @@ namespace Prism.Regions
         private Stack<IRegionNavigationJournalEntry> backStack = new Stack<IRegionNavigationJournalEntry>();
         private Stack<IRegionNavigationJournalEntry> forwardStack = new Stack<IRegionNavigationJournalEntry>();
 
-        private bool isNavigatingInternal;
-
         /// <summary>
         /// Gets or sets the target that implements INavigate.
         /// </summary>
@@ -20,7 +19,7 @@ namespace Prism.Regions
         /// <remarks>
         /// This is set by the owner of this journal.
         /// </remarks>
-        public INavigateAsync NavigationTarget { get; set; }
+        public IRegionNavigationService NavigationTarget { get; set; }
 
         /// <summary>
         /// Gets the current navigation entry of the content that is currently displayed.
@@ -36,7 +35,7 @@ namespace Prism.Regions
         {
             get
             {
-                return this.backStack.Count > 0;
+                return this.backStack.Any(entry => { return entry.IsPersistInHistory; });
             }
         }
 
@@ -50,7 +49,7 @@ namespace Prism.Regions
         {
             get
             {
-                return this.forwardStack.Count > 0;
+                return this.forwardStack.Any(entry => { return entry.IsPersistInHistory; });
             }
         }
 
@@ -61,22 +60,26 @@ namespace Prism.Regions
         {
             if (this.CanGoBack)
             {
-                IRegionNavigationJournalEntry entry = this.backStack.Peek();
-                this.InternalNavigate(
-                    entry,
-                    result =>
-                    {
-                        if (result)
-                        {
-                            if (this.CurrentEntry != null)
-                            {
-                                this.forwardStack.Push(this.CurrentEntry);
-                            }
+                while(true)
+                {
+                    IRegionNavigationJournalEntry entry = this.backStack.Peek();
 
-                            this.backStack.Pop();
-                            this.CurrentEntry = entry;
-                        }
-                    }, NavigationType.GoBack);
+                    if (!entry.IsPersistInHistory)
+                    {
+                        RecordNavigation(entry, NavigationType.GoBack);
+                        // TODO: 如果是Stack类型，同时删除缓存的view
+                    }
+                    else
+                    {
+                        this.NavigationTarget.RequestNavigate(
+                            entry.Uri,
+                            nr => { },
+                            entry.Parameters,
+                            entry.AssociatedView,
+                            NavigationType.GoBack);
+                        break;
+                    }
+                }
             }
         }
 
@@ -87,22 +90,25 @@ namespace Prism.Regions
         {
             if (this.CanGoForward)
             {
-                IRegionNavigationJournalEntry entry = this.forwardStack.Peek();
-                this.InternalNavigate(
-                    entry,
-                    result =>
-                    {
-                        if (result)
-                        {
-                            if (this.CurrentEntry != null)
-                            {
-                                this.backStack.Push(this.CurrentEntry);
-                            }
+                while(true)
+                {
+                    IRegionNavigationJournalEntry entry = this.forwardStack.Peek();
 
-                            this.forwardStack.Pop();
-                            this.CurrentEntry = entry;
-                        }
-                    }, NavigationType.GoForward);
+                    if (!entry.IsPersistInHistory)
+                    {
+                        RecordNavigation(entry, NavigationType.GoForward);
+                    }
+                    else
+                    {
+                        this.NavigationTarget.RequestNavigate(
+                            entry.Uri,
+                            nr => { },
+                            entry.Parameters,
+                            entry.AssociatedView,
+                            NavigationType.GoForward);
+                        break;
+                    }
+                }
             }
         }
 
@@ -111,9 +117,29 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="entry">The entry to record.</param>
         /// <param name="persistInHistory">Determine if the view is added to the back stack or excluded from the history.</param>
-        public void RecordNavigation(IRegionNavigationJournalEntry entry, bool persistInHistory)
+        public void RecordNavigation(IRegionNavigationJournalEntry entry, NavigationType navigationType)
         {
-            if (!this.isNavigatingInternal)
+            if (navigationType == NavigationType.GoBack)
+            {
+                if (this.CurrentEntry != null)
+                {
+                    this.forwardStack.Push(this.CurrentEntry);
+                }
+
+                this.backStack.Pop();
+                this.CurrentEntry = entry;
+            }
+            else if (navigationType == NavigationType.GoForward)
+            {
+                if (this.CurrentEntry != null)
+                {
+                    this.backStack.Push(this.CurrentEntry);
+                }
+
+                this.forwardStack.Pop();
+                this.CurrentEntry = entry;
+            }
+            else //导航到新页面
             {
                 if (this.CurrentEntry != null)
                 {
@@ -122,10 +148,7 @@ namespace Prism.Regions
 
                 this.forwardStack.Clear();
 
-                if (persistInHistory)
-                    CurrentEntry = entry;
-                else
-                    CurrentEntry = null;
+                CurrentEntry = entry;
             }
         }
 
@@ -139,21 +162,5 @@ namespace Prism.Regions
             this.forwardStack.Clear();
         }
 
-        private void InternalNavigate(IRegionNavigationJournalEntry entry, Action<bool> callback, NavigationType navigationType)
-        {
-            this.isNavigatingInternal = true;
-            this.NavigationTarget.RequestNavigate(
-                entry.Uri,
-                nr =>
-                {
-                    this.isNavigatingInternal = false;
-
-                    if (nr.Result.HasValue)
-                    {
-                        callback(nr.Result.Value);
-                    }
-                },
-                entry.Parameters, navigationType);
-        }
     }
 }

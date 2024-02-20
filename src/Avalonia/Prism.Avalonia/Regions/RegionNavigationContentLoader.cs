@@ -50,40 +50,56 @@ namespace Prism.Regions
 
             string candidateTargetContract = GetContractFromNavigationContext(navigationContext);
 
-            var candidates = GetCandidatesFromRegion(region, candidateTargetContract);
-
-            var acceptingCandidates =
-                candidates.Where(
-                    v =>
-                    {// TODO: 如果堆桟里也存放着view，是Stack类型，且导航类型是返回，则可以直接使用堆桟里的；否则就从这里
-                        //如果是Stack生命周期,并且nav类型不是Back，就直接返回false
-                        
-                        if (v is INavigationAware navigationAware && !navigationAware.IsNavigationTarget(navigationContext))
-                        {
-                            return false;
-                        }
-
-                        if (!(v is Control control))
-                        {
-                            return true;
-                        }
-
-                        navigationAware = control.DataContext as INavigationAware;
-                        return navigationAware == null || navigationAware.IsNavigationTarget(navigationContext);
-                    });
-
-            var view = acceptingCandidates.FirstOrDefault();
-
-            if (view != null)
+            var candidateType = _container.GetRegistrationType(candidateTargetContract);
+            if (candidateType is not null && RegionMemberHelper.IsStackViewType(candidateType)) // 如果是堆栈导航类型
             {
+                if (navigationContext.NavigationType == NavigationType.GoBack)
+                {
+                    return navigationContext.AssociatedView.Target;
+                }
+                else
+                {
+                    var view = CreateNewRegionItem(candidateTargetContract);
+
+                    AddViewToRegion(region, view);
+
+                    return view;
+                }
+            }
+            else
+            {
+                var candidates = GetCandidatesFromRegion(region, candidateTargetContract);
+                var acceptingCandidates =
+                    candidates.Where(
+                        v =>
+                        {
+                            if (v is INavigationAware navigationAware && !navigationAware.IsNavigationTarget(navigationContext))
+                            {
+                                return false;
+                            }
+
+                            if (!(v is Control control))
+                            {
+                                return true;
+                            }
+
+                            navigationAware = control.DataContext as INavigationAware;
+                            return navigationAware == null || navigationAware.IsNavigationTarget(navigationContext);
+                        });
+
+                var view = acceptingCandidates.FirstOrDefault();
+
+                if (view != null)
+                {
+                    return view;
+                }
+
+                view = CreateNewRegionItem(candidateTargetContract);
+
+                AddViewToRegion(region, view);
+
                 return view;
             }
-
-            view = CreateNewRegionItem(candidateTargetContract);
-
-            AddViewToRegion(region, view);
-
-            return view;
         }
 
         /// <summary>
