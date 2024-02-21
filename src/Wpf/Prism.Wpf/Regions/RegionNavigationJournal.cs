@@ -1,19 +1,20 @@
-
-
+using Prism.Common;
+using Prism.Ioc;
+using Prism.Ioc.Internals;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Prism.Regions
 {
     /// <summary>
-    /// Provides journaling of current, back, and forward navigation within regions.    
+    /// Provides journaling of current, back, and forward navigation within regions.
     /// </summary>
     public class RegionNavigationJournal : IRegionNavigationJournal
     {
+        private readonly IContainerExtension _container;
         private Stack<IRegionNavigationJournalEntry> backStack = new Stack<IRegionNavigationJournalEntry>();
         private Stack<IRegionNavigationJournalEntry> forwardStack = new Stack<IRegionNavigationJournalEntry>();
-
-        private bool isNavigatingInternal;
 
         /// <summary>
         /// Gets or sets the target that implements INavigate.
@@ -22,7 +23,7 @@ namespace Prism.Regions
         /// <remarks>
         /// This is set by the owner of this journal.
         /// </remarks>
-        public INavigateAsync NavigationTarget { get; set; }
+        public IRegionNavigationService NavigationTarget { get; set; }
 
         /// <summary>
         /// Gets the current navigation entry of the content that is currently displayed.
@@ -30,81 +31,132 @@ namespace Prism.Regions
         /// <value>The current entry.</value>
         public IRegionNavigationJournalEntry CurrentEntry { get; private set; }
 
-        /// <summary>
-        /// Gets a value that indicates whether there is at least one entry in the back navigation history.
-        /// </summary>
-        /// <value><c>true</c> if the journal can go back; otherwise, <c>false</c>.</value>
-        public bool CanGoBack
+        public RegionNavigationJournal(IContainerExtension container)
         {
-            get
-            {
-                return this.backStack.Count > 0;
-            }
+            _container = container;
         }
 
-        /// <summary>
-        /// Gets a value that indicates whether there is at least one entry in the forward navigation history.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance can go forward; otherwise, <c>false</c>.
-        /// </value>
-        public bool CanGoForward
+        public bool CanGoBack()
         {
-            get
+            return CanGoBack((e, i) =>
             {
-                return this.forwardStack.Count > 0;
+                return e.IsPersistInHistory;
+            });
+        }
+
+        public bool CanGoBack(Func<IRegionNavigationJournalEntry, int, bool> gobackPredicate)
+        {
+            int depth = 0;
+
+            while (true)
+            {
+                if (depth >= this.backStack.Count) { return false; }
+
+                IRegionNavigationJournalEntry entry = this.backStack.ElementAt(depth);
+                if (gobackPredicate is not null && !gobackPredicate.Invoke(entry, depth))
+                {
+
+                }
+                else
+                {
+                    return true;
+                }
+                depth++;
             }
         }
 
         /// <summary>
         /// Navigates to the most recent entry in the back navigation history, or does nothing if no entry exists in back navigation.
         /// </summary>
-        public void GoBack()
+        public bool GoBack()
         {
-            if (this.CanGoBack)
+            return GoBack((e, i) =>
             {
-                IRegionNavigationJournalEntry entry = this.backStack.Peek();
-                this.InternalNavigate(
-                    entry,
-                    result =>
-                    {
-                        if (result)
-                        {
-                            if (this.CurrentEntry != null)
-                            {
-                                this.forwardStack.Push(this.CurrentEntry);
-                            }
+                return e.IsPersistInHistory;
+            });
+        }
 
-                            this.backStack.Pop();
-                            this.CurrentEntry = entry;
-                        }
-                    }, NavigationType.GoBack);
+        public bool GoBack(Func<IRegionNavigationJournalEntry, int, bool> gobackPredicate)
+        {
+            int depth = 0;
+
+            while (true)
+            {
+                if (this.backStack.Count <= 0) { return false; }
+
+                IRegionNavigationJournalEntry entry = this.backStack.Peek();
+                if (gobackPredicate is not null && !gobackPredicate.Invoke(entry, depth))
+                {
+                    RecordNavigation(entry, NavigationType.GoBack);
+
+                    // 堆栈导航返回时，在inactive和从历史堆栈直接移除时，都需要删除view
+                    var contract = UriParsingHelper.GetContract(entry.Uri);
+                    var candidateType = _container.GetRegistrationType(contract);
+                    if (candidateType is not null && RegionHelper.IsStackViewType(candidateType))
+                    {
+                        if (entry.AssociatedView is null || !entry.AssociatedView.IsAlive) throw new InvalidOperationException("堆栈导航历史中的View被提前回收了");
+                        NavigationTarget.Region.Remove(entry.AssociatedView.Target);
+                    }
+                }
+                else
+                {
+                    this.NavigationTarget.RequestNavigate(
+                        entry.Uri,
+                        nr => { },
+                        entry.Parameters,
+                        entry.AssociatedView,
+                        NavigationType.GoBack);
+                    return true;
+                }
+                depth++;
+            }
+        }
+
+        public bool CanGoForward()
+        {
+            int depth = 0;
+            while (true)
+            {
+                if (depth >= this.forwardStack.Count) { return false; }
+
+                IRegionNavigationJournalEntry entry = this.forwardStack.ElementAt(depth);
+                if (!entry.IsPersistInHistory)
+                {
+
+                }
+                else
+                {
+                    return true;
+                }
+                depth++;
             }
         }
 
         /// <summary>
         /// Navigates to the most recent entry in the forward navigation history, or does nothing if no entry exists in forward navigation.
         /// </summary>
-        public void GoForward()
+        public bool GoForward()
         {
-            if (this.CanGoForward)
+            while (true)
             {
-                IRegionNavigationJournalEntry entry = this.forwardStack.Peek();
-                this.InternalNavigate(
-                    entry,
-                    result =>
-                    {
-                        if (result)
-                        {
-                            if (this.CurrentEntry != null)
-                            {
-                                this.backStack.Push(this.CurrentEntry);
-                            }
+                if (this.forwardStack.Count <= 0) { return false; }
 
-                            this.forwardStack.Pop();
-                            this.CurrentEntry = entry;
-                        }
-                    }, NavigationType.GoForward);
+                IRegionNavigationJournalEntry entry = this.forwardStack.Peek();
+
+                if (!entry.IsPersistInHistory)
+                {
+                    RecordNavigation(entry, NavigationType.GoForward);
+                }
+                else
+                {
+                    this.NavigationTarget.RequestNavigate(
+                        entry.Uri,
+                        nr => { },
+                        entry.Parameters,
+                        entry.AssociatedView,
+                        NavigationType.GoForward);
+                    return true;
+                }
             }
         }
 
@@ -113,9 +165,29 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="entry">The entry to record.</param>
         /// <param name="persistInHistory">Determine if the view is added to the back stack or excluded from the history.</param>
-        public void RecordNavigation(IRegionNavigationJournalEntry entry, bool persistInHistory)
+        public void RecordNavigation(IRegionNavigationJournalEntry entry, NavigationType navigationType)
         {
-            if (!this.isNavigatingInternal)
+            if (navigationType == NavigationType.GoBack)
+            {
+                if (this.CurrentEntry != null)
+                {
+                    this.forwardStack.Push(this.CurrentEntry);
+                }
+
+                this.backStack.Pop();
+                this.CurrentEntry = entry;
+            }
+            else if (navigationType == NavigationType.GoForward)
+            {
+                if (this.CurrentEntry != null)
+                {
+                    this.backStack.Push(this.CurrentEntry);
+                }
+
+                this.forwardStack.Pop();
+                this.CurrentEntry = entry;
+            }
+            else //导航到新页面
             {
                 if (this.CurrentEntry != null)
                 {
@@ -124,10 +196,7 @@ namespace Prism.Regions
 
                 this.forwardStack.Clear();
 
-                if (persistInHistory)
-                    CurrentEntry = entry;
-                else
-                    CurrentEntry = null;
+                CurrentEntry = entry;
             }
         }
 
@@ -141,21 +210,5 @@ namespace Prism.Regions
             this.forwardStack.Clear();
         }
 
-        private void InternalNavigate(IRegionNavigationJournalEntry entry, Action<bool> callback, NavigationType navigationType)
-        {
-            this.isNavigatingInternal = true;
-            this.NavigationTarget.RequestNavigate(
-                entry.Uri,
-                nr =>
-                {
-                    this.isNavigatingInternal = false;
-
-                    if (nr.Result.HasValue)
-                    {
-                        callback(nr.Result.Value);
-                    }
-                },
-                entry.Parameters, navigationType);
-        }
     }
 }

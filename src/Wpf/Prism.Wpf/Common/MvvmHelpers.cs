@@ -79,5 +79,30 @@ namespace Prism.Common
 
             return null;
         }
+
+        public static T GetAttributeFromViewOrViewModel<T>(object view, bool inherit) where T : Attribute
+        {
+            var viewAttribute = GetCustomAttributes<T>(view.GetType(), inherit).FirstOrDefault();
+            if (viewAttribute != null)
+            {
+                return viewAttribute;
+            }
+
+            var frameworkElement = view as FrameworkElement;
+            if (frameworkElement != null && frameworkElement.DataContext != null)
+            {
+                var dataContext = frameworkElement.DataContext;
+                var vmAttribute =
+                    GetCustomAttributes<T>(dataContext.GetType(), inherit).FirstOrDefault();
+                return vmAttribute;
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<T> GetCustomAttributes<T>(Type type, bool inherit)
+        {
+            return type.GetCustomAttributes(typeof(T), inherit).OfType<T>();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Prism.Common;
 using Prism.Mvvm;
 
 namespace Prism.Ioc
@@ -54,13 +55,13 @@ namespace Prism.Ioc
 
         public static void RegisterForStackNavigation<TView>(this IContainerRegistry containerRegistry, string name = null)
         {
-            //RegionMemberHelper.
+            RegionHelper.AddViewTypeForStackNavigation(typeof(TView));
             containerRegistry.RegisterForNavigation<TView>(name);
         }
 
         public static void RegisterForStackNavigation<TView, TViewModel>(this IContainerRegistry containerRegistry, string name = null)
         {
-
+            RegionHelper.AddViewTypeForStackNavigation(typeof(TView));
             containerRegistry.RegisterForNavigation<TView, TViewModel>(name);
         }
 

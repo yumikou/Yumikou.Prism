@@ -23,7 +23,7 @@ namespace StackNavigation.Wpf
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<HomeView>();
-            containerRegistry.RegisterForNavigation<SecondView>();
+            containerRegistry.RegisterForStackNavigation<SecondView>();
 
         }
 

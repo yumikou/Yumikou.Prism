@@ -21,6 +21,10 @@ namespace Prism.Regions
         /// </summary>
         public NavigationParameters Parameters { get; set; }
 
+        public bool IsPersistInHistory { get; set; }
+
+        public WeakReference AssociatedView { get; set; }
+
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
         /// </summary>

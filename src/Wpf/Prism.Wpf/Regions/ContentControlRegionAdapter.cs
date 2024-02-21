@@ -61,7 +61,7 @@ namespace Prism.Regions
                 {
                     if (e.Action == NotifyCollectionChangedAction.Add && region.ActiveViews.Count() == 0)
                     {
-                        region.Activate(e.NewItems[0]);
+                        region.Activate(e.NewItems[0], NavigationType.Init);
                     }
                 };
         }

@@ -139,7 +139,7 @@ namespace Prism.Regions.Behaviors
                     && this.hostControl.SelectedItem != e.NewItems[0]
                     && this.Region.ActiveViews.Contains(this.hostControl.SelectedItem))
                 {
-                    this.Region.Deactivate(this.hostControl.SelectedItem);
+                    this.Region.Deactivate(this.hostControl.SelectedItem, NavigationType.Navigate);
                 }
 
                 this.hostControl.SelectedItem = e.NewItems[0];
@@ -169,7 +169,7 @@ namespace Prism.Regions.Behaviors
                         // check if the view is in both Views and ActiveViews collections (there may be out of sync)
                         if (this.Region.Views.Contains(item) && this.Region.ActiveViews.Contains(item))
                         {
-                            this.Region.Deactivate(item);
+                            this.Region.Deactivate(item, NavigationType.Navigate);
                         }
                     }
 
@@ -177,7 +177,7 @@ namespace Prism.Regions.Behaviors
                     {
                         if (this.Region.Views.Contains(item) && !this.Region.ActiveViews.Contains(item))
                         {
-                            this.Region.Activate(item);
+                            this.Region.Activate(item, NavigationType.Navigate);
                         }
                     }
                 }

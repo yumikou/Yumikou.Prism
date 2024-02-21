@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Linq;
 using Prism.Properties;
 using Prism.Ioc;
+using Prism.Common;
+
 
 #if HAS_UWP
 using Windows.UI.Xaml;
@@ -301,28 +303,37 @@ namespace Prism.Regions
         /// Marks the specified view as active.
         /// </summary>
         /// <param name="view">The view to activate.</param>
-        public virtual void Activate(object view)
+        public virtual bool Activate(object view, NavigationType navigationType)
         {
             ItemMetadata itemMetadata = this.GetItemMetadataOrThrow(view);
 
             if (!itemMetadata.IsActive)
             {
                 itemMetadata.IsActive = true;
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// Marks the specified view as inactive.
         /// </summary>
         /// <param name="view">The view to deactivate.</param>
-        public virtual void Deactivate(object view)
+        public virtual bool Deactivate(object view, NavigationType navigationType)
         {
             ItemMetadata itemMetadata = this.GetItemMetadataOrThrow(view);
 
             if (itemMetadata.IsActive)
             {
                 itemMetadata.IsActive = false;
+
+                if (!RegionHelper.InactiveViewShouldKeepAlive(view, navigationType))
+                {
+                    this.Remove(view);
+                }
+                return true;
             }
+            return false;
         }
 
         /// <summary>
@@ -365,7 +376,12 @@ namespace Prism.Regions
         /// <param name="navigationParameters">The navigation parameters specific to the navigation request.</param>
         public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate)
         {
-            this.NavigationService.RequestNavigate(target, navigationCallback, navigationParameters, navigationType);
+            this.RequestNavigate(target, navigationCallback, navigationParameters, null, navigationType);
+        }
+
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, WeakReference associatedView, NavigationType navigationType = NavigationType.Navigate)
+        {
+            this.NavigationService.RequestNavigate(target, navigationCallback, navigationParameters, associatedView, navigationType);
         }
 
         private void InnerAdd(object view, string viewName, IRegionManager scopedRegionManager)

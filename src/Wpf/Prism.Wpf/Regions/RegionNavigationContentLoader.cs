@@ -56,41 +56,61 @@ namespace Prism.Regions
             if (navigationContext == null)
                 throw new ArgumentNullException(nameof(navigationContext));
 
-            string candidateTargetContract = GetContractFromNavigationContext(navigationContext);
+            string candidateTargetContract = UriParsingHelper.GetContract(navigationContext.Uri);
 
-            var candidates = GetCandidatesFromRegion(region, candidateTargetContract);
-
-            var acceptingCandidates =
-                candidates.Where(
-                    v =>
-                    {
-                        if (v is INavigationAware navigationAware && !navigationAware.IsNavigationTarget(navigationContext))
-                        {
-                            return false;
-                        }
-
-                        if (!(v is FrameworkElement frameworkElement))
-                        {
-                            return true;
-                        }
-
-                        navigationAware = frameworkElement.DataContext as INavigationAware;
-                        return navigationAware == null || navigationAware.IsNavigationTarget(navigationContext);
-                    });
-
-
-            var view = acceptingCandidates.FirstOrDefault();
-
-            if (view != null)
+            var candidateType = _container.GetRegistrationType(candidateTargetContract);
+            if (candidateType is not null && RegionHelper.IsStackViewType(candidateType)) // 如果是堆栈导航类型
             {
+                if (navigationContext.NavigationType == NavigationType.GoBack)
+                {
+                    if (navigationContext.AssociatedView is null || !navigationContext.AssociatedView.IsAlive) throw new InvalidOperationException("堆栈导航历史中的View被提前回收了");
+                    return navigationContext.AssociatedView.Target;
+                }
+                else
+                {
+                    var view = CreateNewRegionItem(candidateTargetContract);
+
+                    AddViewToRegion(region, view);
+
+                    return view;
+                }
+            }
+            else
+            {
+                var candidates = GetCandidatesFromRegion(region, candidateTargetContract);
+
+                var acceptingCandidates =
+                    candidates.Where(
+                        v =>
+                        {
+                            if (v is INavigationAware navigationAware && !navigationAware.IsNavigationTarget(navigationContext))
+                            {
+                                return false;
+                            }
+
+                            if (!(v is FrameworkElement frameworkElement))
+                            {
+                                return true;
+                            }
+
+                            navigationAware = frameworkElement.DataContext as INavigationAware;
+                            return navigationAware == null || navigationAware.IsNavigationTarget(navigationContext);
+                        });
+
+
+                var view = acceptingCandidates.FirstOrDefault();
+
+                if (view != null)
+                {
+                    return view;
+                }
+
+                view = CreateNewRegionItem(candidateTargetContract);
+
+                AddViewToRegion(region, view);
+
                 return view;
             }
-
-            view = CreateNewRegionItem(candidateTargetContract);
-
-            AddViewToRegion(region, view);
-
-            return view;
         }
 
         /// <summary>
@@ -126,20 +146,6 @@ namespace Prism.Regions
                     string.Format(CultureInfo.CurrentCulture, Resources.CannotCreateNavigationTarget, candidateTargetContract),
                     e);
             }
-        }
-
-        /// <summary>
-        /// Returns the candidate TargetContract based on the <see cref="NavigationContext"/>.
-        /// </summary>
-        /// <param name="navigationContext">The navigation contract.</param>
-        /// <returns>The candidate contract to seek within the <see cref="IRegion"/> and to use, if not found, when resolving from the container.</returns>
-        protected virtual string GetContractFromNavigationContext(NavigationContext navigationContext)
-        {
-            if (navigationContext == null) throw new ArgumentNullException(nameof(navigationContext));
-
-            var candidateTargetContract = UriParsingHelper.GetAbsolutePath(navigationContext.Uri);
-            candidateTargetContract = candidateTargetContract.TrimStart('/');
-            return candidateTargetContract;
         }
 
         /// <summary>

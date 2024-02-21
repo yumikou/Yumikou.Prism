@@ -19,7 +19,7 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="view">The view to deactivate.</param>
         /// <exception cref="InvalidOperationException">Every time this method is called.</exception>
-        public override void Deactivate(object view)
+        public override bool Deactivate(object view, NavigationType navigationType)
         {
             throw new InvalidOperationException(Resources.DeactiveNotPossibleException);
         }
