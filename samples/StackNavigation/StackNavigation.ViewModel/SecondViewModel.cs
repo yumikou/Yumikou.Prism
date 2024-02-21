@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace StackNavigation.ViewModel
 {
-    public class SecondViewModel : RegionStackNavigationBase
+    public class SecondViewModel
     {
         private IRegionManager _regionManager;
 
@@ -26,7 +26,7 @@ namespace StackNavigation.ViewModel
 
         private void OnGoNextPage()
         {
-            _regionManager.RequestStackNavigate(RegionNames.MainRegion, "SecondView");
+            _regionManager.RequestNavigate(RegionNames.MainRegion, "SecondView");
         }
 
         ~SecondViewModel()

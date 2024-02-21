@@ -11,22 +11,6 @@ namespace Prism.Regions
     public interface IRegionNavigationJournal
     {
         /// <summary>
-        /// Gets a value that indicates whether there is at least one entry in the back navigation history.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the journal can go back; otherwise, <c>false</c>.
-        /// </value>
-        bool CanGoBack { get; }
-
-        /// <summary>
-        /// Gets a value that indicates whether there is at least one entry in the forward navigation history.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance can go forward; otherwise, <c>false</c>.
-        /// </value>
-        bool CanGoForward { get; }
-
-        /// <summary>
         /// Gets the current navigation entry of the content that is currently displayed.
         /// </summary>
         /// <value>The current entry.</value>
@@ -41,15 +25,23 @@ namespace Prism.Regions
         /// </remarks>
         IRegionNavigationService NavigationTarget { get; set; }
 
+        bool CanGoBack();
+
+        bool CanGoBack(Func<IRegionNavigationJournalEntry, int, bool> gobackPredicate);
+
         /// <summary>
         /// Navigates to the most recent entry in the back navigation history, or does nothing if no entry exists in back navigation.
         /// </summary>
-        void GoBack();
+        bool GoBack();
+
+        bool GoBack(Func<IRegionNavigationJournalEntry, int, bool> gobackPredicate);
+
+        bool CanGoForward();
 
         /// <summary>
         /// Navigates to the most recent entry in the forward navigation history, or does nothing if no entry exists in forward navigation.
         /// </summary>
-        void GoForward();
+        bool GoForward();
 
         /// <summary>
         /// Records the navigation to the entry..

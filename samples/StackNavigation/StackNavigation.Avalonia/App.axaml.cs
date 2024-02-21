@@ -27,7 +27,7 @@ namespace StackNavigation.Avalonia
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<HomeView>();
-            containerRegistry.RegisterForNavigation<SecondView>();
+            containerRegistry.RegisterForStackNavigation<SecondView>();
         }
 
         protected override void ConfigureViewModelLocator()

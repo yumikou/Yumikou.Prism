@@ -313,7 +313,7 @@ namespace Prism.Regions
             {
                 itemMetadata.IsActive = false;
 
-                if (!RegionMemberHelper.InactiveViewShouldKeepAlive(view, navigationType))
+                if (!RegionHelper.InactiveViewShouldKeepAlive(view, navigationType))
                 {
                     this.Remove(view);
                 }
@@ -363,7 +363,12 @@ namespace Prism.Regions
         /// <param name="navigationParameters">The navigation parameters specific to the navigation request.</param>
         public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate)
         {
-            this.NavigationService.RequestNavigate(target, navigationCallback, navigationParameters, navigationType);
+            this.RequestNavigate(target, navigationCallback, navigationParameters, null, navigationType);
+        }
+
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, WeakReference associatedView, NavigationType navigationType = NavigationType.Navigate)
+        {
+            this.NavigationService.RequestNavigate(target, navigationCallback, navigationParameters, associatedView, navigationType);
         }
 
         private void InnerAdd(object view, string viewName, IRegionManager scopedRegionManager)

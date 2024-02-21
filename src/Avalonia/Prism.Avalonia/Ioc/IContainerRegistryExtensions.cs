@@ -55,13 +55,13 @@ namespace Prism.Ioc
 
         public static void RegisterForStackNavigation<TView>(this IContainerRegistry containerRegistry, string name = null)
         {
-            RegionMemberHelper.AddViewTypeForStackNavigation(typeof(TView));
+            RegionHelper.AddViewTypeForStackNavigation(typeof(TView));
             containerRegistry.RegisterForNavigation<TView>(name);
         }
 
         public static void RegisterForStackNavigation<TView, TViewModel>(this IContainerRegistry containerRegistry, string name = null)
         {
-            RegionMemberHelper.AddViewTypeForStackNavigation(typeof(TView));
+            RegionHelper.AddViewTypeForStackNavigation(typeof(TView));
             containerRegistry.RegisterForNavigation<TView, TViewModel>(name);
         }
 

@@ -11,6 +11,20 @@ namespace Prism.Common
     public static class UriParsingHelper
     {
         /// <summary>
+        /// Returns the candidate TargetContract based on the <see cref="NavigationContext"/>.
+        /// </summary>
+        /// <param name="navigationUri">The navigation contract.</param>
+        /// <returns>The candidate contract to seek within the <see cref="IRegion"/> and to use, if not found, when resolving from the container.</returns>
+        public static string GetContract(Uri uri)
+        {
+            if (uri == null) throw new ArgumentNullException(nameof(uri));
+
+            var candidateTargetContract = UriParsingHelper.GetAbsolutePath(uri);
+            candidateTargetContract = candidateTargetContract.TrimStart('/');
+            return candidateTargetContract;
+        }
+
+        /// <summary>
         /// Gets the query part of <paramref name="uri"/>.
         /// </summary>
         /// <param name="uri">The Uri.</param>

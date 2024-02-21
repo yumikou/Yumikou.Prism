@@ -419,11 +419,11 @@ namespace Prism.Regions
 
             if (Regions.ContainsRegionWithName(regionName))
             {
-                Regions[regionName].RequestNavigate(target, navigationCallback, navigationParameters);
+                Regions[regionName].RequestNavigate(target, navigationCallback, navigationParameters, null);
             }
             else
             {
-                navigationCallback(new NavigationResult(new NavigationContext(null, target, navigationParameters, NavigationType.Navigate), false));
+                navigationCallback(new NavigationResult(new NavigationContext(null, target, navigationParameters, null, NavigationType.Navigate), false));
             }
         }
 

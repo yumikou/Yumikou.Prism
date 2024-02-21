@@ -68,7 +68,7 @@ namespace Prism.Regions
 
             var targetUri = new Uri(target, UriKind.RelativeOrAbsolute);
 
-            navigation.RequestNavigate(targetUri, navigationCallback, navigationParameters);
+            navigation.RequestNavigate(targetUri, navigationCallback, navigationParameters, null);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Prism.Regions
             if (navigation == null)
                 throw new ArgumentNullException(nameof(navigation));
 
-            navigation.RequestNavigate(target, nr => { }, navigationParameters);
+            navigation.RequestNavigate(target, nr => { }, navigationParameters, null);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Prism.Regions
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
 
-            navigation.RequestNavigate(new Uri(target, UriKind.RelativeOrAbsolute), nr => { }, navigationParameters);
+            navigation.RequestNavigate(new Uri(target, UriKind.RelativeOrAbsolute), nr => { }, navigationParameters, null);
         }
     }
 }

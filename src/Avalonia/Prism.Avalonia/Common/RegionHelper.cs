@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Prism.Common
 {
-    internal static class RegionMemberHelper
+    internal static class RegionHelper
     {
         private static HashSet<Type> viewTypesForStackNavigation = new HashSet<Type>();
 
-        internal static bool AddViewTypeForStackNavigation(Type viewType)
+        public static bool AddViewTypeForStackNavigation(Type viewType)
         {
             return viewTypesForStackNavigation.Add(viewType);
         }
 
-        internal static bool IsStackViewType(Type viewType)
+        public static bool IsStackViewType(Type viewType)
         {
             return viewTypesForStackNavigation.Contains(viewType);
         }

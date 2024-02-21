@@ -7,7 +7,7 @@ using Prism.Commands;
 
 namespace StackNavigation.ViewModel
 {
-    public class HomeViewModel : RegionStackNavigationBase
+    public class HomeViewModel
     {
         private IRegionManager _regionManager;
 
@@ -24,7 +24,7 @@ namespace StackNavigation.ViewModel
 
         private void OnGoNextPage()
         {
-            _regionManager.RequestStackNavigate(RegionNames.MainRegion, "SecondView");
+            _regionManager.RequestNavigate(RegionNames.MainRegion, "SecondView");
         }
     }
 }
