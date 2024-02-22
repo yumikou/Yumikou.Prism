@@ -46,19 +46,30 @@ namespace Prism.Regions
 
         public bool CanGoBack(Func<IRegionNavigationJournalEntry, int, bool> gobackPredicate)
         {
+            return CanGoBackInternal(gobackPredicate, out List<IRegionNavigationJournalEntry> skippedBackStackList, out IRegionNavigationJournalEntry goBackEntry);
+        }
+
+        internal bool CanGoBackInternal(Func<IRegionNavigationJournalEntry, int, bool> gobackPredicate, out List<IRegionNavigationJournalEntry> skippedBackStackList, out IRegionNavigationJournalEntry goBackEntry)
+        {
             int depth = 0;
+            skippedBackStackList = new List<IRegionNavigationJournalEntry>();
 
             while (true)
             {
-                if (depth >= this.backStack.Count) { return false; }
+                if (depth >= this.backStack.Count)
+                {
+                    goBackEntry = null;
+                    return false;
+                }
 
                 IRegionNavigationJournalEntry entry = this.backStack.ElementAt(depth);
                 if (gobackPredicate is not null && !gobackPredicate.Invoke(entry, depth))
-                { 
-                
+                {
+                    skippedBackStackList.Add(entry);
                 }
                 else
                 {
+                    goBackEntry = entry;
                     return true;
                 }
                 depth++;
@@ -78,54 +89,74 @@ namespace Prism.Regions
 
         public bool GoBack(Func<IRegionNavigationJournalEntry, int, bool> gobackPredicate)
         {
-            int depth = 0;
-
-            while (true)
+            if (CanGoBackInternal(gobackPredicate, out List<IRegionNavigationJournalEntry> skippedBackStackList, out IRegionNavigationJournalEntry goBackEntry))
             {
-                if (this.backStack.Count <= 0) { return false; }
-
-                IRegionNavigationJournalEntry entry = this.backStack.Peek();
-                if (gobackPredicate is not null && !gobackPredicate.Invoke(entry, depth))
-                {
-                    RecordNavigation(entry, NavigationType.GoBack);
-
-                    // 堆栈导航返回时，在inactive和从历史堆栈直接移除时，都需要删除view
-                    var contract = UriParsingHelper.GetContract(entry.Uri);
-                    var candidateType = _container.GetRegistrationType(contract);
-                    if (candidateType is not null && RegionHelper.IsStackViewType(candidateType))
+                bool naviFlag = false;
+                this.NavigationTarget.RequestNavigate(
+                    goBackEntry.Uri,
+                    nr =>
                     {
-                        if (entry.AssociatedView is null || !entry.AssociatedView.IsAlive) throw new InvalidOperationException("堆栈导航历史中的View被提前回收了");
-                        NavigationTarget.Region.Remove(entry.AssociatedView.Target);
-                    }
-                }
-                else
-                {
-                    this.NavigationTarget.RequestNavigate(
-                        entry.Uri,
-                        nr => { },
-                        entry.Parameters,
-                        entry.AssociatedView,
-                        NavigationType.GoBack);
-                    return true;
-                }
-                depth++;
+                        if (nr.Result) //导航成功
+                        {
+                            if (nr is not NavigationResultInternal nri || nri.ResultEntry is null)
+                            {
+                                throw new NullReferenceException("导航成功的结果不能为空！");
+                            }
+
+                            foreach (var skippedEntry in skippedBackStackList)
+                            {
+                                RecordNavigation(skippedEntry, NavigationType.GoBack);
+
+                                // 堆栈导航返回时，在inactive和从历史堆栈直接移除时，都需要删除view
+                                var contract = UriParsingHelper.GetContract(skippedEntry.Uri);
+                                var candidateType = _container.GetRegistrationType(contract);
+                                if (candidateType is not null && RegionHelper.IsStackViewType(candidateType))
+                                {
+                                    if (skippedEntry.AssociatedView is not null && skippedEntry.AssociatedView.IsAlive) // IsPersistInHistory为false时的goforward，不会创建view直接跳过entry，这时候再返回跳过关联的view是空
+                                    {
+                                        NavigationTarget.Region.Remove(skippedEntry.AssociatedView.Target);
+                                    }
+                                }
+                            }
+
+                            RecordNavigation(nri.ResultEntry, NavigationType.GoBack);
+                        }
+                        naviFlag = nr.Result;
+                    },
+                    goBackEntry.Parameters,
+                    goBackEntry.AssociatedView,
+                    NavigationType.GoBack);
+                return naviFlag;
             }
+            return false;
         }
 
         public bool CanGoForward()
         {
+            return CanGoForwardInternal(out List<IRegionNavigationJournalEntry> skippedForwardStackList, out IRegionNavigationJournalEntry goForwardEntry);
+        }
+
+        internal bool CanGoForwardInternal(out List<IRegionNavigationJournalEntry> skippedForwardStackList, out IRegionNavigationJournalEntry goForwardEntry)
+        {
             int depth = 0;
+            skippedForwardStackList = new List<IRegionNavigationJournalEntry>();
+
             while (true)
             {
-                if (depth >= this.forwardStack.Count) { return false; }
+                if (depth >= this.forwardStack.Count)
+                {
+                    goForwardEntry = null;
+                    return false;
+                }
 
                 IRegionNavigationJournalEntry entry = this.forwardStack.ElementAt(depth);
                 if (!entry.IsPersistInHistory)
                 {
-
+                    skippedForwardStackList.Add(entry);
                 }
                 else
                 {
+                    goForwardEntry = entry;
                     return true;
                 }
                 depth++;
@@ -137,27 +168,35 @@ namespace Prism.Regions
         /// </summary>
         public bool GoForward()
         {
-            while (true)
+            if (CanGoForwardInternal(out List<IRegionNavigationJournalEntry> skippedForwardStackList, out IRegionNavigationJournalEntry goForwardEntry))
             {
-                if (this.forwardStack.Count <= 0) { return false; }
+                bool naviFlag = false;
+                this.NavigationTarget.RequestNavigate(
+                    goForwardEntry.Uri,
+                    nr =>
+                    {
+                        if (nr.Result) //导航成功
+                        {
+                            if (nr is not NavigationResultInternal nri || nri.ResultEntry is null)
+                            {
+                                throw new NullReferenceException("导航成功的结果不能为空！");
+                            }
 
-                IRegionNavigationJournalEntry entry = this.forwardStack.Peek();
+                            foreach (var skippedEntry in skippedForwardStackList)
+                            {
+                                RecordNavigation(skippedEntry, NavigationType.GoForward);
+                            }
 
-                if (!entry.IsPersistInHistory)
-                {
-                    RecordNavigation(entry, NavigationType.GoForward);
-                }
-                else
-                {
-                    this.NavigationTarget.RequestNavigate(
-                        entry.Uri,
-                        nr => { },
-                        entry.Parameters,
-                        entry.AssociatedView,
-                        NavigationType.GoForward);
-                    return true;
-                }
+                            RecordNavigation(nri.ResultEntry, NavigationType.GoForward);
+                        }
+                        naviFlag = nr.Result;
+                    },
+                    goForwardEntry.Parameters,
+                    goForwardEntry.AssociatedView,
+                    NavigationType.GoForward);
+                return naviFlag;
             }
+            return false;
         }
 
         /// <summary>

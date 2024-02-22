@@ -14,7 +14,7 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="result">The result.</param>
-        public NavigationResult(NavigationContext context, bool? result)
+        public NavigationResult(NavigationContext context, bool result)
         {
             this.Context = context;
             this.Result = result;
@@ -36,7 +36,7 @@ namespace Prism.Regions
         /// Gets the result.
         /// </summary>
         /// <value>The result.</value>
-        public bool? Result { get; private set; }
+        public bool Result { get; private set; }
 
         /// <summary>
         /// Gets an exception that occurred while navigating.

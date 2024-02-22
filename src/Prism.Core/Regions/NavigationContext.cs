@@ -56,7 +56,7 @@ namespace Prism.Regions
 
         public NavigationType NavigationType { get; private set; }
 
-        public WeakReference AssociatedView { get; private set; }
+        public WeakReference AssociatedView { get; set; }
 
         private void GetNavigationParameters(NavigationParameters navigationParameters)
         {

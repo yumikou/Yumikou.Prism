@@ -219,6 +219,8 @@ namespace Prism.Regions
 
                 object view = _regionNavigationContentLoader.LoadContent(Region, navigationContext);
 
+                navigationContext.AssociatedView = new WeakReference(view);
+
                 // Raise the navigating event just before activating the view.
                 RaiseNavigating(navigationContext);
 
@@ -232,13 +234,16 @@ namespace Prism.Regions
                 journalEntry.IsPersistInHistory = persistInHistory;
                 journalEntry.AssociatedView = new WeakReference(view);
 
-                Journal.RecordNavigation(journalEntry, navigationContext.NavigationType);
-
                 // The view can be informed of navigation
                 Action<INavigationAware> action = (n) => n.OnNavigatedTo(navigationContext);
                 MvvmHelpers.ViewAndViewModelAction(view, action);
 
-                navigationCallback(new NavigationResult(navigationContext, true));
+                if (navigationContext.NavigationType != NavigationType.GoBack && navigationContext.NavigationType != NavigationType.GoForward) // goBack和goForward的导航记录在Journal内部回调时处理
+                {
+                    Journal.RecordNavigation(journalEntry, navigationContext.NavigationType);
+                }
+                
+                navigationCallback(new NavigationResultInternal(navigationContext, true, journalEntry));
 
                 // Raise the navigated event when navigation is completed.
                 RaiseNavigated(navigationContext);
