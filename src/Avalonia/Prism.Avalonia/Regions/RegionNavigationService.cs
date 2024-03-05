@@ -230,15 +230,15 @@ namespace Prism.Regions
                 IRegionNavigationJournalEntry journalEntry = _container.Resolve<IRegionNavigationJournalEntry>();
                 journalEntry.Uri = navigationContext.Uri;
                 journalEntry.Parameters = navigationContext.Parameters;
-                bool persistInHistory = PersistInHistory(view);
-                journalEntry.IsPersistInHistory = persistInHistory;
+                PersistInHistoryType persistInHistory = PersistInHistory(view);
+                journalEntry.PersistInHistoryType = persistInHistory;
                 journalEntry.AssociatedView = new WeakReference(view);
 
                 // The view can be informed of navigation
                 Action<INavigationAware> action = (n) => n.OnNavigatedTo(navigationContext);
                 MvvmHelpers.ViewAndViewModelAction(view, action);
 
-                if (navigationContext.NavigationType != NavigationType.GoBack && navigationContext.NavigationType != NavigationType.GoForward) // goBack和goForward的导航记录在Journal内部回调时处理
+                if (persistInHistory != PersistInHistoryType.NotInHistory && navigationContext.NavigationType != NavigationType.GoBack && navigationContext.NavigationType != NavigationType.GoForward) // goBack和goForward的导航记录在Journal内部回调时处理
                 {
                     Journal.RecordNavigation(journalEntry, navigationContext.NavigationType);
                 }
@@ -254,10 +254,14 @@ namespace Prism.Regions
             }
         }
 
-        private static bool PersistInHistory(object view)
+        private static PersistInHistoryType PersistInHistory(object view)
         {
-            bool persist = true;
-            MvvmHelpers.ViewAndViewModelAction<IJournalAware>(view, ija => { persist &= ija.PersistInHistory(); });
+            PersistInHistoryType persist = PersistInHistoryType.InHistory;
+            MvvmHelpers.ViewAndViewModelAction<IJournalAware>(view, ija => { persist = ija.PersistInHistoryType(); });
+            if (RegionHelper.IsStackViewType(view.GetType()) && persist == PersistInHistoryType.NotInHistory)
+            {
+                throw new InvalidOperationException("堆栈类型的View不能设置为PersistInHistoryType.NotInHistory");
+            }
             return persist;
         }
 

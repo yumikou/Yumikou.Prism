@@ -19,7 +19,7 @@ namespace Prism.Regions
         /// </summary>
         NavigationParameters Parameters { get; set; }
 
-        bool IsPersistInHistory { get; set; }
+        PersistInHistoryType PersistInHistoryType { get; set; }
 
         WeakReference AssociatedView { get; set; }
     }

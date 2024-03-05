@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{43DC740B
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		build\MultiTargetFileName.targets = build\MultiTargetFileName.targets
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9D5ACEDE-FDFF-463F-8B81-AC958E30D232}"
@@ -42,11 +43,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackNavigation.ViewModel",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DialogInteractivity", "DialogInteractivity", "{6D0548D1-724F-487A-9C67-5F6CE5D8D3AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DialogInteractivity.ViewModel", "samples\DialogInteractivity\DialogInteractivity.ViewModel\DialogInteractivity.ViewModel.csproj", "{3932CAA6-4C20-42E4-963F-2A7A4729AD75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DialogInteractivity.ViewModel", "samples\DialogInteractivity\DialogInteractivity.ViewModel\DialogInteractivity.ViewModel.csproj", "{3932CAA6-4C20-42E4-963F-2A7A4729AD75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DialogInteractivity.Wpf", "samples\DialogInteractivity\DialogInteractivity.Wpf\DialogInteractivity.Wpf.csproj", "{79789D82-43A3-493B-AB4C-9ED316245B6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DialogInteractivity.Wpf", "samples\DialogInteractivity\DialogInteractivity.Wpf\DialogInteractivity.Wpf.csproj", "{79789D82-43A3-493B-AB4C-9ED316245B6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DialogInteractivity.Avalonia", "samples\DialogInteractivity\DialogInteractivity.Avalonia\DialogInteractivity.Avalonia.csproj", "{F31B0616-2A55-46A3-A4D0-2E86B5B18C44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DialogInteractivity.Avalonia", "samples\DialogInteractivity\DialogInteractivity.Avalonia\DialogInteractivity.Avalonia.csproj", "{F31B0616-2A55-46A3-A4D0-2E86B5B18C44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

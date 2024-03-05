@@ -40,7 +40,7 @@ namespace Prism.Regions
         {
             return CanGoBack((e, i) =>
             {
-                return e.IsPersistInHistory;
+                return e.PersistInHistoryType == PersistInHistoryType.InHistory;
             });
         }
 
@@ -83,7 +83,7 @@ namespace Prism.Regions
         {
             return GoBack((e, i) =>
             {
-                return e.IsPersistInHistory;
+                return e.PersistInHistoryType == PersistInHistoryType.InHistory; ;
             });
         }
 
@@ -133,10 +133,15 @@ namespace Prism.Regions
 
         public bool CanGoForward()
         {
-            return CanGoForwardInternal(out List<IRegionNavigationJournalEntry> skippedForwardStackList, out IRegionNavigationJournalEntry goForwardEntry);
+            return CanGoForwardInternal(e =>
+            {
+                return e.PersistInHistoryType == PersistInHistoryType.InHistory || e.PersistInHistoryType == PersistInHistoryType.InHistoryAndSkipGoBack;
+            }, 
+            out List<IRegionNavigationJournalEntry> skippedForwardStackList, 
+            out IRegionNavigationJournalEntry goForwardEntry);
         }
 
-        internal bool CanGoForwardInternal(out List<IRegionNavigationJournalEntry> skippedForwardStackList, out IRegionNavigationJournalEntry goForwardEntry)
+        internal bool CanGoForwardInternal(Func<IRegionNavigationJournalEntry, bool> goforwardPredicate, out List<IRegionNavigationJournalEntry> skippedForwardStackList, out IRegionNavigationJournalEntry goForwardEntry)
         {
             int depth = 0;
             skippedForwardStackList = new List<IRegionNavigationJournalEntry>();
@@ -150,7 +155,7 @@ namespace Prism.Regions
                 }
 
                 IRegionNavigationJournalEntry entry = this.forwardStack.ElementAt(depth);
-                if (!entry.IsPersistInHistory)
+                if (goforwardPredicate is not null && !goforwardPredicate.Invoke(entry))
                 {
                     skippedForwardStackList.Add(entry);
                 }
@@ -168,7 +173,12 @@ namespace Prism.Regions
         /// </summary>
         public bool GoForward()
         {
-            if (CanGoForwardInternal(out List<IRegionNavigationJournalEntry> skippedForwardStackList, out IRegionNavigationJournalEntry goForwardEntry))
+            if (CanGoForwardInternal(e =>
+            {
+                return e.PersistInHistoryType == PersistInHistoryType.InHistory || e.PersistInHistoryType == PersistInHistoryType.InHistoryAndSkipGoBack;
+            }, 
+            out List<IRegionNavigationJournalEntry> skippedForwardStackList, 
+            out IRegionNavigationJournalEntry goForwardEntry))
             {
                 bool naviFlag = false;
                 this.NavigationTarget.RequestNavigate(

@@ -9,6 +9,6 @@
         /// Determines if the current object is going to be added to the navigation journal's backstack.
         /// </summary>
         /// <returns>True, add to backstack. False, remove from backstack.</returns>
-        bool PersistInHistory();
+        PersistInHistoryType PersistInHistoryType();
     }
 }
