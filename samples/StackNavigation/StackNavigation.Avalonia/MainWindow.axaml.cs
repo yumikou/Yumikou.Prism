@@ -1,5 +1,7 @@
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Prism.Regions;
+using System;
 
 namespace StackNavigation.Avalonia
 {
@@ -8,6 +10,7 @@ namespace StackNavigation.Avalonia
         public MainWindow()
         {
             InitializeComponent();
+            this.tcc.PageTransition = new PageSlide(TimeSpan.FromMilliseconds(200), PageSlide.SlideAxis.Vertical);
         }
     }
 }

@@ -38,7 +38,16 @@ namespace Prism.Regions
 
             ((SingleActiveRegion)region).NavigationActiveViewChanged += (s, a) =>
             {
-                regionTarget.Content = a.ActiveView;
+                if (a.NavigationType == NavigationType.GoBack)
+                {
+                    regionTarget.IsTransitionReversed = true;
+                    regionTarget.Content = a.ActiveView;
+                }
+                else
+                {
+                    regionTarget.IsTransitionReversed = false;
+                    regionTarget.Content = a.ActiveView;
+                }
             };
            
             region.Views.CollectionChanged +=

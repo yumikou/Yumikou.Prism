@@ -1,7 +1,8 @@
 <Project>
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
-    <AvaloniaVersion>11.0.7</AvaloniaVersion>
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
+    <AvaloniaBehaviorsVersion>11.0.9</AvaloniaBehaviorsVersion>
   </PropertyGroup>
 
   
