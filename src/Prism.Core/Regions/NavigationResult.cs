@@ -15,9 +15,16 @@ namespace Prism.Regions
         /// <param name="context">The context.</param>
         /// <param name="result">The result.</param>
         public NavigationResult(NavigationContext context, bool result)
+            :this(context, result, null)
+        {
+            
+        }
+
+        public NavigationResult(NavigationContext context, bool result, IRegionNavigationJournalEntry resultEntry)
         {
             this.Context = context;
             this.Result = result;
+            this.ResultEntry = resultEntry;
         }
 
         /// <summary>
@@ -49,5 +56,7 @@ namespace Prism.Regions
         /// </summary>
         /// <value>The navigation context.</value>
         public NavigationContext Context { get; private set; }
+
+        public IRegionNavigationJournalEntry ResultEntry { get; private set; }
     }
 }

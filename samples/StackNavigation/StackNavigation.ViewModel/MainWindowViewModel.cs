@@ -31,7 +31,7 @@ namespace StackNavigation.ViewModel
                 _isViewLoaded = true;
                 if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
                 {
-                    _regionManager.RequestNavigate(RegionNames.MainRegion, "HomeView");
+                    _regionManager.RequestNavigate(RegionNames.MainRegion, "HomeView", NavigationType.Init);
                 }
             }
         }

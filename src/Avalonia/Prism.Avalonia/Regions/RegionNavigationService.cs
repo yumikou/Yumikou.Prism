@@ -238,12 +238,9 @@ namespace Prism.Regions
                 Action<INavigationAware> action = (n) => n.OnNavigatedTo(navigationContext);
                 MvvmHelpers.ViewAndViewModelAction(view, action);
 
-                if (persistInHistory != PersistInHistoryType.NotInHistory && navigationContext.NavigationType != NavigationType.GoBack && navigationContext.NavigationType != NavigationType.GoForward) // goBack和goForward的导航记录在Journal内部回调时处理
-                {
-                    Journal.RecordNavigation(journalEntry, navigationContext.NavigationType);
-                }
+                Journal.RecordNavigation(journalEntry, navigationContext.NavigationType);
                 
-                navigationCallback(new NavigationResultInternal(navigationContext, true, journalEntry));
+                navigationCallback(new NavigationResult(navigationContext, true, journalEntry));
 
                 // Raise the navigated event when navigation is completed.
                 RaiseNavigated(navigationContext);

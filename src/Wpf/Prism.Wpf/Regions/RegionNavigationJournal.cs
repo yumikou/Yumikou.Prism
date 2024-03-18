@@ -15,6 +15,7 @@ namespace Prism.Regions
         private readonly IContainerExtension _container;
         private Stack<IRegionNavigationJournalEntry> backStack = new Stack<IRegionNavigationJournalEntry>();
         private Stack<IRegionNavigationJournalEntry> forwardStack = new Stack<IRegionNavigationJournalEntry>();
+        private bool isNavigatingInternal = false;
 
         /// <summary>
         /// Gets or sets the target that implements INavigate.
@@ -92,13 +93,15 @@ namespace Prism.Regions
             if (CanGoBackInternal(gobackPredicate, out List<IRegionNavigationJournalEntry> skippedBackStackList, out IRegionNavigationJournalEntry goBackEntry))
             {
                 bool naviFlag = false;
+                this.isNavigatingInternal = true;
                 this.NavigationTarget.RequestNavigate(
                     goBackEntry.Uri,
                     nr =>
                     {
+                        this.isNavigatingInternal = false;
                         if (nr.Result) //导航成功
                         {
-                            if (nr is not NavigationResultInternal nri || nri.ResultEntry is null)
+                            if (nr.ResultEntry is null)
                             {
                                 throw new NullReferenceException("导航成功的结果不能为空！");
                             }
@@ -119,7 +122,7 @@ namespace Prism.Regions
                                 }
                             }
 
-                            RecordNavigation(nri.ResultEntry, NavigationType.GoBack);
+                            RecordNavigation(nr.ResultEntry, NavigationType.GoBack);
                         }
                         naviFlag = nr.Result;
                     },
@@ -181,13 +184,15 @@ namespace Prism.Regions
             out IRegionNavigationJournalEntry goForwardEntry))
             {
                 bool naviFlag = false;
+                this.isNavigatingInternal = true;
                 this.NavigationTarget.RequestNavigate(
                     goForwardEntry.Uri,
                     nr =>
                     {
+                        this.isNavigatingInternal = false;
                         if (nr.Result) //导航成功
                         {
-                            if (nr is not NavigationResultInternal nri || nri.ResultEntry is null)
+                            if (nr.ResultEntry is null)
                             {
                                 throw new NullReferenceException("导航成功的结果不能为空！");
                             }
@@ -197,7 +202,7 @@ namespace Prism.Regions
                                 RecordNavigation(skippedEntry, NavigationType.GoForward);
                             }
 
-                            RecordNavigation(nri.ResultEntry, NavigationType.GoForward);
+                            RecordNavigation(nr.ResultEntry, NavigationType.GoForward);
                         }
                         naviFlag = nr.Result;
                     },
@@ -216,6 +221,8 @@ namespace Prism.Regions
         /// <param name="persistInHistory">Determine if the view is added to the back stack or excluded from the history.</param>
         public void RecordNavigation(IRegionNavigationJournalEntry entry, NavigationType navigationType)
         {
+            if (this.isNavigatingInternal) return;
+
             if (navigationType == NavigationType.GoBack)
             {
                 if (this.CurrentEntry != null)
@@ -245,7 +252,14 @@ namespace Prism.Regions
 
                 this.forwardStack.Clear();
 
-                CurrentEntry = entry;
+                if (entry.PersistInHistoryType != PersistInHistoryType.NotInHistory)
+                {
+                    CurrentEntry = entry;
+                }
+                else
+                {
+                    CurrentEntry = null;
+                }
             }
         }
 

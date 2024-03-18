@@ -69,14 +69,14 @@ namespace Prism.Regions
         /// <param name="regionName">The name of the region to call Navigate on.</param>
         /// <param name="source">The URI of the content to display.</param>
         /// <param name="navigationCallback">The navigation callback.</param>
-        void RequestNavigate(string regionName, Uri source, Action<NavigationResult> navigationCallback);
+        void RequestNavigate(string regionName, Uri source, Action<NavigationResult> navigationCallback, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// Navigates the specified region manager.
         /// </summary>
         /// <param name="regionName">The name of the region to call Navigate on.</param>
         /// <param name="source">The URI of the content to display.</param>
-        void RequestNavigate(string regionName, Uri source);
+        void RequestNavigate(string regionName, Uri source, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// Navigates the specified region manager.
@@ -84,14 +84,14 @@ namespace Prism.Regions
         /// <param name="regionName">The name of the region to call Navigate on.</param>
         /// <param name="source">The URI of the content to display.</param>
         /// <param name="navigationCallback">The navigation callback.</param>
-        void RequestNavigate(string regionName, string source, Action<NavigationResult> navigationCallback);
+        void RequestNavigate(string regionName, string source, Action<NavigationResult> navigationCallback, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// Navigates the specified region manager.
         /// </summary>
         /// <param name="regionName">The name of the region to call Navigate on.</param>
         /// <param name="source">The URI of the content to display.</param>
-        void RequestNavigate(string regionName, string source);
+        void RequestNavigate(string regionName, string source, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// This method allows an IRegionManager to locate a specified region and navigate in it to the specified target Uri, passing a navigation callback and an instance of NavigationParameters, which holds a collection of object parameters.
@@ -100,7 +100,7 @@ namespace Prism.Regions
         /// <param name="target">A Uri that represents the target where the region will navigate.</param>
         /// <param name="navigationCallback">The navigation callback that will be executed after the navigation is completed.</param>
         /// <param name="navigationParameters">An instance of NavigationParameters, which holds a collection of object parameters.</param>
-        void RequestNavigate(string regionName, Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters);
+        void RequestNavigate(string regionName, Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// This method allows an IRegionManager to locate a specified region and navigate in it to the specified target string, passing a navigation callback and an instance of NavigationParameters, which holds a collection of object parameters.
@@ -109,7 +109,7 @@ namespace Prism.Regions
         /// <param name="target">A string that represents the target where the region will navigate.</param>
         /// <param name="navigationCallback">The navigation callback that will be executed after the navigation is completed.</param>
         /// <param name="navigationParameters">An instance of NavigationParameters, which holds a collection of object parameters.</param>
-        void RequestNavigate(string regionName, string target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters);
+        void RequestNavigate(string regionName, string target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// This method allows an IRegionManager to locate a specified region and navigate in it to the specified target Uri, passing an instance of NavigationParameters, which holds a collection of object parameters.
@@ -117,7 +117,7 @@ namespace Prism.Regions
         /// <param name="regionName">The name of the region where the navigation will occur.</param>
         /// <param name="target">A Uri that represents the target where the region will navigate.</param>
         /// <param name="navigationParameters">An instance of NavigationParameters, which holds a collection of object parameters.</param>
-        void RequestNavigate(string regionName, Uri target, NavigationParameters navigationParameters);
+        void RequestNavigate(string regionName, Uri target, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate);
 
         /// <summary>
         /// This method allows an IRegionManager to locate a specified region and navigate in it to the specified target string, passing an instance of NavigationParameters, which holds a collection of object parameters.
@@ -125,6 +125,6 @@ namespace Prism.Regions
         /// <param name="regionName">The name of the region where the navigation will occur.</param>
         /// <param name="target">A string that represents the target where the region will navigate.</param>
         /// <param name="navigationParameters">An instance of NavigationParameters, which holds a collection of object parameters.</param>
-        void RequestNavigate(string regionName, string target, NavigationParameters navigationParameters);
+        void RequestNavigate(string regionName, string target, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate);
     }
 }

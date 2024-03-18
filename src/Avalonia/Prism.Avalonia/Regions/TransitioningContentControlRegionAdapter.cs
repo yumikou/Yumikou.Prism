@@ -1,11 +1,11 @@
-﻿using Avalonia.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Prism.Properties;
 using System.Collections.Specialized;
+using Avalonia.Controls;
 
 namespace Prism.Regions
 {
@@ -31,7 +31,7 @@ namespace Prism.Regions
                 throw new ArgumentNullException(nameof(regionTarget));
 
             bool contentIsSet = regionTarget.Content != null;
-            contentIsSet = contentIsSet || regionTarget[ContentControl.ContentProperty] != null;
+            contentIsSet = contentIsSet || regionTarget[Avalonia.Controls.ContentControl.ContentProperty] != null;
 
             if (contentIsSet)
                 throw new InvalidOperationException(Resources.ContentControlHasContentException);
@@ -41,6 +41,11 @@ namespace Prism.Regions
                 if (a.NavigationType == NavigationType.GoBack)
                 {
                     regionTarget.IsTransitionReversed = true;
+                    regionTarget.Content = a.ActiveView;
+                }
+                else if (a.NavigationType == NavigationType.Init) //初始化加载不用执行动画
+                {
+                    regionTarget.IsTransitionReversed = false;
                     regionTarget.Content = a.ActiveView;
                 }
                 else
