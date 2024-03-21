@@ -17,7 +17,7 @@ namespace Prism.Regions
         /// <summary>
         /// Value indicating whether the wrapped item is considered active.
         /// </summary>
-        public static readonly StyledProperty<bool> IsActiveProperty =
+        private static readonly StyledProperty<bool> IsActiveProperty =
             AvaloniaProperty.Register<ItemMetadata, bool>("IsActive");
 
         /// <summary>
@@ -28,11 +28,6 @@ namespace Prism.Regions
         {
             // check for null
             this.Item = item;
-        }
-
-        static ItemMetadata()
-        {
-            IsActiveProperty.Changed.Subscribe(args => StyledPropertyChanged(args?.Sender, args));
         }
 
         /// <summary>
@@ -58,30 +53,18 @@ namespace Prism.Regions
         public bool IsActive
         {
             get { return (bool)GetValue(IsActiveProperty); }
-            set { SetValue(IsActiveProperty, value); }
+            private set { SetValue(IsActiveProperty, value); }
         }
 
         /// <summary>
         /// Occurs when metadata on the item changes.
         /// </summary>
-        public event EventHandler MetadataChanged;
+        public event EventHandler<ItemMetadataIsActiveChangedEventArgs> IsActiveChanged;
 
-        /// <summary>
-        /// Explicitly invokes <see cref="MetadataChanged"/> to notify listeners.
-        /// </summary>
-        public void InvokeMetadataChanged()
+        public void SetIsActive(bool isActive, NavigationType navigationType)
         {
-            EventHandler metadataChangedHandler = MetadataChanged;
-            if (metadataChangedHandler != null) metadataChangedHandler(this, EventArgs.Empty);
-        }
-
-        private static void StyledPropertyChanged(AvaloniaObject dependencyObject, AvaloniaPropertyChangedEventArgs args)
-        {
-            ItemMetadata itemMetadata = dependencyObject as ItemMetadata;
-            if (itemMetadata != null)
-            {
-                itemMetadata.InvokeMetadataChanged();
-            }
+            IsActive = isActive;
+            IsActiveChanged?.Invoke(this, new ItemMetadataIsActiveChangedEventArgs(isActive, navigationType));
         }
     }
 }

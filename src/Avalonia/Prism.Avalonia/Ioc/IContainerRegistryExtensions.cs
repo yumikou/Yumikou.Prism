@@ -53,18 +53,6 @@ namespace Prism.Ioc
             containerRegistry.Register(typeof(Services.Dialogs.IDialogWindow), typeof(TWindow), name);
         }
 
-        public static void RegisterForStackNavigation<TView>(this IContainerRegistry containerRegistry, string name = null)
-        {
-            RegionHelper.AddViewTypeForStackNavigation(typeof(TView));
-            containerRegistry.RegisterForNavigation<TView>(name);
-        }
-
-        public static void RegisterForStackNavigation<TView, TViewModel>(this IContainerRegistry containerRegistry, string name = null)
-        {
-            RegionHelper.AddViewTypeForStackNavigation(typeof(TView));
-            containerRegistry.RegisterForNavigation<TView, TViewModel>(name);
-        }
-
         /// <summary>
         /// Registers an object for navigation
         /// </summary>

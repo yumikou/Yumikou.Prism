@@ -15,13 +15,13 @@ namespace Prism.Regions
         /// </summary>
         public RegionMemberLifetimeAttribute()
         {
-            KeepAlive = true;
+            RegionMemberLifetimeType = RegionMemberLifetimeType.KeepAlive;
         }
 
         ///<summary>
         /// Determines if the region member should be kept-alive
         /// when deactivated.
         ///</summary>
-        public bool KeepAlive { get; set; }
+        public RegionMemberLifetimeType RegionMemberLifetimeType { get; set; }
     }
 }

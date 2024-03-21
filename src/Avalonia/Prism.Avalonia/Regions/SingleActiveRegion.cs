@@ -9,15 +9,13 @@ namespace Prism.Regions
     /// </summary>
     public class SingleActiveRegion : Region
     {
-        public EventHandler<NavigationActiveViewChangedEventArgs> NavigationActiveViewChanged;
-
         /// <summary>
         /// Marks the specified view as active.
         /// </summary>
         /// <param name="view">The view to activate.</param>
         /// <remarks>If there is an active view before calling this method,
         /// that view will be deactivated automatically.</remarks>
-        public override bool Activate(object view, NavigationType navigationType)
+        public override void Activate(object view, NavigationType navigationType)
         {
             object currentActiveView = ActiveViews.FirstOrDefault();
 
@@ -25,12 +23,7 @@ namespace Prism.Regions
             {
                 base.Deactivate(currentActiveView, navigationType);
             }
-            if (base.Activate(view, navigationType))
-            {
-                NavigationActiveViewChanged?.Invoke(this, new NavigationActiveViewChangedEventArgs(view, navigationType));
-                return true;
-            }
-            return false;
+            base.Activate(view, navigationType);
         }
     }
 }

@@ -36,22 +36,30 @@ namespace Prism.Regions
             if (contentIsSet)
                 throw new InvalidOperationException(Resources.ContentControlHasContentException);
 
-            ((SingleActiveRegion)region).NavigationActiveViewChanged += (s, a) =>
+            region.ActiveViews.NavigationCollectionChanged += (s, e) =>
             {
-                if (a.NavigationType == NavigationType.GoBack)
+                object aView = region.ActiveViews.FirstOrDefault();
+                if (e.Action == NotifyCollectionChangedAction.Reset && regionTarget.Content == aView) //Reset只会有顺序变更，如果当前的Content没有变化，就不触发
                 {
-                    regionTarget.IsTransitionReversed = true;
-                    regionTarget.Content = a.ActiveView;
+                    return;
                 }
-                else if (a.NavigationType == NavigationType.Init) //初始化加载不用执行动画
+                if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Reset)
                 {
-                    regionTarget.IsTransitionReversed = false;
-                    regionTarget.Content = a.ActiveView;
-                }
-                else
-                {
-                    regionTarget.IsTransitionReversed = false;
-                    regionTarget.Content = a.ActiveView;
+                    if (e.NavigationType == NavigationType.GoBack)
+                    {
+                        regionTarget.IsTransitionReversed = true;
+                        regionTarget.Content = aView;
+                    }
+                    else if (e.NavigationType == NavigationType.Init || e.NavigationType == null) //初始化加载不用执行动画
+                    {
+                        regionTarget.IsTransitionReversed = false;
+                        regionTarget.Content = aView;
+                    }
+                    else //goForward或Navigate
+                    {
+                        regionTarget.IsTransitionReversed = false;
+                        regionTarget.Content = aView;
+                    }
                 }
             };
            

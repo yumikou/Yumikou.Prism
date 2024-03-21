@@ -255,10 +255,6 @@ namespace Prism.Regions
         {
             PersistInHistoryType persist = PersistInHistoryType.InHistory;
             MvvmHelpers.ViewAndViewModelAction<IJournalAware>(view, ija => { persist = ija.PersistInHistoryType(); });
-            if (RegionHelper.IsStackViewType(view.GetType()) && persist == PersistInHistoryType.NotInHistory)
-            {
-                throw new InvalidOperationException("堆栈类型的View不能设置为PersistInHistoryType.NotInHistory");
-            }
             return persist;
         }
 

@@ -9,40 +9,38 @@ namespace Prism.Common
 {
     internal static class RegionHelper
     {
-        private static HashSet<Type> viewTypesForStackNavigation = new HashSet<Type>();
-
-        public static bool AddViewTypeForStackNavigation(Type viewType)
+        internal static bool InactiveViewShouldKeepAlive(object inactiveView, NavigationType? navigationType)
         {
-            return viewTypesForStackNavigation.Add(viewType);
-        }
-
-        public static bool IsStackViewType(Type viewType)
-        {
-            return viewTypesForStackNavigation.Contains(viewType);
-        }
-
-        internal static bool InactiveViewShouldKeepAlive(object inactiveView, NavigationType navigationType)
-        {
-            if (IsStackViewType(inactiveView.GetType()))
+            RegionMemberLifetimeType lifetimeType = GetLifetimeType(inactiveView);
+            if (lifetimeType == RegionMemberLifetimeType.Transient)
+            {
+                return false;
+            }
+            else if (lifetimeType == RegionMemberLifetimeType.KeepAlive)
+            {
+                return true;
+            }
+            else // Stack
             {
                 return navigationType != NavigationType.GoBack;
             }
-            else
+        }
+
+        internal static RegionMemberLifetimeType GetLifetimeType(object view)
+        {
+            IRegionMemberLifetime lifetime = MvvmHelpers.GetImplementerFromViewOrViewModel<IRegionMemberLifetime>(view);
+            if (lifetime != null)
             {
-                IRegionMemberLifetime lifetime = MvvmHelpers.GetImplementerFromViewOrViewModel<IRegionMemberLifetime>(inactiveView);
-                if (lifetime != null)
-                {
-                    return lifetime.KeepAlive;
-                }
-
-                RegionMemberLifetimeAttribute lifetimeAttribute = MvvmHelpers.GetAttributeFromViewOrViewModel<RegionMemberLifetimeAttribute>(inactiveView, true);
-                if (lifetimeAttribute != null)
-                {
-                    return lifetimeAttribute.KeepAlive;
-                }
-
-                return true;
+                return lifetime.RegionMemberLifetimeType;
             }
+
+            RegionMemberLifetimeAttribute lifetimeAttribute = MvvmHelpers.GetAttributeFromViewOrViewModel<RegionMemberLifetimeAttribute>(view, true);
+            if (lifetimeAttribute != null)
+            {
+                return lifetimeAttribute.RegionMemberLifetimeType;
+            }
+
+            return RegionMemberLifetimeType.KeepAlive;
         }
     }
 }

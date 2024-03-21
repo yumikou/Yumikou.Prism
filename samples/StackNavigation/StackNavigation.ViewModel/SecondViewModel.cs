@@ -8,13 +8,15 @@ using System.Diagnostics;
 
 namespace StackNavigation.ViewModel
 {
-    public class SecondViewModel
+    public class SecondViewModel : IRegionMemberLifetime
     {
         private IRegionManager _regionManager;
 
         public int StackDepth { get; set; }
 
         public DelegateCommand GoNextPageCommand { get; set; }
+
+        public RegionMemberLifetimeType RegionMemberLifetimeType { get; set; } = RegionMemberLifetimeType.Stack;
 
         public SecondViewModel(IRegionManager regionManager)
         {

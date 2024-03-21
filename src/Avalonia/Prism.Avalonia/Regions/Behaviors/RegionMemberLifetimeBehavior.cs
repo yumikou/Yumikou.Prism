@@ -42,10 +42,10 @@ namespace Prism.Regions.Behaviors
         /// </summary>
         protected override void OnAttach()
         {
-            this.Region.ActiveViews.CollectionChanged += this.OnActiveViewsChanged;
+            this.Region.ActiveViews.NavigationCollectionChanged += this.OnActiveViewsChanged;
         }
 
-        private void OnActiveViewsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnActiveViewsChanged(object sender, NavigationNotifyCollectionChangedEventArgs e)
         {
             // We only pay attention to items removed from the ActiveViews list.
             // Thus, we expect that any ICollectionView implementation would
@@ -56,7 +56,7 @@ namespace Prism.Regions.Behaviors
             var inactiveViews = e.OldItems;
             foreach (var inactiveView in inactiveViews)
             {
-                if (!ShouldKeepAlive(inactiveView))
+                if (!RegionHelper.InactiveViewShouldKeepAlive(inactiveView, e.NavigationType))
                 {
                     if (Region.Views.Contains(inactiveView))
                         Region.Remove(inactiveView);
@@ -64,46 +64,46 @@ namespace Prism.Regions.Behaviors
             }
         }
 
-        private static bool ShouldKeepAlive(object inactiveView)
-        {
-            IRegionMemberLifetime lifetime = MvvmHelpers.GetImplementerFromViewOrViewModel<IRegionMemberLifetime>(inactiveView);
-            if (lifetime != null)
-            {
-                return lifetime.KeepAlive;
-            }
+        //private static bool ShouldKeepAlive(object inactiveView)
+        //{
+        //    IRegionMemberLifetime lifetime = MvvmHelpers.GetImplementerFromViewOrViewModel<IRegionMemberLifetime>(inactiveView);
+        //    if (lifetime != null)
+        //    {
+        //        return lifetime.KeepAlive;
+        //    }
 
-            RegionMemberLifetimeAttribute lifetimeAttribute = GetItemOrContextLifetimeAttribute(inactiveView);
-            if (lifetimeAttribute != null)
-            {
-                return lifetimeAttribute.KeepAlive;
-            }
+        //    RegionMemberLifetimeAttribute lifetimeAttribute = GetItemOrContextLifetimeAttribute(inactiveView);
+        //    if (lifetimeAttribute != null)
+        //    {
+        //        return lifetimeAttribute.KeepAlive;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        private static RegionMemberLifetimeAttribute GetItemOrContextLifetimeAttribute(object inactiveView)
-        {
-            var lifetimeAttribute = GetCustomAttributes<RegionMemberLifetimeAttribute>(inactiveView.GetType()).FirstOrDefault();
-            if (lifetimeAttribute != null)
-            {
-                return lifetimeAttribute;
-            }
+        //private static RegionMemberLifetimeAttribute GetItemOrContextLifetimeAttribute(object inactiveView)
+        //{
+        //    var lifetimeAttribute = GetCustomAttributes<RegionMemberLifetimeAttribute>(inactiveView.GetType()).FirstOrDefault();
+        //    if (lifetimeAttribute != null)
+        //    {
+        //        return lifetimeAttribute;
+        //    }
 
-            var Control = inactiveView as Control;
-            if (Control != null && Control.DataContext != null)
-            {
-                var dataContext = Control.DataContext;
-                var contextLifetimeAttribute =
-                    GetCustomAttributes<RegionMemberLifetimeAttribute>(dataContext.GetType()).FirstOrDefault();
-                return contextLifetimeAttribute;
-            }
+        //    var Control = inactiveView as Control;
+        //    if (Control != null && Control.DataContext != null)
+        //    {
+        //        var dataContext = Control.DataContext;
+        //        var contextLifetimeAttribute =
+        //            GetCustomAttributes<RegionMemberLifetimeAttribute>(dataContext.GetType()).FirstOrDefault();
+        //        return contextLifetimeAttribute;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        private static IEnumerable<T> GetCustomAttributes<T>(Type type)
-        {
-            return type.GetCustomAttributes(typeof(T), true).OfType<T>();
-        }
+        //private static IEnumerable<T> GetCustomAttributes<T>(Type type)
+        //{
+        //    return type.GetCustomAttributes(typeof(T), true).OfType<T>();
+        //}
     }
 }

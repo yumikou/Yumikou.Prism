@@ -10,6 +10,6 @@ namespace Prism.Regions
         /// <summary>
         /// Gets a value indicating whether this instance should be kept-alive upon deactivation.
         /// </summary>
-        bool KeepAlive { get; }
+        RegionMemberLifetimeType RegionMemberLifetimeType { get; }
     }
 }

@@ -79,13 +79,13 @@ namespace Prism.Regions
         /// Marks the specified view as active. 
         /// </summary>
         /// <param name="view">The view to activate.</param>
-        bool Activate(object view, NavigationType navigationType);
+        void Activate(object view, NavigationType navigationType);
 
         /// <summary>
         /// Marks the specified view as inactive. 
         /// </summary>
         /// <param name="view">The view to deactivate.</param>
-        bool Deactivate(object view, NavigationType navigationType);
+        void Deactivate(object view, NavigationType navigationType);
 
         /// <summary>
         /// Returns the view instance that was added to the region using a specific name.

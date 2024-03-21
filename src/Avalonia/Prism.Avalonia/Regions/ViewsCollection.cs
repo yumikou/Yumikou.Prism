@@ -42,6 +42,8 @@ namespace Prism.Regions
         /// </summary>
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
+        public event EventHandler<NavigationNotifyCollectionChangedEventArgs> NavigationCollectionChanged;
+
         /// <summary>
         /// Gets or sets the comparison used to sort the views.
         /// </summary>
@@ -55,7 +57,7 @@ namespace Prism.Regions
                 {
                     this.sort = value;
                     this.UpdateFilteredItemsList();
-                    this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    this.OnCollectionChanged(new NavigationNotifyCollectionChangedEventArgs(null, NotifyCollectionChangedAction.Reset));
                 }
             }
         }
@@ -96,15 +98,16 @@ namespace Prism.Regions
         /// Used to invoked the <see cref="CollectionChanged"/> event.
         /// </summary>
         /// <param name="e"></param>
-        private void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        private void OnCollectionChanged(NavigationNotifyCollectionChangedEventArgs e)
         {
             NotifyCollectionChangedEventHandler handler = this.CollectionChanged;
             if (handler != null) handler(this, e);
+            this.NavigationCollectionChanged?.Invoke(this, e);
         }
 
         private void NotifyReset()
         {
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.OnCollectionChanged(new NavigationNotifyCollectionChangedEventArgs(null, NotifyCollectionChangedAction.Reset));
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace Prism.Regions
         {
             foreach (var item in this.monitoredItems)
             {
-                item.Key.MetadataChanged -= this.OnItemMetadataChanged;
+                item.Key.IsActiveChanged -= this.OnItemMetadataIsActiveChanged;
             }
 
             this.monitoredItems.Clear();
@@ -147,7 +150,7 @@ namespace Prism.Regions
         /// <param name="isInList"></param>
         private void AddMetadataMonitor(ItemMetadata itemMetadata, bool isInList)
         {
-            itemMetadata.MetadataChanged += this.OnItemMetadataChanged;
+            itemMetadata.IsActiveChanged += this.OnItemMetadataIsActiveChanged;
             this.monitoredItems.Add(
                 itemMetadata,
                 new MonitorInfo
@@ -162,7 +165,7 @@ namespace Prism.Regions
         /// <param name="itemMetadata"></param>
         private void RemoveMetadataMonitor(ItemMetadata itemMetadata)
         {
-            itemMetadata.MetadataChanged -= this.OnItemMetadataChanged;
+            itemMetadata.IsActiveChanged -= this.OnItemMetadataIsActiveChanged;
             this.monitoredItems.Remove(itemMetadata);
         }
 
@@ -171,7 +174,7 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnItemMetadataChanged(object sender, EventArgs e)
+        private void OnItemMetadataIsActiveChanged(object sender, ItemMetadataIsActiveChangedEventArgs e)
         {
             ItemMetadata itemMetadata = (ItemMetadata)sender;
 
@@ -191,7 +194,7 @@ namespace Prism.Regions
                     // an Add.
                     monitorInfo.IsInList = true;
                     this.UpdateFilteredItemsList();
-                    NotifyAdd(itemMetadata.Item);
+                    NotifyAdd(itemMetadata.Item, e.NavigationType);
                 }
             }
             else
@@ -200,7 +203,7 @@ namespace Prism.Regions
                 // tracking list, but should not remove any monitoring in
                 // case it fits our filter in the future.
                 monitorInfo.IsInList = false;
-                this.RemoveFromFilteredList(itemMetadata.Item);
+                this.RemoveFromFilteredList(itemMetadata.Item, e.NavigationType);
             }
         }
 
@@ -221,7 +224,7 @@ namespace Prism.Regions
                         this.AddMetadataMonitor(itemMetadata, isInFilter);
                         if (isInFilter)
                         {
-                            NotifyAdd(itemMetadata.Item);
+                            NotifyAdd(itemMetadata.Item, null);
                         }
                     }
 
@@ -241,7 +244,7 @@ namespace Prism.Regions
                         this.RemoveMetadataMonitor(itemMetadata);
                         if (this.filter(itemMetadata))
                         {
-                            this.RemoveFromFilteredList(itemMetadata.Item);
+                            this.RemoveFromFilteredList(itemMetadata.Item, null);
                         }
                     }
 
@@ -256,17 +259,17 @@ namespace Prism.Regions
             }
         }
 
-        private void NotifyAdd(object item)
+        private void NotifyAdd(object item, NavigationType? navigationType)
         {
             int newIndex = this.filteredItems.IndexOf(item);
-            this.NotifyAdd(new[] { item }, newIndex);
+            this.NotifyAdd(new[] { item }, newIndex, navigationType);
         }
 
-        private void RemoveFromFilteredList(object item)
+        private void RemoveFromFilteredList(object item, NavigationType? navigationType)
         {
             int index = this.filteredItems.IndexOf(item);
             this.UpdateFilteredItemsList();
-            this.NotifyRemove(new[] { item }, index);
+            this.NotifyRemove(new[] { item }, index, navigationType);
         }
 
         private void UpdateFilteredItemsList()
@@ -300,22 +303,24 @@ namespace Prism.Regions
             }
         }
 
-        private void NotifyAdd(IList items, int newStartingIndex)
+        private void NotifyAdd(IList items, int newStartingIndex, NavigationType? navigationType)
         {
             if (items.Count > 0)
             {
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(
+                OnCollectionChanged(new NavigationNotifyCollectionChangedEventArgs(
+                                            navigationType,
                                             NotifyCollectionChangedAction.Add,
                                             items,
                                             newStartingIndex));
             }
         }
 
-        private void NotifyRemove(IList items, int originalIndex)
+        private void NotifyRemove(IList items, int originalIndex, NavigationType? navigationType)
         {
             if (items.Count > 0)
             {
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(
+                OnCollectionChanged(new NavigationNotifyCollectionChangedEventArgs(
+                    navigationType,
                     NotifyCollectionChangedAction.Remove,
                     items,
                     originalIndex));

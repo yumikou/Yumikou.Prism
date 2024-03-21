@@ -48,27 +48,15 @@ namespace Prism.Regions
             if (navigationContext == null)
                 throw new ArgumentNullException(nameof(navigationContext));
 
-            string candidateTargetContract = UriParsingHelper.GetContract(navigationContext.Uri);
-
-            var candidateType = _container.GetRegistrationType(candidateTargetContract);
-            if (candidateType is not null && RegionHelper.IsStackViewType(candidateType)) // 如果是堆栈导航类型
+            if (navigationContext.NavigationType == NavigationType.GoBack 
+                && navigationContext.AssociatedView is not null && navigationContext.AssociatedView.IsAlive 
+                && RegionHelper.GetLifetimeType(navigationContext.AssociatedView.Target) == RegionMemberLifetimeType.Stack)
             {
-                if (navigationContext.NavigationType == NavigationType.GoBack)
-                {
-                    if (navigationContext.AssociatedView is null || !navigationContext.AssociatedView.IsAlive) throw new InvalidOperationException("堆栈导航历史中的View被提前回收了");
-                    return navigationContext.AssociatedView.Target;
-                }
-                else
-                {
-                    var view = CreateNewRegionItem(candidateTargetContract);
-
-                    AddViewToRegion(region, view);
-
-                    return view;
-                }
+                return navigationContext.AssociatedView.Target;
             }
             else
             {
+                string candidateTargetContract = UriParsingHelper.GetContract(navigationContext.Uri);
                 var candidates = GetCandidatesFromRegion(region, candidateTargetContract);
                 var acceptingCandidates =
                     candidates.Where(
