@@ -52,7 +52,10 @@ namespace Prism.Regions
                 && navigationContext.AssociatedView is not null && navigationContext.AssociatedView.IsAlive 
                 && RegionHelper.GetLifetimeType(navigationContext.AssociatedView.Target) == RegionMemberLifetimeType.Stack)
             {
-                return navigationContext.AssociatedView.Target;
+                if (region.Views.Contains(navigationContext.AssociatedView.Target))
+                    return navigationContext.AssociatedView.Target;
+                else
+                    throw new InvalidOperationException("导航堆栈中记录的view在Region中找不到了");
             }
             else
             {

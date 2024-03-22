@@ -38,7 +38,7 @@ namespace Prism.Regions
             if (contentIsSet)
                 throw new InvalidOperationException(Resources.ContentControlHasContentException);
 
-            ((SingleActiveRegion)region).SingleActiveViewChanged += delegate
+            region.ActiveViews.CollectionChanged += delegate
             {
                 regionTarget.Content = region.ActiveViews.FirstOrDefault();
             };

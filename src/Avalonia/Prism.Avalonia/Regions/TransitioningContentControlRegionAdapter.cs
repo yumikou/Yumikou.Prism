@@ -36,22 +36,26 @@ namespace Prism.Regions
             if (contentIsSet)
                 throw new InvalidOperationException(Resources.ContentControlHasContentException);
 
-            ((SingleActiveRegion)region).SingleActiveViewChanged += (s, e) =>
+            region.ActiveViews.NavigationCollectionChanged += (s, e) =>
             {
+                var aView = region.ActiveViews.FirstOrDefault();
+                if (e.Action != NotifyCollectionChangedAction.Add && e.Action != NotifyCollectionChangedAction.Reset) return;
+                if (regionTarget.Content == aView) return;
+
                 if (e.NavigationType == NavigationType.GoBack)
                 {
                     regionTarget.IsTransitionReversed = true;
-                    regionTarget.Content = e.ActiveView;
+                    regionTarget.Content = aView;
                 }
                 else if (e.NavigationType == NavigationType.Init) //初始化加载不用执行动画
                 {
                     regionTarget.IsTransitionReversed = false;
-                    regionTarget.Content = e.ActiveView;
+                    regionTarget.Content = aView;
                 }
                 else //goForward或Navigate
                 {
                     regionTarget.IsTransitionReversed = false;
-                    regionTarget.Content = e.ActiveView;
+                    regionTarget.Content = aView;
                 }
             };
            
