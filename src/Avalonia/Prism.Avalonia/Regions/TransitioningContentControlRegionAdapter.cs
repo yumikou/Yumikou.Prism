@@ -36,30 +36,22 @@ namespace Prism.Regions
             if (contentIsSet)
                 throw new InvalidOperationException(Resources.ContentControlHasContentException);
 
-            region.ActiveViews.NavigationCollectionChanged += (s, e) =>
+            ((SingleActiveRegion)region).SingleActiveViewChanged += (s, e) =>
             {
-                object aView = region.ActiveViews.FirstOrDefault();
-                if (e.Action == NotifyCollectionChangedAction.Reset && regionTarget.Content == aView) //Reset只会有顺序变更，如果当前的Content没有变化，就不触发
+                if (e.NavigationType == NavigationType.GoBack)
                 {
-                    return;
+                    regionTarget.IsTransitionReversed = true;
+                    regionTarget.Content = e.ActiveView;
                 }
-                if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Reset)
+                else if (e.NavigationType == NavigationType.Init) //初始化加载不用执行动画
                 {
-                    if (e.NavigationType == NavigationType.GoBack)
-                    {
-                        regionTarget.IsTransitionReversed = true;
-                        regionTarget.Content = aView;
-                    }
-                    else if (e.NavigationType == NavigationType.Init || e.NavigationType == null) //初始化加载不用执行动画
-                    {
-                        regionTarget.IsTransitionReversed = false;
-                        regionTarget.Content = aView;
-                    }
-                    else //goForward或Navigate
-                    {
-                        regionTarget.IsTransitionReversed = false;
-                        regionTarget.Content = aView;
-                    }
+                    regionTarget.IsTransitionReversed = false;
+                    regionTarget.Content = e.ActiveView;
+                }
+                else //goForward或Navigate
+                {
+                    regionTarget.IsTransitionReversed = false;
+                    regionTarget.Content = e.ActiveView;
                 }
             };
            

@@ -114,7 +114,8 @@ namespace Prism.Regions
                                 if (skippedEntry.AssociatedView is not null && skippedEntry.AssociatedView.IsAlive 
                                     && !RegionHelper.InactiveViewShouldKeepAlive(skippedEntry.AssociatedView.Target, NavigationType.GoBack))
                                 {
-                                    NavigationTarget.Region.Remove(skippedEntry.AssociatedView.Target);
+                                    if (NavigationTarget.Region.Views.Contains(skippedEntry.AssociatedView.Target))
+                                        NavigationTarget.Region.Remove(skippedEntry.AssociatedView.Target);
                                 }
                             }
 

@@ -84,7 +84,7 @@ namespace Prism.Regions
         {
             return GoBack((e, i) =>
             {
-                return e.PersistInHistoryType == PersistInHistoryType.InHistory; ;
+                return e.PersistInHistoryType == PersistInHistoryType.InHistory;
             });
         }
 
@@ -110,15 +110,12 @@ namespace Prism.Regions
                             {
                                 RecordNavigation(skippedEntry, NavigationType.GoBack);
 
-                                // 堆栈导航返回时，在inactive和从历史堆栈直接移除时，都需要删除view
-                                var contract = UriParsingHelper.GetContract(skippedEntry.Uri);
-                                var candidateType = _container.GetRegistrationType(contract);
-                                if (candidateType is not null && RegionHelper.IsStackViewType(candidateType))
+                                // 堆栈导航以跳过的形式返回时，相当于以goback的方式Deactivate这个view
+                                if (skippedEntry.AssociatedView is not null && skippedEntry.AssociatedView.IsAlive
+                                    && !RegionHelper.InactiveViewShouldKeepAlive(skippedEntry.AssociatedView.Target, NavigationType.GoBack))
                                 {
-                                    if (skippedEntry.AssociatedView is not null && skippedEntry.AssociatedView.IsAlive) // IsPersistInHistory为false时的goforward，不会创建view直接跳过entry，这时候再返回跳过关联的view是空
-                                    {
+                                    if (NavigationTarget.Region.Views.Contains(skippedEntry.AssociatedView.Target))
                                         NavigationTarget.Region.Remove(skippedEntry.AssociatedView.Target);
-                                    }
                                 }
                             }
 

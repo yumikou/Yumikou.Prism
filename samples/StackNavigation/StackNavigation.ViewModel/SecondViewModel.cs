@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace StackNavigation.ViewModel
 {
-    public class SecondViewModel : IRegionMemberLifetime
+    public class SecondViewModel : INavigationAware, IRegionMemberLifetime
     {
         private IRegionManager _regionManager;
 
@@ -29,6 +29,21 @@ namespace StackNavigation.ViewModel
         private void OnGoNextPage()
         {
             _regionManager.RequestNavigate(RegionNames.MainRegion, "SecondView");
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return false;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+
         }
 
         ~SecondViewModel()

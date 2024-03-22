@@ -309,7 +309,7 @@ namespace Prism.Regions
 
             if (!itemMetadata.IsActive)
             {
-                itemMetadata.IsActive = true;
+                itemMetadata.SetIsActive(true, navigationType);
                 return true;
             }
             return false;
@@ -325,12 +325,7 @@ namespace Prism.Regions
 
             if (itemMetadata.IsActive)
             {
-                itemMetadata.IsActive = false;
-
-                if (!RegionHelper.InactiveViewShouldKeepAlive(view, navigationType))
-                {
-                    this.Remove(view);
-                }
+                itemMetadata.SetIsActive(false, navigationType);
                 return true;
             }
             return false;

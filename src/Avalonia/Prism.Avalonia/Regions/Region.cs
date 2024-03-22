@@ -289,33 +289,32 @@ namespace Prism.Regions
         /// Marks the specified view as active.
         /// </summary>
         /// <param name="view">The view to activate.</param>
-        public virtual void Activate(object view, NavigationType navigationType)
+        public virtual bool Activate(object view, NavigationType navigationType)
         {
             ItemMetadata itemMetadata = this.GetItemMetadataOrThrow(view);
 
             if (!itemMetadata.IsActive)
             {
                 itemMetadata.SetIsActive(true, navigationType);
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// Marks the specified view as inactive.
         /// </summary>
         /// <param name="view">The view to deactivate.</param>
-        public virtual void Deactivate(object view, NavigationType navigationType)
+        public virtual bool Deactivate(object view, NavigationType navigationType)
         {
             ItemMetadata itemMetadata = this.GetItemMetadataOrThrow(view);
 
             if (itemMetadata.IsActive)
             {
                 itemMetadata.SetIsActive(false, navigationType);
-
-                if (!RegionHelper.InactiveViewShouldKeepAlive(view, navigationType))
-                {
-                    this.Remove(view);
-                }
+                return true;
             }
+            return false;
         }
 
         /// <summary>

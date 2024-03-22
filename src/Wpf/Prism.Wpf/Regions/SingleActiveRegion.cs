@@ -8,7 +8,7 @@ namespace Prism.Regions
     /// </summary>
     public class SingleActiveRegion : Region
     {
-        public EventHandler<NavigationActiveViewChangedEventArgs> NavigationActiveViewChanged;
+        public EventHandler<SingleActiveViewChangedEventArgs> SingleActiveViewChanged;
 
         /// <summary>
         /// Marks the specified view as active.
@@ -26,7 +26,7 @@ namespace Prism.Regions
             }
             if (base.Activate(view, navigationType))
             {
-                NavigationActiveViewChanged?.Invoke(this, new NavigationActiveViewChangedEventArgs(view, navigationType));
+                SingleActiveViewChanged?.Invoke(this, new SingleActiveViewChangedEventArgs(view, navigationType));
                 return true;
             }
             return false;

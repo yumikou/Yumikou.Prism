@@ -63,47 +63,5 @@ namespace Prism.Regions.Behaviors
                 }
             }
         }
-
-        //private static bool ShouldKeepAlive(object inactiveView)
-        //{
-        //    IRegionMemberLifetime lifetime = MvvmHelpers.GetImplementerFromViewOrViewModel<IRegionMemberLifetime>(inactiveView);
-        //    if (lifetime != null)
-        //    {
-        //        return lifetime.KeepAlive;
-        //    }
-
-        //    RegionMemberLifetimeAttribute lifetimeAttribute = GetItemOrContextLifetimeAttribute(inactiveView);
-        //    if (lifetimeAttribute != null)
-        //    {
-        //        return lifetimeAttribute.KeepAlive;
-        //    }
-
-        //    return true;
-        //}
-
-        //private static RegionMemberLifetimeAttribute GetItemOrContextLifetimeAttribute(object inactiveView)
-        //{
-        //    var lifetimeAttribute = GetCustomAttributes<RegionMemberLifetimeAttribute>(inactiveView.GetType()).FirstOrDefault();
-        //    if (lifetimeAttribute != null)
-        //    {
-        //        return lifetimeAttribute;
-        //    }
-
-        //    var Control = inactiveView as Control;
-        //    if (Control != null && Control.DataContext != null)
-        //    {
-        //        var dataContext = Control.DataContext;
-        //        var contextLifetimeAttribute =
-        //            GetCustomAttributes<RegionMemberLifetimeAttribute>(dataContext.GetType()).FirstOrDefault();
-        //        return contextLifetimeAttribute;
-        //    }
-
-        //    return null;
-        //}
-
-        //private static IEnumerable<T> GetCustomAttributes<T>(Type type)
-        //{
-        //    return type.GetCustomAttributes(typeof(T), true).OfType<T>();
-        //}
     }
 }

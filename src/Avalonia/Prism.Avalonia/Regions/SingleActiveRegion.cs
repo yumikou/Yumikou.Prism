@@ -1,4 +1,3 @@
-using Avalonia.Threading;
 using System;
 using System.Linq;
 
@@ -9,13 +8,15 @@ namespace Prism.Regions
     /// </summary>
     public class SingleActiveRegion : Region
     {
+        public EventHandler<SingleActiveViewChangedEventArgs> SingleActiveViewChanged;
+
         /// <summary>
         /// Marks the specified view as active.
         /// </summary>
         /// <param name="view">The view to activate.</param>
         /// <remarks>If there is an active view before calling this method,
         /// that view will be deactivated automatically.</remarks>
-        public override void Activate(object view, NavigationType navigationType)
+        public override bool Activate(object view, NavigationType navigationType)
         {
             object currentActiveView = ActiveViews.FirstOrDefault();
 
@@ -23,7 +24,12 @@ namespace Prism.Regions
             {
                 base.Deactivate(currentActiveView, navigationType);
             }
-            base.Activate(view, navigationType);
+            if (base.Activate(view, navigationType))
+            {
+                SingleActiveViewChanged?.Invoke(this, new SingleActiveViewChangedEventArgs(view, navigationType));
+                return true;
+            }
+            return false;
         }
     }
 }
