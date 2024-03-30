@@ -1,4 +1,7 @@
 # PrismLibrary
+
+基于 prism 8.1.97 和 prism.avalonia 8.1.97.11000
+
 nuget package:
 `Yumikou.Prism.Core`
 
@@ -10,8 +13,8 @@ nuget package:
 
 ## TODO:
 
-### 虚拟Dialog
+### 虚拟Dialog适配
 
 ### 嵌套Region的默认行为：
-1.父Region销毁时，自动销毁嵌套的子Region
-2.待定。。要不要自动更新子Region的IsActive
+- 父Region销毁时，自动销毁嵌套的子Region
+- 自动更新子Region的IsActive开关

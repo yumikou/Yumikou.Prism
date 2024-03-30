@@ -19,9 +19,9 @@
     </Description>
     <PackageTags>prism;mvvm;xaml;net40;stack;navigation;dialog;interactionrequest;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>8.2.2</Version>
-    <PackageProjectUrl>https://github.com/yumikou/PrismLibrary</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/yumikou/PrismLibrary</RepositoryUrl>
+    <Version>8.2.3</Version>
+    <PackageProjectUrl>https://github.com/yumikou/Yumikou.Prism</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yumikou/Yumikou.Prism</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
