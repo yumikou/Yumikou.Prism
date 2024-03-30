@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Directives>
+    <!--
+        This file is part of RdXmlLibrary project.
+        Visit https://github.com/kant2002/rdxmllibrary for latest version.
+        If you have modifications specific to this Nuget package,
+        please contribute back.
+    -->
+    <Application>
+        <Assembly Name="Avalonia.Markup.Xaml" Dynamic="Required All"/>
+        <Assembly Name="Prism" Dynamic="Required All"/>
+        <Assembly Name="Prism.Avalonia" Dynamic="Required All"/>
+        <Assembly Name="Prism.DryIoc.Avalonia" Dynamic="Required All"/>
+        <Assembly Name="Avalonia.Themes.Fluent" Dynamic="Required All"/>
+        <Assembly Name="StackNavigation.ViewModel" Dynamic="Required All"/>
+        <Assembly Name="StackNavigation.Avalonia" Dynamic="Required All"/>
+        <Assembly Name="StackNavigation.Avalonia.Android" Dynamic="Required All"/>
+    </Application>
+</Directives>

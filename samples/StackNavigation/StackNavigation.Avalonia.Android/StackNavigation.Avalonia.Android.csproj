@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-android</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ApplicationId>com.CompanyName.StackNavigation.Avalonia</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+  </PropertyGroup>
+
+  <!-- 安卓还不支持netcoreclr的aot
+  <PropertyGroup Condition="$(_Aot) == true">
+    <PublishAot>true</PublishAot>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <RuntimeIdentifier>android-arm64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$(_Aot) == true">
+    <RdXmlFile Include="rd.xml" />
+  </ItemGroup>
+  -->
+  
+  <ItemGroup>
+    <AndroidResource Include="Icon.png">
+      <Link>Resources\drawable\Icon.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.6" />
+  </ItemGroup>
+
+  <!--
+  <ItemGroup Condition="$(_Aot) == true">
+    <PackageReference Include="Microsoft.DotNet.ILCompiler; runtime.linux-bionic-arm64.Microsoft.DotNet.ILCompiler" Version="8.0.0-*" />
+  </ItemGroup>
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\StackNavigation.Avalonia\StackNavigation.Avalonia.csproj" />
+  </ItemGroup>
+</Project>

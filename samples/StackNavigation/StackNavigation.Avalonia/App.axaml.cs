@@ -8,6 +8,7 @@ using System;
 using System.Globalization;
 using StackNavigation.ViewModel;
 using StackNavigation.Avalonia.Views;
+using Avalonia.Controls;
 
 namespace StackNavigation.Avalonia
 {
@@ -21,7 +22,20 @@ namespace StackNavigation.Avalonia
 
         protected override AvaloniaObject CreateShell()
         {
-            return Container.Resolve<MainWindow>();
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+                return Container.Resolve<MainWindow>();
+            else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
+                return Container.Resolve<MainView>();
+            return null;
+        }
+
+        protected override DryIoc.Rules CreateContainerRules()
+        {
+#if _Aot_
+            return base.CreateContainerRules().WithUseInterpretation();
+#else
+            return base.CreateContainerRules();
+#endif
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -53,7 +67,7 @@ namespace StackNavigation.Avalonia
                 return Type.GetType(vmTypeName);
             });
 
-            ViewModelLocationProvider.Register<MainWindow>(() => Container.Resolve<MainWindowViewModel>());
+            ViewModelLocationProvider.Register<MainView>(() => Container.Resolve<MainViewModel>());
         }
     }
 }

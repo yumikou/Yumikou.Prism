@@ -13,8 +13,6 @@ namespace StackNavigation.Avalonia
         public MainWindow()
         {
             InitializeComponent();
-            
-            this.tcc.PageTransition = DefaultIosPageSlide.Instance;
         }
     }
 }

@@ -6,7 +6,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="StackNavigation.Avalonia.Views.SecondView">
-  <Grid Background="LightBlue">
+  <Grid Background="LightBlue" RowDefinitions="Auto,*">
     <StackPanel>
       <TextBlock FontSize="40">SecondView</TextBlock>
       <TextBlock FontSize="30" Margin="0 20 0 0">
@@ -15,5 +15,35 @@
       </TextBlock>
       <Button Command="{Binding GoNextPageCommand}" HorizontalAlignment="Left">GoNewPage</Button>
     </StackPanel>
+    <ScrollViewer Grid.Row="1" IsScrollInertiaEnabled="True">
+      <StackPanel>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+        <CheckBox>test</CheckBox>
+        <CheckBox>测试</CheckBox>
+      </StackPanel>
+    </ScrollViewer>
   </Grid>
 </UserControl>

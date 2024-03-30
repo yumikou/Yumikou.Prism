@@ -10,8 +10,8 @@ nuget package:
 
 ## TODO:
 
-### 虚拟Dialog
+### 铏氭嫙Dialog
 
-### 嵌套Region的默认行为：
-1.父Region销毁时，自动销毁嵌套的子Region
-2.待定。。要不要自动更新子Region的IsActive
+### 宓屽Region鐨勯粯璁よ涓猴細
+1.鐖禦egion閿�姣佹椂锛岃嚜鍔ㄩ攢姣佸祵濂楃殑瀛怰egion
+2.寰呭畾銆傘�傝涓嶈鑷姩鏇存柊瀛怰egion鐨処sActive

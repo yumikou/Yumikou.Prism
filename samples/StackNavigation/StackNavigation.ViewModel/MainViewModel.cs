@@ -7,7 +7,7 @@ using Prism.Commands;
 
 namespace StackNavigation.ViewModel
 {
-    public class MainWindowViewModel
+    public class MainViewModel
     {
         private IRegionManager _regionManager;
         private bool _isViewLoaded = false;
@@ -16,7 +16,7 @@ namespace StackNavigation.ViewModel
         public DelegateCommand GoHomeCommand { get; set; }
         public DelegateCommand GoBackCommand { get; set; }
 
-        public MainWindowViewModel(IRegionManager regionManager)
+        public MainViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;
             ViewLoadedCommand = new DelegateCommand(OnViewLoaded);

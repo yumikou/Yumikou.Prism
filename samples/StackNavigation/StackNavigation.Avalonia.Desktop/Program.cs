@@ -1,7 +1,8 @@
 ﻿using Avalonia;
+using Avalonia.ReactiveUI;
 using System;
 
-namespace StackNavigation.Avalonia
+namespace StackNavigation.Avalonia.Desktop
 {
     internal class Program
     {

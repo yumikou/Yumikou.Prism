@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:vm="using:StackNavigation.ViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StackNavigation.Avalonia.MainView">
+  <i:Interaction.Behaviors>
+    <ia:EventTriggerBehavior EventName="Loaded">
+      <ia:InvokeCommandAction Command="{Binding ViewLoadedCommand}"></ia:InvokeCommandAction>
+    </ia:EventTriggerBehavior>
+  </i:Interaction.Behaviors>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="80"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+      <Button Command="{Binding GoHomeCommand}">Home</Button>
+      <Button Command="{Binding GoBackCommand}" Margin="12 0 0 0">GoBack</Button>
+    </StackPanel>
+    <Border Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1">
+      <TransitioningContentControl Name="tcc" Grid.Row="1" prism:RegionManager.RegionName="{x:Static vm:RegionNames.MainRegion}"></TransitioningContentControl>
+    </Border>
+  </Grid>
+</UserControl>

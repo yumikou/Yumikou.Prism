@@ -50,7 +50,7 @@ namespace StackNavigation.Wpf
                 return Type.GetType(vmTypeName);
             });
 
-            ViewModelLocationProvider.Register<MainWindow>(() => Container.Resolve<MainWindowViewModel>());
+            ViewModelLocationProvider.Register<MainWindow>(() => Container.Resolve<MainViewModel>());
         }
     }
 
