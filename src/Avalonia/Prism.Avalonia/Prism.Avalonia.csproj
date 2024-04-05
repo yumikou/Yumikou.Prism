@@ -56,4 +56,6 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <Import Project="..\..\Shared\Prism.Shared\Prism.Shared.projitems" Label="Shared" />
+
 </Project>

@@ -15,7 +15,7 @@
       </TextBlock>
       <Button Command="{Binding GoNextPageCommand}" HorizontalAlignment="Left">GoNewPage</Button>
     </StackPanel>
-    <ScrollViewer Grid.Row="1" IsScrollInertiaEnabled="True">
+    <ScrollViewer Grid.Row="1" IsDeferredScrollingEnabled="True" IsScrollInertiaEnabled="True">
       <StackPanel>
         <CheckBox>test</CheckBox>
         <CheckBox>测试</CheckBox>

@@ -43,7 +43,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Prism.Avalonia\Prism.Avalonia.csproj" />
   </ItemGroup>
-  
-  <Import Project="..\..\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems" Label="Shared" />
+
+  <Import Project="..\..\Shared\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems" Label="Shared" />
 
 </Project>

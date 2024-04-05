@@ -16,6 +16,10 @@ using Avalonia.Markup.Xaml;
 
 namespace Prism.Services.Dialogs
 {
+    /// <summary>
+    /// TODO: 与wpf的实现放入共享项目，IDialogWindow不做任何修改，完全通过宏命令差异化处理
+    /// VirtualDialogServiceControl同理也和wpf的实现共享，但不和当前这个DialogServiceControl共享，而是都用新的逻辑
+    /// </summary>
     public class DialogServiceControl : Control
     {
         private readonly IContainerExtension _containerExtension;

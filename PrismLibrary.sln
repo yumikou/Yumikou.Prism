@@ -9,9 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wpf", "Wpf", "{E4A6CD64-C2D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Avalonia", "Avalonia", "{080E5422-A6C4-42B9-A7E6-8DEE061BED55}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Containers", "Containers", "{07B9417E-3EA0-4ABF-A4C0-962C6887A2CE}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Prism.DryIoc.Shared", "src\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.shproj", "{6E7EC81D-DA39-4C4F-A898-0148558C34F4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{07B9417E-3EA0-4ABF-A4C0-962C6887A2CE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prism.Core", "src\Prism.Core\Prism.Core.csproj", "{D22E5A97-B0E4-47AA-A1B4-5459BAF32327}"
 EndProject
@@ -52,6 +50,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackNavigation.Avalonia.Android", "samples\StackNavigation\StackNavigation.Avalonia.Android\StackNavigation.Avalonia.Android.csproj", "{3CADBF5F-FC83-4438-9912-DC8A0A02C619}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackNavigation.Avalonia.Desktop", "samples\StackNavigation\StackNavigation.Avalonia.Desktop\StackNavigation.Avalonia.Desktop.csproj", "{89DE6902-5C3A-4EC3-BB66-57AD4CCA4D85}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NestedRegion", "NestedRegion", "{7E8ADE1D-70A5-49EC-A3F2-0109AB8D667E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Prism.DryIoc.Shared", "src\Shared\Prism.DryIoc.Shared\Prism.DryIoc.Shared.shproj", "{6E7EC81D-DA39-4C4F-A898-0148558C34F4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Prism.Shared", "src\Shared\Prism.Shared\Prism.Shared.shproj", "{372C1739-F63F-45C8-B87E-875A68861585}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -120,7 +124,6 @@ Global
 		{E4A6CD64-C2D1-421D-A72A-79C15B7F842A} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
 		{080E5422-A6C4-42B9-A7E6-8DEE061BED55} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
 		{07B9417E-3EA0-4ABF-A4C0-962C6887A2CE} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
-		{6E7EC81D-DA39-4C4F-A898-0148558C34F4} = {07B9417E-3EA0-4ABF-A4C0-962C6887A2CE}
 		{D22E5A97-B0E4-47AA-A1B4-5459BAF32327} = {6286A6DF-99F9-4E38-BDF9-B7999607488B}
 		{1B3CE9D1-A1E3-4F90-90CE-983F3F6F3C61} = {E4A6CD64-C2D1-421D-A72A-79C15B7F842A}
 		{5A11D4BD-E8B7-4AF0-A883-012D75CEE9B4} = {E4A6CD64-C2D1-421D-A72A-79C15B7F842A}
@@ -136,13 +139,19 @@ Global
 		{F31B0616-2A55-46A3-A4D0-2E86B5B18C44} = {6D0548D1-724F-487A-9C67-5F6CE5D8D3AB}
 		{3CADBF5F-FC83-4438-9912-DC8A0A02C619} = {B63053A5-0C54-4752-9F11-ED6E4F88CC17}
 		{89DE6902-5C3A-4EC3-BB66-57AD4CCA4D85} = {B63053A5-0C54-4752-9F11-ED6E4F88CC17}
+		{7E8ADE1D-70A5-49EC-A3F2-0109AB8D667E} = {9D5ACEDE-FDFF-463F-8B81-AC958E30D232}
+		{6E7EC81D-DA39-4C4F-A898-0148558C34F4} = {07B9417E-3EA0-4ABF-A4C0-962C6887A2CE}
+		{372C1739-F63F-45C8-B87E-875A68861585} = {07B9417E-3EA0-4ABF-A4C0-962C6887A2CE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EB85636-B6BB-4F3E-8F9E-A132C8700B3F}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{5a11d4bd-e8b7-4af0-a883-012d75cee9b4}*SharedItemsImports = 5
-		src\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{6e7ec81d-da39-4c4f-a898-0148558c34f4}*SharedItemsImports = 13
-		src\Containers\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{ad7506de-4196-4947-8c8e-ffd88f3249c9}*SharedItemsImports = 5
+		src\Shared\Prism.Shared\Prism.Shared.projitems*{1b3ce9d1-a1e3-4f90-90ce-983f3f6f3c61}*SharedItemsImports = 5
+		src\Shared\Prism.Shared\Prism.Shared.projitems*{372c1739-f63f-45c8-b87e-875a68861585}*SharedItemsImports = 13
+		src\Shared\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{5a11d4bd-e8b7-4af0-a883-012d75cee9b4}*SharedItemsImports = 5
+		src\Shared\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{6e7ec81d-da39-4c4f-a898-0148558c34f4}*SharedItemsImports = 13
+		src\Shared\Prism.DryIoc.Shared\Prism.DryIoc.Shared.projitems*{ad7506de-4196-4947-8c8e-ffd88f3249c9}*SharedItemsImports = 5
+		src\Shared\Prism.Shared\Prism.Shared.projitems*{d9231c84-56c8-4449-91f0-c57cc064e6cc}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

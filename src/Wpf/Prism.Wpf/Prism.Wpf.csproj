@@ -47,4 +47,6 @@
     <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
 
+  <Import Project="..\..\Shared\Prism.Shared\Prism.Shared.projitems" Label="Shared" />
+
 </Project>
