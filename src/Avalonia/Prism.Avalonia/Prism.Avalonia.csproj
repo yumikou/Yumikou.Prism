@@ -40,6 +40,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Prism.Core\Prism.Core.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <AvaloniaXaml Update="Services\Dialogs\VirtualDialogWindow.axaml">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </AvaloniaXaml>
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

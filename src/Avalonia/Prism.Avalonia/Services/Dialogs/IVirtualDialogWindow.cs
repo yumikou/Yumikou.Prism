@@ -11,7 +11,7 @@ namespace Prism.Services.Dialogs
         /// <summary>
         /// Dialog content.
         /// </summary>
-        object ContentArea { get; set; }
+        object Content { get; set; }
 
         /// <summary>
         /// Close the window.
@@ -32,9 +32,9 @@ namespace Prism.Services.Dialogs
         object DataContext { get; set; }
 
         /// <summary>
-        /// Called when the window is loaded.
+        /// Called when the window is opened.
         /// </summary>
-        event EventHandler<RoutedEventArgs> Loaded;
+        event EventHandler<EventArgs> Opened;
 
         /// <summary>
         /// Called when the window is closed.
@@ -44,13 +44,14 @@ namespace Prism.Services.Dialogs
         /// <summary>
         /// Called when the window is closing.
         /// </summary>
-        // WPF: event CancelEventHandler Closing;
-        // Ava: ...
-        event EventHandler<WindowClosingEventArgs>? Closing; //TODO: 自定义VirtualWindowClosingEventArgs
+        event EventHandler<VirtualWindowClosingEventArgs>? Closing;
 
         /// <summary>
         /// The result of the dialog.
         /// </summary>
         IDialogResult Result { get; set; }
+
+        
+        Styles Styles { get; }
     }
 }

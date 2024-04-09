@@ -8,7 +8,7 @@ using System.Windows.Markup;
 
 [assembly: ComVisible(false)]
 
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]
 
 // -----  Legacy -----
 [assembly: XmlnsDefinition("http://www.codeplex.com/prism", "Prism.Regions")]

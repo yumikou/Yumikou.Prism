@@ -32,6 +32,8 @@
       <Button Command="{Binding UseDialogServiceControlCommand}">Use DialogServiceControl</Button>
       <Button Command="{Binding UseDialogServiceCommand}">Use DialogService</Button>
       <Button Command="{Binding UseDialogInteractionRequestCommand}">Use DialogInteractionRequest</Button>
+
+      <Button x:Name="vdt" Margin="0 80 0 0">VirtualDialogTest</Button>
     </StackPanel>
   </Grid>
 </Window>

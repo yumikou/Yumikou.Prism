@@ -230,7 +230,7 @@ namespace Prism.Services.Dialogs
 
         public virtual void Close()
         {
-            if (DialogState != DialogState.Loaded) { throw new InvalidOperationException("The dialog has been closed."); }
+            if (DialogState != DialogState.Opened) { throw new InvalidOperationException("The dialog has been closed."); }
 
             //this.Dispatcher.BeginInvoke(() =>
             //{
@@ -336,7 +336,7 @@ namespace Prism.Services.Dialogs
             {
                 dialogWindow.Loaded -= loadedHandler;
                 dialogWindow.GetDialogViewModel().RequestClose += requestCloseHandler;
-                SetCurrentValue(DialogStateProperty, DialogState.Loaded);
+                SetCurrentValue(DialogStateProperty, DialogState.Opened);
             };
             dialogWindow.Loaded += loadedHandler;
 
