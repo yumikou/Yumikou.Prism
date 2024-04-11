@@ -89,7 +89,7 @@ namespace Prism.Services.Dialogs
 
         void ShowDialogInternal(string name, IDialogParameters parameters, Action<IDialogResult> callback, bool isModal, string windowName = null)
         {
-            DialogServiceControl dialogServiceControl = new DialogServiceControl();
+            DialogHost dialogServiceControl = new DialogHost();
             dialogServiceControl.WindowName = windowName;
             dialogServiceControl.DialogName = name;
             dialogServiceControl.Parameters = parameters;
@@ -105,7 +105,7 @@ namespace Prism.Services.Dialogs
         Task<IDialogResult> ShowDialogInternalAsync(string name, IDialogParameters parameters, bool isModal, string windowName = null)
         {
             TaskCompletionSource<IDialogResult> tcs = new TaskCompletionSource<IDialogResult>();
-            DialogServiceControl dialogServiceControl = new DialogServiceControl();
+            DialogHost dialogServiceControl = new DialogHost();
             dialogServiceControl.WindowName = windowName;
             dialogServiceControl.DialogName = name;
             dialogServiceControl.Parameters = parameters;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Prism.Services.Dialogs
 {
-    public class VirtualDialogServiceControl: Control
+    public class VirtualDialogHost: Control
     {
 
     }

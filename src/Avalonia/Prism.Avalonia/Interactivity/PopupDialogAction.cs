@@ -14,19 +14,19 @@ namespace Prism.Interactivity
         /// DependencyProperty for <see cref="WindowStyle" /> property.
         /// </summary>
         public static readonly StyledProperty<Style> WindowStyleProperty =
-            DialogServiceControl.WindowStyleProperty.AddOwner<PopupDialogAction>();
+            DialogHost.WindowStyleProperty.AddOwner<PopupDialogAction>();
 
         /// <summary>
         /// DependencyProperty for <see cref="Owner" /> property.
         /// </summary>
         public static readonly StyledProperty<Window> OwnerProperty =
-            DialogServiceControl.OwnerProperty.AddOwner<PopupDialogAction>();
+            DialogHost.OwnerProperty.AddOwner<PopupDialogAction>();
 
         /// <summary>
         /// DependencyProperty for <see cref="IsOwnerEnabled" /> property.
         /// </summary>
         public static readonly StyledProperty<bool> IsOwnerEnabledProperty =
-            DialogServiceControl.IsOwnerEnabledProperty.AddOwner<PopupDialogAction>();
+            DialogHost.IsOwnerEnabledProperty.AddOwner<PopupDialogAction>();
 
         public Style WindowStyle
         {
@@ -50,7 +50,7 @@ namespace Prism.Interactivity
         {
             if (parameter is InteractionRequestedEventArgs<DialogNotification, IDialogResult> args && args.Parameter is not null)
             {
-                DialogServiceControl dialogServiceControl = new DialogServiceControl();
+                DialogHost dialogServiceControl = new DialogHost();
                 dialogServiceControl.WindowName = args.Parameter.WindowName;
                 dialogServiceControl.DialogName = args.Parameter.DialogName;
                 dialogServiceControl.Parameters = args.Parameter.Parameters;

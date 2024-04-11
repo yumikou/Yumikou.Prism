@@ -22,9 +22,4 @@
     <ProjectReference Include="..\..\..\src\Avalonia\Prism.DryIoc.Avalonia\Prism.DryIoc.Avalonia.csproj" />
     <ProjectReference Include="..\DialogInteractivity.ViewModel\DialogInteractivity.ViewModel.csproj" />
   </ItemGroup>
-
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="MainWindow2.axaml" />
-  </ItemGroup>
 </Project>

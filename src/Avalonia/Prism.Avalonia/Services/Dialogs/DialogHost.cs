@@ -19,7 +19,7 @@ namespace Prism.Services.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public class DialogServiceControl : Control
+    public class DialogHost : Control
     {
         private readonly IContainerExtension _containerExtension;
         private IDialogWindow _dialogWindow;
@@ -34,11 +34,11 @@ namespace Prism.Services.Dialogs
         /// DependencyProperty for <see cref="IsShowAsync" /> property.
         /// </summary>
         public static readonly StyledProperty<bool> IsShowAsyncProperty =
-            AvaloniaProperty.Register<DialogServiceControl, bool>("IsShowAsync", false, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
+            AvaloniaProperty.Register<DialogHost, bool>("IsShowAsync", false, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         private static void OnIsShowAsyncPropertyChanged(AvaloniaObject sender, AvaloniaPropertyChangedEventArgs e)
         {
-            if (sender is DialogServiceControl dsc && dsc._isShowAsyncChangedEnabled && e.NewValue is bool isShow)
+            if (sender is DialogHost dsc && dsc._isShowAsyncChangedEnabled && e.NewValue is bool isShow)
             {
                 if (isShow)
                 {
@@ -55,55 +55,55 @@ namespace Prism.Services.Dialogs
         /// DependencyProperty for <see cref="IsModal" /> property.
         /// </summary>
         public static readonly StyledProperty<bool> IsModalProperty =
-            AvaloniaProperty.Register<DialogServiceControl, bool>("IsModal", false);
+            AvaloniaProperty.Register<DialogHost, bool>("IsModal", false);
 
         /// <summary>
         /// DependencyProperty for <see cref="DialogName" /> property.
         /// </summary>
         public static readonly StyledProperty<string> DialogNameProperty =
-            AvaloniaProperty.Register<DialogServiceControl, string>("DialogName", null);
+            AvaloniaProperty.Register<DialogHost, string>("DialogName", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="WindowName" /> property.
         /// </summary>
         public static readonly StyledProperty<string> WindowNameProperty =
-            AvaloniaProperty.Register<DialogServiceControl, string>("WindowName", null);
+            AvaloniaProperty.Register<DialogHost, string>("WindowName", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="WindowStyle" /> property.
         /// </summary>
         public static readonly StyledProperty<Style> WindowStyleProperty =
-            Dialog.WindowStyleProperty.AddOwner<DialogServiceControl>();
+            Dialog.WindowStyleProperty.AddOwner<DialogHost>();
 
         /// <summary>
         /// DependencyProperty for <see cref="Parameters" /> property.
         /// </summary>
         public static readonly StyledProperty<IDialogParameters> ParametersProperty =
-            AvaloniaProperty.Register<DialogServiceControl, IDialogParameters>("Parameters", null);
+            AvaloniaProperty.Register<DialogHost, IDialogParameters>("Parameters", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="Result" /> property.
         /// </summary>
         public static readonly StyledProperty<IDialogResult> ResultProperty =
-            AvaloniaProperty.Register<DialogServiceControl, IDialogResult>("Result", null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
+            AvaloniaProperty.Register<DialogHost, IDialogResult>("Result", null, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         /// <summary>
         /// DependencyProperty for <see cref="Owner" /> property.
         /// </summary>
         public static readonly StyledProperty<Window> OwnerProperty =
-            AvaloniaProperty.Register<DialogServiceControl, Window>("Owner", null);
+            AvaloniaProperty.Register<DialogHost, Window>("Owner", null);
 
         /// <summary>
         /// DependencyProperty for <see cref="IsOwnerEnabled" /> property.
         /// </summary>
         public static readonly StyledProperty<bool> IsOwnerEnabledProperty =
-            AvaloniaProperty.Register<DialogServiceControl, bool>("IsOwnerEnabled", true);
+            AvaloniaProperty.Register<DialogHost, bool>("IsOwnerEnabled", true);
 
         /// <summary>
         /// DependencyProperty for <see cref="DialogState" /> property.
         /// </summary>
         public static readonly StyledProperty<DialogState> DialogStateProperty =
-            AvaloniaProperty.Register<DialogServiceControl, DialogState>("DialogState", DialogState.Closed, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
+            AvaloniaProperty.Register<DialogHost, DialogState>("DialogState", DialogState.Closed, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         #endregion
 
@@ -175,12 +175,12 @@ namespace Prism.Services.Dialogs
             protected set { SetValue(DialogStateProperty, value); }
         }
 
-        static DialogServiceControl()
+        static DialogHost()
         {
             IsShowAsyncProperty.Changed.Subscribe(args => OnIsShowAsyncPropertyChanged(args?.Sender, args));
         }
 
-        public DialogServiceControl()
+        public DialogHost()
         {
             this.IsVisible = false;
             

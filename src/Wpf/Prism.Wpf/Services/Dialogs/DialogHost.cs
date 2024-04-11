@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 
 namespace Prism.Services.Dialogs
 {
-    public class DialogServiceControl : FrameworkElement
+    public class DialogHost : FrameworkElement
     {
         private readonly IContainerExtension _containerExtension;
         private IDialogWindow _dialogWindow;
@@ -29,12 +29,12 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "IsShowAsync",
                 typeof(bool),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnIsShowAsyncPropertyChanged));
 
         private static void OnIsShowAsyncPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (sender is DialogServiceControl dsc && dsc._isShowAsyncChangedEnabled && e.NewValue is bool isShow)
+            if (sender is DialogHost dsc && dsc._isShowAsyncChangedEnabled && e.NewValue is bool isShow)
             {
                 if (isShow)
                 {
@@ -54,7 +54,7 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "IsModal",
                 typeof(bool),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new PropertyMetadata(false));
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "DialogName",
                 typeof(string),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new PropertyMetadata(null));
 
         /// <summary>
@@ -74,14 +74,14 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "WindowName",
                 typeof(string),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new PropertyMetadata(null));
 
         /// <summary>
         /// DependencyProperty for <see cref="WindowStyle" /> property.
         /// </summary>
         public static readonly DependencyProperty WindowStyleProperty =
-            Dialog.WindowStyleProperty.AddOwner(typeof(DialogServiceControl));
+            Dialog.WindowStyleProperty.AddOwner(typeof(DialogHost));
 
         /// <summary>
         /// DependencyProperty for <see cref="Parameters" /> property.
@@ -90,7 +90,7 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "Parameters",
                 typeof(IDialogParameters),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new PropertyMetadata(null));
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "Result",
                 typeof(IDialogResult),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "Owner",
                 typeof(Window),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new PropertyMetadata(null));
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "IsOwnerEnabled",
                 typeof(bool),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new PropertyMetadata(true));
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Prism.Services.Dialogs
             DependencyProperty.Register(
                 "DialogState",
                 typeof(DialogState),
-                typeof(DialogServiceControl),
+                typeof(DialogHost),
                 new FrameworkPropertyMetadata(DialogState.Closed, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         #endregion
@@ -201,7 +201,7 @@ namespace Prism.Services.Dialogs
             protected set { SetValue(DialogStateProperty, value); }
         }
 
-        public DialogServiceControl()
+        public DialogHost()
         {
             this.Visibility = Visibility.Collapsed;
             _containerExtension = ContainerLocator.Current;
