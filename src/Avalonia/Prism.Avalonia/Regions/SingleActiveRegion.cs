@@ -14,8 +14,10 @@ namespace Prism.Regions
         /// <param name="view">The view to activate.</param>
         /// <remarks>If there is an active view before calling this method,
         /// that view will be deactivated automatically.</remarks>
-        public override bool Activate(object view, NavigationType navigationType)
+        public override bool Activate(object view, NavigationType? navigationType)
         {
+            if (!CanActivate) return false;
+
             object currentActiveView = ActiveViews.FirstOrDefault();
 
             if (currentActiveView != null && currentActiveView != view && Views.Contains(currentActiveView))

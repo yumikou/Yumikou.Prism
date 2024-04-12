@@ -101,7 +101,11 @@ namespace Prism.Regions
         /// <param name="view">The view to add to the region</param>
         protected virtual void AddViewToRegion(IRegion region, object view)
         {
+            region.CanActivate = false; // 导航期间的视图激活行为在RegionNavigationService里手动处理，因此这里禁用了Region在添加视图时的自动激活行为
+            region.CanDeactivate = false;
             region.Add(view);
+            region.CanDeactivate = true;
+            region.CanActivate = true;
         }
 
         /// <summary>

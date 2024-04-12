@@ -79,7 +79,7 @@ namespace Prism.Regions.Behaviors
             this.SynchronizeItems();
 
             this.hostControl.SelectionChanged += this.HostControlSelectionChanged;
-            this.Region.ActiveViews.CollectionChanged += this.ActiveViews_CollectionChanged;
+            this.Region.ActiveViews.NavigationCollectionChanged += this.ActiveViews_CollectionChanged;
             this.Region.Views.CollectionChanged += this.Views_CollectionChanged;
         }
 
@@ -124,7 +124,7 @@ namespace Prism.Regions.Behaviors
         }
 
 
-        private void ActiveViews_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ActiveViews_CollectionChanged(object sender, NavigationNotifyCollectionChangedEventArgs e)
         {
             if (this.updatingActiveViewsInHostControlSelectionChanged)
             {
@@ -139,7 +139,7 @@ namespace Prism.Regions.Behaviors
                     && this.hostControl.SelectedItem != e.NewItems[0]
                     && this.Region.ActiveViews.Contains(this.hostControl.SelectedItem))
                 {
-                    this.Region.Deactivate(this.hostControl.SelectedItem, NavigationType.Navigate);
+                    this.Region.Deactivate(this.hostControl.SelectedItem, e.NavigationType);
                 }
 
                 this.hostControl.SelectedItem = e.NewItems[0];
@@ -169,7 +169,7 @@ namespace Prism.Regions.Behaviors
                         // check if the view is in both Views and ActiveViews collections (there may be out of sync)
                         if (this.Region.Views.Contains(item) && this.Region.ActiveViews.Contains(item))
                         {
-                            this.Region.Deactivate(item, NavigationType.Navigate);
+                            this.Region.Deactivate(item, null);
                         }
                     }
 
@@ -177,7 +177,7 @@ namespace Prism.Regions.Behaviors
                     {
                         if (this.Region.Views.Contains(item) && !this.Region.ActiveViews.Contains(item))
                         {
-                            this.Region.Activate(item, NavigationType.Navigate);
+                            this.Region.Activate(item, null);
                         }
                     }
                 }

@@ -103,6 +103,10 @@ namespace Prism.Regions
             }
         }
 
+        public bool CanActivate { get; set; } = true;
+
+        public bool CanDeactivate { get; set; } = true;
+
         /// <summary>
         /// Gets a readonly view of the collection of views in the region.
         /// </summary>
@@ -303,8 +307,10 @@ namespace Prism.Regions
         /// Marks the specified view as active.
         /// </summary>
         /// <param name="view">The view to activate.</param>
-        public virtual bool Activate(object view, NavigationType navigationType)
+        public virtual bool Activate(object view, NavigationType? navigationType)
         {
+            if (!CanActivate) return false;
+
             ItemMetadata itemMetadata = this.GetItemMetadataOrThrow(view);
 
             if (!itemMetadata.IsActive)
@@ -319,8 +325,10 @@ namespace Prism.Regions
         /// Marks the specified view as inactive.
         /// </summary>
         /// <param name="view">The view to deactivate.</param>
-        public virtual bool Deactivate(object view, NavigationType navigationType)
+        public virtual bool Deactivate(object view, NavigationType? navigationType)
         {
+            if (!CanDeactivate) return false;
+
             ItemMetadata itemMetadata = this.GetItemMetadataOrThrow(view);
 
             if (itemMetadata.IsActive)

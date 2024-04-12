@@ -61,7 +61,7 @@ namespace Prism.Regions
         /// </summary>
         public event EventHandler<ItemMetadataIsActiveChangedEventArgs> IsActiveChanged;
 
-        public void SetIsActive(bool isActive, NavigationType navigationType)
+        public void SetIsActive(bool isActive, NavigationType? navigationType)
         {
             IsActive = isActive;
             IsActiveChanged?.Invoke(this, new ItemMetadataIsActiveChangedEventArgs(isActive, navigationType));

@@ -8,9 +8,9 @@ namespace Prism.Regions
     {
         public bool IsActive { get; set;}
 
-        public NavigationType NavigationType { get; set;}
+        public NavigationType? NavigationType { get; set;}
 
-        public ItemMetadataIsActiveChangedEventArgs(bool isActive, NavigationType navigationType)
+        public ItemMetadataIsActiveChangedEventArgs(bool isActive, NavigationType? navigationType)
         { 
             IsActive = isActive;
             NavigationType = navigationType;

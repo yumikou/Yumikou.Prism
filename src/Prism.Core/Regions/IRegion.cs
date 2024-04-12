@@ -10,6 +10,16 @@ namespace Prism.Regions
     public interface IRegion : INavigateAsync, INotifyPropertyChanged
     {
         /// <summary>
+        /// set是internal的，谨慎使用
+        /// </summary>
+        bool CanActivate { get; set; }
+
+        /// <summary>
+        /// set是internal的，谨慎使用
+        /// </summary>
+        bool CanDeactivate { get; set; }
+
+        /// <summary>
         /// Gets a readonly view of the collection of views in the region.
         /// </summary>
         /// <value>An <see cref="IViewsCollection"/> of all the added views.</value>
@@ -79,13 +89,13 @@ namespace Prism.Regions
         /// Marks the specified view as active. 
         /// </summary>
         /// <param name="view">The view to activate.</param>
-        bool Activate(object view, NavigationType navigationType);
+        bool Activate(object view, NavigationType? navigationType);
 
         /// <summary>
         /// Marks the specified view as inactive. 
         /// </summary>
         /// <param name="view">The view to deactivate.</param>
-        bool Deactivate(object view, NavigationType navigationType);
+        bool Deactivate(object view, NavigationType? navigationType);
 
         /// <summary>
         /// Returns the view instance that was added to the region using a specific name.

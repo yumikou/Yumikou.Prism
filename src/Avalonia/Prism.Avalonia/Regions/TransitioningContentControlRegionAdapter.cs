@@ -52,7 +52,7 @@ namespace Prism.Regions
                     regionTarget.IsTransitionReversed = false;
                     regionTarget.Content = aView;
                 }
-                else //goForward或Navigate
+                else //goForward或Navigate或非导航加载(NavigationType为null)
                 {
                     regionTarget.IsTransitionReversed = false;
                     regionTarget.Content = aView;
@@ -64,7 +64,7 @@ namespace Prism.Regions
                 {
                     if (e.Action == NotifyCollectionChangedAction.Add && region.ActiveViews.Count() == 0)
                     {
-                        region.Activate(e.NewItems[0], NavigationType.Init);
+                        region.Activate(e.NewItems[0], null);
                     }
                 };
         }
