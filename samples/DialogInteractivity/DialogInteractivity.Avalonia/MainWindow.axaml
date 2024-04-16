@@ -16,18 +16,18 @@
     </prism:InteractionRequestTriggerBehavior>
   </i:Interaction.Behaviors>
   <Grid>
-    <prism:DialogServiceControl IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsOwnerEnabled="False" IsModal="False" DialogName="MyDialogView">
-      <prism:DialogServiceControl.WindowStyle>
+    <prism:DialogHost IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsOwnerEnabled="False" IsModal="False" DialogName="MyDialogView">
+      <prism:DialogHost.WindowStyle>
         <Style Selector="Window">
           <Setter Property="Background" Value="Yellow" />
         </Style>
-      </prism:DialogServiceControl.WindowStyle>
+      </prism:DialogHost.WindowStyle>
       <i:Interaction.Behaviors>
         <ia:EventTriggerBehavior EventName="Closed">
           <ia:InvokeCommandAction Command="{Binding UseDialogServiceControlClosedCommand}"></ia:InvokeCommandAction>
         </ia:EventTriggerBehavior>
       </i:Interaction.Behaviors>
-    </prism:DialogServiceControl>
+    </prism:DialogHost>
     <StackPanel>
       <Button Command="{Binding UseDialogServiceControlCommand}">Use DialogServiceControl</Button>
       <Button Command="{Binding UseDialogServiceCommand}">Use DialogService</Button>

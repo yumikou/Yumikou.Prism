@@ -15,13 +15,13 @@
         </prism:InteractionRequestTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
-        <prism:DialogServiceControl IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsModal="False" DialogName="MyDialogView">
+        <prism:DialogHost IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsModal="False" DialogName="MyDialogView">
             <behaviors:Interaction.Triggers>
                 <behaviors:EventTrigger EventName="Closed">
                     <prism:InvokeCommandAction Command="{Binding UseDialogServiceControlClosedCommand}"></prism:InvokeCommandAction>
                 </behaviors:EventTrigger>
             </behaviors:Interaction.Triggers>
-        </prism:DialogServiceControl>
+        </prism:DialogHost>
         
         <StackPanel>
             <Button Command="{Binding UseDialogServiceControlCommand}">Use DialogServiceControl</Button>

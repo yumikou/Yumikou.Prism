@@ -2,10 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:prism="http://prismlibrary.com/">
   <ControlTheme x:Key="{x:Type prism:VirtualDialogWindow}" TargetType="{x:Type prism:VirtualDialogWindow}">
-    <Setter Property="HorizontalAlignment" Value="Center"/>
-    <Setter Property="VerticalAlignment" Value="Center"/>
-    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalAlignment" Value="Right"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
     <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
     <Setter Property="Width" Value="{DynamicResource TabViewItemHeaderCloseButtonWidth}"/>
     <Setter Property="Height" Value="{DynamicResource TabViewItemHeaderCloseButtonHeight}"/>
@@ -16,17 +16,15 @@
     <Setter Property="BorderThickness" Value="{DynamicResource TabViewItemHeaderCloseButtonBorderThickness}"/>
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Background="Yellow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid Background="Yellow">
           <Border Margin="{TemplateBinding Margin}"
-                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                  VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                  VerticalAlignment="{TemplateBinding HorizontalContentAlignment}"
                   CornerRadius="{TemplateBinding CornerRadius}"
                   BorderBrush="{TemplateBinding BorderBrush}"
                   BorderThickness="{TemplateBinding BorderThickness}"
                   Background="{TemplateBinding Background}">
               <ContentPresenter Name="ContentPresenter"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                 Content="{TemplateBinding Content}" />
           </Border>

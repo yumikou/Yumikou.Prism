@@ -231,7 +231,7 @@ namespace Prism.Services.Dialogs
                 }
                 else if (dialogWindow.Owner == null)
                 {
-                    ownerWindow = Window.GetTopLevel(this) as Window;
+                    ownerWindow = Window.GetTopLevel(this) as Window; // DialogHost在xaml中构建时，所在的View未必已添加到控件树上，所以尽可能的延迟Window.GetWindow的访问时机
                 }
             }
 
