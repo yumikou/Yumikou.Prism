@@ -22,6 +22,10 @@ public partial class MainView : UserControl
     {
         VirtualDialogWindow vd = new VirtualDialogWindow();
         var ol = OverlayLayer.GetOverlayLayer(Window.GetTopLevel(this));
-        ol.Children.Add(vd);
+
+        VirtualDialogOverlayLayer vdol = new VirtualDialogOverlayLayer();
+        vdol.Content = vd;
+
+        ol.Children.Add(vdol);
     }
 }
