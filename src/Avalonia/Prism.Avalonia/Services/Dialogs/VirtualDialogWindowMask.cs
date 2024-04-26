@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +11,22 @@ using System.Threading.Tasks;
 
 namespace Prism.Services.Dialogs
 {
-    public class VirtualDialogOverlayLayer : ContentControl
+    [PseudoClasses(":show", ":hidden")]
+    public class VirtualDialogWindowMask : ContentControl
     {
         private IDisposable _rootBoundsWatcher;
 
-        public VirtualDialogOverlayLayer()
+        public virtual void Show()
         {
-            //HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center;
-            //VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
+            PseudoClasses.Set(":hidden", false);
+            PseudoClasses.Set(":show", true);
         }
 
-        protected override Type StyleKeyOverride => typeof(OverlayPopupHost);
+        public virtual void Hidden()
+        {
+            PseudoClasses.Set(":show", false);
+            PseudoClasses.Set(":hidden", true);
+        }
 
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -47,6 +54,7 @@ namespace Prism.Services.Dialogs
                 // bounds change. Subscribe to force update
                 _rootBoundsWatcher = wb.GetObservable(BoundsProperty).Subscribe(_ => OnRootBoundsChanged());
             }
+            Show();
         }
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)

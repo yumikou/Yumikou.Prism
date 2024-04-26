@@ -14,18 +14,15 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
 
-        this.Loaded += MainView_Loaded;
-        
+        this.tt.Click += Tt_Click;
     }
 
-    private void MainView_Loaded(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    VirtualDialogWindow vd;
+
+    private void Tt_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
-        VirtualDialogWindow vd = new VirtualDialogWindow();
-        var ol = OverlayLayer.GetOverlayLayer(Window.GetTopLevel(this));
-
-        VirtualDialogOverlayLayer vdol = new VirtualDialogOverlayLayer();
-        vdol.Content = vd;
-
-        ol.Children.Add(vdol);
+        vd ??= new VirtualDialogWindow();
+        vd.Owner = this;
+        vd.Open();
     }
 }

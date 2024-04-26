@@ -1,4 +1,5 @@
 ﻿
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
@@ -19,9 +20,14 @@ namespace Prism.Services.Dialogs
         void Close();
 
         /// <summary>
+        /// 虚拟窗口所属的窗口或者根视图
+        /// </summary>
+        Visual Owner { get; set; }
+
+        /// <summary>
         /// Show a dialog async.
         /// </summary>
-        void Show();
+        void Open();
 
         /// <summary>
         /// The data context of the window.

@@ -11,6 +11,7 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://Prism.Avalonia/Services/Dialogs/VirtualDialogWindow.axaml"></ResourceInclude>
+        <ResourceInclude Source="avares://Prism.Avalonia/Services/Dialogs/VirtualDialogWindowMask.axaml"></ResourceInclude>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

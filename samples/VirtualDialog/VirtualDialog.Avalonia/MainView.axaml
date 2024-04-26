@@ -7,6 +7,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="VirtualDialog.Avalonia.MainView">
   <Grid>
-    <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="200"></TextBox>
+    <Button x:Name="tt">ShowWindow</Button>
   </Grid>
 </UserControl>

@@ -1,0 +1,53 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:prism="http://prismlibrary.com/">
+  <ControlTheme x:Key="{x:Type prism:VirtualDialogWindowMask}" TargetType="{x:Type prism:VirtualDialogWindowMask}">
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="Background" Value="#33000000"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid>
+          <Border Name="BackgroundBorder"
+                  Background="{TemplateBinding Background}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"></Border>
+          <ContentPresenter Name="ContentPresenter"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Padding="{TemplateBinding Padding}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Content="{TemplateBinding Content}" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:hidden /template/ Border#BackgroundBorder">
+      <Style.Animations>
+        <Animation Duration="00:00:00.120" FillMode="Forward">
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="1.0"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="0.0"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="^:show /template/ Border#BackgroundBorder">
+      <Style.Animations>
+        <Animation Duration="00:00:00.120" FillMode="Forward">
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="0.0"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="1.0"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </ControlTheme>
+
+</ResourceDictionary>
