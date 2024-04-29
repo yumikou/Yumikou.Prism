@@ -54,6 +54,27 @@ namespace Prism.Ioc
         }
 
         /// <summary>
+        /// Registers an object that implements IDialogWindow to be used to host all dialogs in the IDialogService.
+        /// </summary>
+        /// <typeparam name="TWindow">The Type of the Window class that will be used to host dialogs in the IDialogService</typeparam>
+        /// <param name="containerRegistry"></param>
+        public static void RegisterVirtualDialogWindow<TWindow>(this IContainerRegistry containerRegistry) where TWindow : Services.Dialogs.IVirtualDialogWindow
+        {
+            containerRegistry.Register(typeof(Services.Dialogs.IVirtualDialogWindow), typeof(TWindow));
+        }
+
+        /// <summary>
+        /// Registers an object that implements IDialogWindow to be used to host all dialogs in the IDialogService.
+        /// </summary>
+        /// <typeparam name="TWindow">The Type of the Window class that will be used to host dialogs in the IDialogService</typeparam>
+        /// <param name="containerRegistry"></param>
+        /// <param name="name">The name of the dialog window</param>
+        public static void RegisterVirtualDialogWindow<TWindow>(this IContainerRegistry containerRegistry, string name) where TWindow : Services.Dialogs.IVirtualDialogWindow
+        {
+            containerRegistry.Register(typeof(Services.Dialogs.IVirtualDialogWindow), typeof(TWindow), name);
+        }
+
+        /// <summary>
         /// Registers an object for navigation
         /// </summary>
         /// <param name="containerRegistry"></param>
