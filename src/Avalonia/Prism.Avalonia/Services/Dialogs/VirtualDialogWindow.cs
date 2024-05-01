@@ -3,6 +3,7 @@ using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using Avalonia.Rendering.Composition;
 using System;
 using System.Collections.Generic;
@@ -26,12 +27,36 @@ namespace Prism.Services.Dialogs
         public static readonly StyledProperty<bool> IsCloseAnimationCompletedProperty =
             AvaloniaProperty.Register<VirtualDialogWindow, bool>("IsCloseAnimationCompleted", false);
 
+        /// <summary>
+        /// DependencyProperty for <see cref="IsAutoCloseByMaskTapped" /> property.
+        /// </summary>
+        public static readonly StyledProperty<bool> IsAutoCloseByMaskTappedProperty =
+            AvaloniaProperty.Register<VirtualDialogWindow, bool>("IsAutoCloseByMaskTapped", false);
+
+        /// <summary>
+        /// DependencyProperty for <see cref="MaskBackground" /> property.
+        /// </summary>
+        public static readonly StyledProperty<IBrush?> MaskBackgroundProperty =
+            AvaloniaProperty.Register<VirtualDialogWindow, IBrush?>("MaskBackground", null);
+
         #endregion
 
         public bool IsCloseAnimationCompleted
         {
             get { return (bool)GetValue(IsCloseAnimationCompletedProperty); }
             set { SetValue(IsCloseAnimationCompletedProperty, value); }
+        }
+
+        public bool IsAutoCloseByMaskTapped
+        {
+            get { return (bool)GetValue(IsAutoCloseByMaskTappedProperty); }
+            set { SetValue(IsAutoCloseByMaskTappedProperty, value); }
+        }
+
+        public IBrush? MaskBackground
+        {
+            get { return (IBrush?)GetValue(MaskBackgroundProperty); }
+            set { SetValue(MaskBackgroundProperty, value); }
         }
 
         public virtual IDialogResult Result { get; set; }
@@ -88,7 +113,10 @@ namespace Prism.Services.Dialogs
 
         private void _mask_Tapped(object sender, Avalonia.Input.TappedEventArgs e)
         {
-            Close();
+            if (IsAutoCloseByMaskTapped)
+            {
+                Close();
+            }
         }
 
         private void VirtualDialogWindow_Loaded(object sender, Avalonia.Interactivity.RoutedEventArgs e)

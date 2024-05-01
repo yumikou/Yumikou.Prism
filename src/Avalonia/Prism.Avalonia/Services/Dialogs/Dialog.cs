@@ -6,7 +6,7 @@ using Avalonia.Styling;
 namespace Prism.Services.Dialogs
 {
     /// <summary>
-    /// This class contains <see cref="IDialogWindow"/> attached properties.
+    /// This class contains <see cref="IDialogWindow"/> and <see cref="IVirtualDialogWindow"/> attached properties.
     /// </summary>
     public class Dialog
     {
@@ -14,6 +14,11 @@ namespace Prism.Services.Dialogs
         /// <remarks>This attached property is used to specify the style of a <see cref="IDialogWindow"/>.</remarks>
         public static readonly StyledProperty<Style> WindowStyleProperty =
             AvaloniaProperty.RegisterAttached<Dialog, AvaloniaObject, Style>("WindowStyle");
+
+        /// <summary>Identifies the VirtualWindowStyle attached property.</summary>
+        /// <remarks>This attached property is used to specify the style of a <see cref="IVirtualDialogWindow"/>.</remarks>
+        public static readonly StyledProperty<Style> VirtualWindowStyleProperty =
+            AvaloniaProperty.RegisterAttached<Dialog, AvaloniaObject, Style>("VirtualWindowStyle");
 
         /// <summary>Identifies the WindowStartupLocation attached property.</summary>
         /// <remarks>This attached property is used to specify the startup location of a <see cref="IDialogWindow"/>.</remarks>
@@ -45,6 +50,26 @@ namespace Prism.Services.Dialogs
         public static void SetWindowStyle(AvaloniaObject obj, Style value)
         {
             obj.SetValue(WindowStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets the value for the <see cref="VirtualWindowStyleProperty"/> attached property.
+        /// </summary>
+        /// <param name="obj">The target element.</param>
+        /// <returns>The <see cref="VirtualWindowStyleProperty"/> attached to the <paramref name="obj"/> element.</returns>
+        public static Style GetVirtualWindowStyle(AvaloniaObject obj)
+        {
+            return obj.GetValue(VirtualWindowStyleProperty);
+        }
+
+        /// <summary>
+        /// Sets the <see cref="VirtualWindowStyleProperty"/> attached property.
+        /// </summary>
+        /// <param name="obj">The target element.</param>
+        /// <param name="value">The Style to attach.</param>
+        public static void SetVirtualWindowStyle(AvaloniaObject obj, Style value)
+        {
+            obj.SetValue(VirtualWindowStyleProperty, value);
         }
 
         /// <summary>

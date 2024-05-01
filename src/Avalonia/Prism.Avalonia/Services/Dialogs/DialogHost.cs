@@ -378,7 +378,7 @@ namespace Prism.Services.Dialogs
             var dialogWindowStyle = Dialog.GetWindowStyle(dialogContent);
             if (dialogWindowStyle != null)
             {
-                window.Styles?.Add(dialogWindowStyle);
+                window.Styles?.Add(WindowStyleClone(dialogWindowStyle));
             }
             if (WindowStyle != null)
             {
@@ -389,7 +389,7 @@ namespace Prism.Services.Dialogs
             window.DataContext = viewModel; //we want the host window and the dialog to share the same data context
         }
 
-        protected Style WindowStyleClone(Style source)
+        protected virtual Style WindowStyleClone(Style source)
         {
             if (source == null) { return null; }
             
