@@ -24,7 +24,4 @@
     <ProjectReference Include="..\VirtualDialog.ViewModel\VirtualDialog.ViewModel.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
 </Project>

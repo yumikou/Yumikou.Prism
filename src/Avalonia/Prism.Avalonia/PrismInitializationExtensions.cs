@@ -23,6 +23,7 @@ namespace Prism
         {
             containerRegistry.RegisterInstance(moduleCatalog);
             containerRegistry.RegisterSingleton<IDialogService, DialogService>();
+            containerRegistry.RegisterSingleton<IVirtualDialogService, VirtualDialogService>();
             containerRegistry.RegisterSingleton<IModuleInitializer, ModuleInitializer>();
             containerRegistry.RegisterSingleton<IModuleManager, ModuleManager>();
             containerRegistry.RegisterSingleton<RegionAdapterMappings>();
@@ -35,6 +36,7 @@ namespace Prism
             containerRegistry.Register<IRegionNavigationJournal, RegionNavigationJournal>();
             containerRegistry.Register<IRegionNavigationService, RegionNavigationService>();
             containerRegistry.Register<IDialogWindow, DialogWindow>(); //default dialog host
+            containerRegistry.Register<IVirtualDialogWindow, VirtualDialogWindow>(); //default virtual dialog host
         }
 
         internal static void RegisterDefaultRegionBehaviors(this IRegionBehaviorFactory regionBehaviors)

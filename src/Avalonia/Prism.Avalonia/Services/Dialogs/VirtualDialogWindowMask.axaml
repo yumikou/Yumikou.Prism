@@ -10,7 +10,7 @@
     <Setter Property="Template">
       <ControlTemplate>
         <Grid>
-          <Border Name="BackgroundBorder"
+          <Border Name="PART_Background"
                   Background="{TemplateBinding Background}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"></Border>
@@ -24,7 +24,7 @@
       </ControlTemplate>
     </Setter>
 
-    <Style Selector="^:hidden /template/ Border#BackgroundBorder">
+    <Style Selector="^:hidden /template/ Border#PART_Background">
       <Style.Animations>
         <Animation Duration="00:00:00.120" FillMode="Forward">
           <KeyFrame Cue="0%">
@@ -36,7 +36,7 @@
         </Animation>
       </Style.Animations>
     </Style>
-    <Style Selector="^:show /template/ Border#BackgroundBorder">
+    <Style Selector="^:show /template/ Border#PART_Background">
       <Style.Animations>
         <Animation Duration="00:00:00.120" FillMode="Forward">
           <KeyFrame Cue="0%">

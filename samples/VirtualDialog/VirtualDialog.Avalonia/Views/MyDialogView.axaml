@@ -5,8 +5,8 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="VirtualDialog.Avalonia.MainView">
+             x:Class="VirtualDialog.Avalonia.Views.MyDialogView">
   <Grid>
-    <Button Command="{Binding UseVirtualDialogServiceCommand}">Use VirtualDialogService</Button>
+    <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
   </Grid>
 </UserControl>

@@ -5,8 +5,12 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="VirtualDialog.Avalonia.MainView">
-  <Grid>
-    <Button Command="{Binding UseVirtualDialogServiceCommand}">Use VirtualDialogService</Button>
-  </Grid>
+             x:Class="VirtualDialog.Avalonia.Views.ConfirmDialogView">
+  <StackPanel>
+    <TextBlock>Are you sure to close the dialog?</TextBlock>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+      <Button Command="{Binding OkCommand}">Ok</Button>
+      <Button Command="{Binding CancelCommand}">Cancel</Button>
+    </StackPanel>
+  </StackPanel>
 </UserControl>

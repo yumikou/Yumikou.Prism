@@ -11,12 +11,12 @@ namespace Prism.Services.Dialogs
         /// Determines if the dialog can be closed.
         /// </summary>
         /// <returns>If <c>true</c> the dialog can be closed. If <c>false</c> the dialog will not close.</returns>
-        bool CanCloseDialog();
+        bool CanCloseDialog(IDialogResult dialogResult);
 
         /// <summary>
         /// Called when the dialog is closed.
         /// </summary>
-        void OnDialogClosed();
+        void OnDialogClosed(IDialogResult dialogResult);
 
         /// <summary>
         /// Called when the dialog is opened.

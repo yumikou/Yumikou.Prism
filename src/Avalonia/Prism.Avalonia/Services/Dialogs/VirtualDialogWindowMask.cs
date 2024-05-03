@@ -11,10 +11,13 @@ using System.Threading.Tasks;
 
 namespace Prism.Services.Dialogs
 {
+    [TemplatePart(Name = "PART_Background", Type = typeof(Border), IsRequired = true)]
     [PseudoClasses(":show", ":hidden")]
     public class VirtualDialogWindowMask : ContentControl
     {
         private IDisposable _rootBoundsWatcher;
+
+        public event EventHandler<EventArgs> BackgroundTapped;
 
         public virtual void Show()
         {
@@ -26,6 +29,19 @@ namespace Prism.Services.Dialogs
         {
             PseudoClasses.Set(":show", false);
             PseudoClasses.Set(":hidden", true);
+        }
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            var bg = e.NameScope.Find("PART_Background") as Border;
+            bg.Tapped += Background_Tapped;
+        }
+
+        private void Background_Tapped(object sender, Avalonia.Input.TappedEventArgs e)
+        {
+            // 也许拦截ContentPresenter的Tapped事件会更好，但我不想频繁的触发Tapped事件
+            BackgroundTapped?.Invoke(this, EventArgs.Empty);
         }
 
         protected override Size MeasureOverride(Size availableSize)

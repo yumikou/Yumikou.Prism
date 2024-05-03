@@ -9,20 +9,8 @@ namespace VirtualDialog.Avalonia;
 
 public partial class MainView : UserControl
 {
-    private VirtualDialogWindow vdw;
     public MainView()
     {
         InitializeComponent();
-
-        this.tt.Click += Tt_Click;
-    }
-
-    VirtualDialogWindow vd;
-
-    private void Tt_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        vd ??= new VirtualDialogWindow();
-        vd.Owner = this;
-        vd.Open();
     }
 }

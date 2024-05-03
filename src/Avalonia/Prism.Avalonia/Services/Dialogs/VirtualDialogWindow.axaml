@@ -10,7 +10,7 @@
     <Setter Property="Background" Value="Red"/>
     <Setter Property="BorderBrush" Value="Green"/>
     <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="IsAutoCloseByMaskTapped" Value="False" />
+    <Setter Property="IsAutoCloseByMaskTapped" Value="True" />
     <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Template">
       <ControlTemplate>

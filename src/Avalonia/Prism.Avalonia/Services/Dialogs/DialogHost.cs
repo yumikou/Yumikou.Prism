@@ -328,9 +328,13 @@ namespace Prism.Services.Dialogs
             closingHandler = (o, e) =>
             {
                 var lastDialogState = DialogState;
+                if (dialogWindow.Result == null)
+                {
+                    dialogWindow.Result = new DialogResult();
+                }
                 SetCurrentIsShowAsync(false);
                 SetCurrentValue(DialogStateProperty, DialogState.Closing);
-                if (!dialogWindow.GetDialogViewModel().CanCloseDialog())
+                if (!dialogWindow.GetDialogViewModel().CanCloseDialog(dialogWindow.Result))
                 {
                     SetCurrentIsShowAsync(true);
                     SetCurrentValue(DialogStateProperty, lastDialogState);
@@ -346,12 +350,8 @@ namespace Prism.Services.Dialogs
                 dialogWindow.Closed -= closedHandler;
                 dialogWindow.Closing -= closingHandler;
                 dialogWindow.GetDialogViewModel().RequestClose -= requestCloseHandler;
-                dialogWindow.GetDialogViewModel().OnDialogClosed();
+                dialogWindow.GetDialogViewModel().OnDialogClosed(dialogWindow.Result);
 
-                if (dialogWindow.Result == null)
-                {
-                    dialogWindow.Result = new DialogResult();
-                }
                 SetCurrentValue(DialogStateProperty, DialogState.Closed);
                 SetCurrentValue(ResultProperty, dialogWindow.Result);
                 Closed?.Invoke(this, new DialogResultEventArgs(Result));

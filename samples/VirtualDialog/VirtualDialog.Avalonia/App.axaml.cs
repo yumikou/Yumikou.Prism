@@ -1,12 +1,13 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using VirtualDialog.Avalonia.ViewModels;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Mvvm;
 using System.Globalization;
 using System;
+using VirtualDialog.Avalonia.Views;
+using VirtualDialog.ViewModel;
 
 namespace VirtualDialog.Avalonia
 {
@@ -38,7 +39,8 @@ namespace VirtualDialog.Avalonia
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            containerRegistry.RegisterDialog<MyDialogView>();
+            containerRegistry.RegisterDialog<ConfirmDialogView>();
         }
 
         protected override void ConfigureViewModelLocator()

@@ -102,7 +102,7 @@ namespace Prism.Services.Dialogs
             if (_mask is null)
             {
                 _mask = new VirtualDialogWindowMask();
-                _mask.Tapped += _mask_Tapped;
+                _mask.BackgroundTapped += Mask_BackgroundTapped;
             }
             _mask.Content = this;
             ol.Children.Add(_mask);
@@ -111,7 +111,7 @@ namespace Prism.Services.Dialogs
             PseudoClasses.Set(":open", true);
         }
 
-        private void _mask_Tapped(object sender, Avalonia.Input.TappedEventArgs e)
+        private void Mask_BackgroundTapped(object sender, EventArgs e)
         {
             if (IsAutoCloseByMaskTapped)
             {
