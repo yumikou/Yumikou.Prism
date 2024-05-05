@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
-    <AvaloniaVersion>11.1.0-beta1</AvaloniaVersion>
-    <AvaloniaBehaviorsVersion>11.0.9</AvaloniaBehaviorsVersion>
+    <AvaloniaVersion>11.1.0-beta2</AvaloniaVersion>
+    <AvaloniaBehaviorsVersion>11.1.0-beta2.1</AvaloniaBehaviorsVersion>
     <DryIocVersion>5.4.3</DryIocVersion>
     <_Aot>false</_Aot>
   </PropertyGroup>

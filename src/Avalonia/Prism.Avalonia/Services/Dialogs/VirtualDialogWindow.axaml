@@ -7,10 +7,10 @@
     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     <Setter Property="VerticalContentAlignment" Value="Stretch"/>
     <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
-    <Setter Property="Background" Value="Red"/>
-    <Setter Property="BorderBrush" Value="Green"/>
-    <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="IsAutoCloseByMaskTapped" Value="True" />
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Margin" Value="24" />
+    <Setter Property="IsAutoCloseByMaskTapped" Value="False" />
+    <Setter Property="BoxShadow" Value="0 8 32 0 #66000000" />
     <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Template">
       <ControlTemplate>
@@ -21,9 +21,8 @@
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 Padding="{TemplateBinding Padding}"
-                Height="100"
                 Background="{TemplateBinding Background}"
-                BoxShadow="0 8 32 0 #66000000">
+                BoxShadow="{TemplateBinding BoxShadow}">
             <ContentPresenter Name="ContentPresenter"
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -48,12 +47,17 @@
     </Style>
     <Style Selector="^:open">
       <Style.Animations>
-        <Animation Duration="00:00:00.200" FillMode="Forward">
+        <Animation Duration="00:00:00.167" FillMode="Forward">
+          <Animation.Easing>
+            <CubicEaseOut></CubicEaseOut>
+          </Animation.Easing>
           <KeyFrame Cue="0%">
             <Setter Property="Opacity" Value="0.0"/>
+            <Setter Property="TranslateTransform.Y" Value="200"/>
           </KeyFrame>
           <KeyFrame Cue="100%">
             <Setter Property="Opacity" Value="1.0"/>
+            <Setter Property="TranslateTransform.Y" Value="0.0"/>
           </KeyFrame>
         </Animation>
       </Style.Animations>

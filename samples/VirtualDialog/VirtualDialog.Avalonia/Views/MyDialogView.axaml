@@ -5,7 +5,20 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             MinHeight="80"
              x:Class="VirtualDialog.Avalonia.Views.MyDialogView">
+  <prism:Dialog.VirtualWindowStyle>
+    <Style Selector="prism|VirtualDialogWindow">
+      <Setter Property="IsAutoCloseByMaskTapped" Value="True"></Setter>
+      <Setter Property="MaskStyle">
+        <Setter.Value>
+          <Style Selector="prism|VirtualDialogWindowMask">
+            <Setter Property="Background" Value="AliceBlue"></Setter>
+          </Style>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </prism:Dialog.VirtualWindowStyle>
   <Grid>
     <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
   </Grid>

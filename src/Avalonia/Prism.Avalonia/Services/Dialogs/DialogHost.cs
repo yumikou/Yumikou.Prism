@@ -13,6 +13,7 @@ using Avalonia.Styling;
 using DynamicData;
 using Avalonia.Markup.Xaml.XamlIl.Runtime;
 using Avalonia.Markup.Xaml;
+using Prism.Extensions;
 
 namespace Prism.Services.Dialogs
 {
@@ -378,42 +379,15 @@ namespace Prism.Services.Dialogs
             var dialogWindowStyle = Dialog.GetWindowStyle(dialogContent);
             if (dialogWindowStyle != null)
             {
-                window.Styles?.Add(WindowStyleClone(dialogWindowStyle));
+                window.Styles?.Add(dialogWindowStyle.SimpleClone());
             }
             if (WindowStyle != null)
             {
-                window.Styles?.Add(WindowStyleClone(WindowStyle));
+                window.Styles?.Add(WindowStyle.SimpleClone());
             }
 
             window.Content = dialogContent;
             window.DataContext = viewModel; //we want the host window and the dialog to share the same data context
-        }
-
-        protected virtual Style WindowStyleClone(Style source)
-        {
-            if (source == null) { return null; }
-            
-            Style resultStyle = new Style();
-            resultStyle.Selector = source.Selector;
-
-            foreach (var ani in source.Animations)
-            {
-                resultStyle.Animations.Add(ani);
-            }
-            foreach (var chi in source.Children)
-            {
-                resultStyle.Children.Add(chi);
-            }
-            foreach (var res in source.Resources)
-            {
-                resultStyle.Resources.Add(res);
-            }
-            foreach (var set in source.Setters)
-            {
-                resultStyle.Setters.Add(set);
-            }
-            
-            return resultStyle;
         }
     }
 }

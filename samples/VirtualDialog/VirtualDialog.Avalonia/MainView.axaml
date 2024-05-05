@@ -2,11 +2,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="mainView"
              x:Class="VirtualDialog.Avalonia.MainView">
+  <i:Interaction.Behaviors>
+    <prism:InteractionRequestTriggerBehavior SourceObject="{Binding VirtualDialogInteractionRequest}">
+      <prism:PopupVirtualDialogAction Owner="{Binding ElementName=mainView}"></prism:PopupVirtualDialogAction>
+    </prism:InteractionRequestTriggerBehavior>
+  </i:Interaction.Behaviors>
   <Grid>
-    <Button Command="{Binding UseVirtualDialogServiceCommand}">Use VirtualDialogService</Button>
+    <prism:VirtualDialogHost IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" DialogName="MyDialogView">
+      <prism:VirtualDialogHost.VirtualWindowStyle>
+        <Style Selector="prism|VirtualDialogWindow">
+          <Setter Property="MaskStyle">
+            <Setter.Value>
+              <Style Selector="prism|VirtualDialogWindowMask">
+                <Setter Property="Background" Value="Pink"></Setter>
+              </Style>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </prism:VirtualDialogHost.VirtualWindowStyle>
+      <i:Interaction.Behaviors>
+        <ia:EventTriggerBehavior EventName="Closed">
+          <ia:InvokeCommandAction Command="{Binding VirtualDialogHostClosedCommand}"></ia:InvokeCommandAction>
+        </ia:EventTriggerBehavior>
+      </i:Interaction.Behaviors>
+    </prism:VirtualDialogHost>
+    <StackPanel>
+      <Button Command="{Binding UseVirtualDialogHostCommand}">Use VirtualDialogHost</Button>
+      <Button Command="{Binding UseVirtualDialogServiceCommand}">Use VirtualDialogService</Button>
+      <Button Command="{Binding UseVirtualDialogInteractionRequestCommand}">Use VirtualDialogInteractionRequest</Button>
+
+    </StackPanel>
   </Grid>
 </UserControl>

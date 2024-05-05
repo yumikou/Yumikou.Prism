@@ -5,6 +5,8 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Rendering.Composition;
+using Avalonia.Styling;
+using Prism.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,12 @@ using System.Threading.Tasks;
 
 namespace Prism.Services.Dialogs
 {
+    [TemplatePart(Name = "PART_CloseButton", Type = typeof(Button))]
     [PseudoClasses(":open", ":close")]
     public class VirtualDialogWindow : ContentControl, IVirtualDialogWindow
     {
         private VirtualDialogWindowMask _mask;
+        private bool _isMaskStyleApplied = false;
 
         #region Dependency Property
 
@@ -34,10 +38,16 @@ namespace Prism.Services.Dialogs
             AvaloniaProperty.Register<VirtualDialogWindow, bool>("IsAutoCloseByMaskTapped", false);
 
         /// <summary>
-        /// DependencyProperty for <see cref="MaskBackground" /> property.
+        /// Defines the <see cref="BoxShadow"/> property.
         /// </summary>
-        public static readonly StyledProperty<IBrush?> MaskBackgroundProperty =
-            AvaloniaProperty.Register<VirtualDialogWindow, IBrush?>("MaskBackground", null);
+        public static readonly StyledProperty<BoxShadows> BoxShadowProperty =
+            Border.BoxShadowProperty.AddOwner<VirtualDialogWindow>();
+
+        /// <summary>
+        /// DependencyProperty for <see cref="MaskStyle" /> property.
+        /// </summary>
+        public static readonly StyledProperty<Style> MaskStyleProperty =
+            AvaloniaProperty.Register<VirtualDialogWindow, Style>("MaskStyle");
 
         #endregion
 
@@ -53,10 +63,16 @@ namespace Prism.Services.Dialogs
             set { SetValue(IsAutoCloseByMaskTappedProperty, value); }
         }
 
-        public IBrush? MaskBackground
+        public BoxShadows BoxShadow
         {
-            get { return (IBrush?)GetValue(MaskBackgroundProperty); }
-            set { SetValue(MaskBackgroundProperty, value); }
+            get { return (BoxShadows)GetValue(BoxShadowProperty); }
+            set { SetValue(BoxShadowProperty, value); }
+        }
+
+        public Style MaskStyle
+        {
+            get { return (Style)GetValue(MaskStyleProperty); }
+            set { SetValue(MaskStyleProperty, value); }
         }
 
         public virtual IDialogResult Result { get; set; }
@@ -76,7 +92,7 @@ namespace Prism.Services.Dialogs
             IDisposable isCompletedWatcher = null;
             isCompletedWatcher = IsCloseAnimationCompletedProperty.Changed.Subscribe((args) => {
                 var isCompleted = args.NewValue.Value;
-                if (!isCompleted) throw new Exception("IsCloseAnimationCompleted通过动画只能修改为True");
+                if (!isCompleted) throw new Exception("IsCloseAnimationCompleted can only be modified to True through animation");
 
                 var ol = OverlayLayer.GetOverlayLayer(_mask);
                 if (ol == null) throw new InvalidOperationException("OverlayLayer not found! The dialog may have been closed");
@@ -104,6 +120,7 @@ namespace Prism.Services.Dialogs
                 _mask = new VirtualDialogWindowMask();
                 _mask.BackgroundTapped += Mask_BackgroundTapped;
             }
+            ApplyMaskStyle();
             _mask.Content = this;
             ol.Children.Add(_mask);
 
@@ -124,6 +141,31 @@ namespace Prism.Services.Dialogs
             this.Loaded -= VirtualDialogWindow_Loaded;
 
             RaiseOpened();
+        }
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            ApplyMaskStyle();
+            Button closeBtn = e.NameScope.Find("PART_CloseButton") as Button;
+            if (closeBtn is not null)
+            {
+                closeBtn.Click += CloseBtn_Click;
+            }
+        }
+
+        private void CloseBtn_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void ApplyMaskStyle()
+        {
+            if (!_isMaskStyleApplied && _mask is not null && MaskStyle is not null)
+            {
+                _isMaskStyleApplied = true;
+                _mask.Styles?.Add(MaskStyle.SimpleClone());
+            }
         }
 
         protected virtual void RaiseOpened()

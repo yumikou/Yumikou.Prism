@@ -18,13 +18,13 @@
         <prism:DialogHost IsShowAsync="{Binding IsShow}" Parameters="{Binding DialogParameters}" Result="{Binding DialogResult}" IsModal="False" DialogName="MyDialogView">
             <behaviors:Interaction.Triggers>
                 <behaviors:EventTrigger EventName="Closed">
-                    <prism:InvokeCommandAction Command="{Binding UseDialogServiceControlClosedCommand}"></prism:InvokeCommandAction>
+                    <prism:InvokeCommandAction Command="{Binding UseDialogHostClosedCommand}"></prism:InvokeCommandAction>
                 </behaviors:EventTrigger>
             </behaviors:Interaction.Triggers>
         </prism:DialogHost>
         
         <StackPanel>
-            <Button Command="{Binding UseDialogServiceControlCommand}">Use DialogServiceControl</Button>
+            <Button Command="{Binding UseDialogHostCommand}">Use DialogHost</Button>
             <Button Command="{Binding UseDialogServiceCommand}">Use DialogService</Button>
             <Button Command="{Binding UseDialogInteractionRequestCommand}">Use DialogInteractionRequest</Button>
         </StackPanel>

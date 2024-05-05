@@ -24,12 +24,12 @@
       </prism:DialogHost.WindowStyle>
       <i:Interaction.Behaviors>
         <ia:EventTriggerBehavior EventName="Closed">
-          <ia:InvokeCommandAction Command="{Binding UseDialogServiceControlClosedCommand}"></ia:InvokeCommandAction>
+          <ia:InvokeCommandAction Command="{Binding UseDialogHostClosedCommand}"></ia:InvokeCommandAction>
         </ia:EventTriggerBehavior>
       </i:Interaction.Behaviors>
     </prism:DialogHost>
     <StackPanel>
-      <Button Command="{Binding UseDialogServiceControlCommand}">Use DialogServiceControl</Button>
+      <Button Command="{Binding UseDialogHostCommand}">Use DialogHost</Button>
       <Button Command="{Binding UseDialogServiceCommand}">Use DialogService</Button>
       <Button Command="{Binding UseDialogInteractionRequestCommand}">Use DialogInteractionRequest</Button>
 

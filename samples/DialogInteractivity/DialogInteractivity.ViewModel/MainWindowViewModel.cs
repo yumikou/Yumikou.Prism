@@ -10,17 +10,10 @@ namespace DialogInteractivity.ViewModel
 {
     public class MainWindowViewModel: BindableBase
     {
-        public DelegateCommand UseDialogServiceControlCommand { get; set; }
-        public DelegateCommand UseDialogServiceControlClosedCommand { get; set; }
-
-        public DelegateCommand UseDialogServiceCommand { get; set; }
-
-        public DelegateCommand UseDialogInteractionRequestCommand { get; set; }
-
         public MainWindowViewModel(IDialogService dialogService)
         {
-            UseDialogServiceControlCommand = new DelegateCommand(OnUseDialogServiceControl);
-            UseDialogServiceControlClosedCommand = new DelegateCommand(OnUseDialogServiceControlClosed);
+            UseDialogHostCommand = new DelegateCommand(OnUseDialogHost);
+            UseDialogHostClosedCommand = new DelegateCommand(OnUseDialogHostClosed);
 
             _dialogService = dialogService;
             UseDialogServiceCommand = new DelegateCommand(OnUseDialogService);
@@ -28,7 +21,10 @@ namespace DialogInteractivity.ViewModel
             UseDialogInteractionRequestCommand = new DelegateCommand(OnUseDialogInteractionRequest);
         }
 
-        #region DialogServiceControl
+        #region DialogHost
+
+        public DelegateCommand UseDialogHostCommand { get; set; }
+        public DelegateCommand UseDialogHostClosedCommand { get; set; }
 
         private DialogParameters _dialogParameters;
         public DialogParameters DialogParameters
@@ -54,14 +50,14 @@ namespace DialogInteractivity.ViewModel
             }
         }
 
-        private void OnUseDialogServiceControl()
+        private void OnUseDialogHost()
         {
             DialogParameters = new DialogParameters();
-            DialogParameters.Add("Title", "UseDialogServiceControl");
+            DialogParameters.Add("Title", "UseDialogHost");
             IsShow = !IsShow;
         }
 
-        private void OnUseDialogServiceControlClosed()
+        private void OnUseDialogHostClosed()
         {
             var r = DialogResult;
         }
@@ -69,6 +65,8 @@ namespace DialogInteractivity.ViewModel
         #endregion
 
         #region DialogService
+
+        public DelegateCommand UseDialogServiceCommand { get; set; }
 
         private IDialogService _dialogService;
 
@@ -85,6 +83,8 @@ namespace DialogInteractivity.ViewModel
         #endregion
 
         #region UseDialogInteractionRequest
+
+        public DelegateCommand UseDialogInteractionRequestCommand { get; set; }
 
         public DialogInteractionRequest DialogInteractionRequest { get; set; } = new DialogInteractionRequest();
 

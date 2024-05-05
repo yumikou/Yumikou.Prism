@@ -4,8 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
+             MinHeight="120"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="VirtualDialog.Avalonia.Views.ConfirmDialogView">
+  <prism:Dialog.VirtualWindowStyle>
+    <Style Selector="prism|VirtualDialogWindow">
+      <Setter Property="Margin" Value="128"></Setter>
+    </Style>
+  </prism:Dialog.VirtualWindowStyle>
   <StackPanel>
     <TextBlock>Are you sure to close the dialog?</TextBlock>
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
