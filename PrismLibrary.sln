@@ -67,7 +67,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDialog.Avalonia.Desk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDialog.Avalonia.Android", "samples\VirtualDialog\VirtualDialog.Avalonia.Android\VirtualDialog.Avalonia.Android.csproj", "{D1D52571-37E4-4B68-9E78-B76BC390FA78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualDialog.ViewModel", "samples\VirtualDialog\VirtualDialog.ViewModel\VirtualDialog.ViewModel.csproj", "{0DC536FB-0750-466B-9170-8B5F3A2E62B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualDialog.ViewModel", "samples\VirtualDialog\VirtualDialog.ViewModel\VirtualDialog.ViewModel.csproj", "{0DC536FB-0750-466B-9170-8B5F3A2E62B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NestedRegion.ViewModel", "samples\NestedRegion\NestedRegion.ViewModel\NestedRegion.ViewModel.csproj", "{A057BDD3-9758-4689-9456-022F06EA56A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +152,10 @@ Global
 		{0DC536FB-0750-466B-9170-8B5F3A2E62B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DC536FB-0750-466B-9170-8B5F3A2E62B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DC536FB-0750-466B-9170-8B5F3A2E62B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A057BDD3-9758-4689-9456-022F06EA56A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A057BDD3-9758-4689-9456-022F06EA56A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A057BDD3-9758-4689-9456-022F06EA56A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A057BDD3-9758-4689-9456-022F06EA56A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +188,7 @@ Global
 		{4CBE17A4-4155-4F15-A55E-66EAC33FB1BA} = {65AE3F90-2159-4EF8-8930-D77F7840CB9A}
 		{D1D52571-37E4-4B68-9E78-B76BC390FA78} = {65AE3F90-2159-4EF8-8930-D77F7840CB9A}
 		{0DC536FB-0750-466B-9170-8B5F3A2E62B3} = {65AE3F90-2159-4EF8-8930-D77F7840CB9A}
+		{A057BDD3-9758-4689-9456-022F06EA56A0} = {7E8ADE1D-70A5-49EC-A3F2-0109AB8D667E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EB85636-B6BB-4F3E-8F9E-A132C8700B3F}

@@ -11,6 +11,7 @@ using Avalonia.Styling;
 using Avalonia;
 using System.Threading;
 using Prism.Extensions;
+using Avalonia.Controls.Primitives;
 
 namespace Prism.Services.Dialogs
 {
@@ -238,6 +239,9 @@ namespace Prism.Services.Dialogs
         /// <param name="parameters">The parameters to pass to the dialog.</param>
         protected virtual void ConfigureDialogWindowContent(string dialogName, IVirtualDialogWindow window, IDialogParameters parameters)
         {
+            // TODO: 和常规窗体不同，虚拟对话框可以是界面上的任意浮层，不一定要视为标准对话框，可以尝试新增DialogContent和DialogContentTemplate属性，如果设置了值就在这里构建一个ContentControl作为DialogContent，并覆盖掉DialogName。
+            // 同时新增一个DialogDataContext属性，一旦绑定或设置值就覆盖掉DialogName对应的DataContext，也能作为刚刚构建的ContentControl的DataContext，注意这个DataContext并不会每次打开对话框就构建一个新的，而是一直存在的。它不一定要实现IDialogAware，也不是必须设置的，而是作为一个类似ComboBox的数据源，可以便利的为ContentControl提供数据源，不必刻意处理对话框的相关逻辑
+            // 也许上面说的并不合理，特殊的浮层直接用Popup相关的控件会更好
             if (parameters == null)
             {
                 parameters = new DialogParameters();

@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
+using Android.AdServices.Common;
 
 namespace VirtualDialog.Avalonia.Android
 {
