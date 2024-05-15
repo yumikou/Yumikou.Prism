@@ -47,11 +47,6 @@ namespace Prism.Regions
                     regionTarget.IsTransitionReversed = true;
                     regionTarget.Content = aView;
                 }
-                else if (e.NavigationType == NavigationType.Init) //初始化加载不用执行动画
-                {
-                    regionTarget.IsTransitionReversed = false;
-                    regionTarget.Content = aView;
-                }
                 else //goForward或Navigate或非导航加载(NavigationType为null)
                 {
                     regionTarget.IsTransitionReversed = false;

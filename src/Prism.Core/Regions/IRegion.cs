@@ -7,7 +7,7 @@ namespace Prism.Regions
     /// <summary>
     /// Defines a model that can be used to compose views.
     /// </summary>
-    public interface IRegion : INavigateAsync, INotifyPropertyChanged
+    public interface IRegion : IRequestCreate, INavigateAsync, INotifyPropertyChanged
     {
         /// <summary>
         /// set是internal的，谨慎使用
@@ -116,6 +116,11 @@ namespace Prism.Regions
         /// Gets the collection of <see cref="IRegionBehavior"/>s that can extend the behavior of regions. 
         /// </summary>
         IRegionBehaviorCollection Behaviors { get; }
+
+        /// <summary>
+        /// Gets or sets the request add view to region service.
+        /// </summary>
+        IRegionRequestCreateService RequestCreateService { get; set; }
 
         /// <summary>
         /// Gets or sets the navigation service.

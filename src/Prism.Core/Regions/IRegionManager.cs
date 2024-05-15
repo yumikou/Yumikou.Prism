@@ -126,5 +126,13 @@ namespace Prism.Regions
         /// <param name="target">A string that represents the target where the region will navigate.</param>
         /// <param name="navigationParameters">An instance of NavigationParameters, which holds a collection of object parameters.</param>
         void RequestNavigate(string regionName, string target, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate);
+
+        RequestCreateResult RequestCreate(string regionName, Uri target, bool cancelIfExists = false);
+
+        RequestCreateResult RequestCreate(string regionName, Uri target, NavigationParameters parameters, bool cancelIfExists = false);
+
+        RequestCreateResult RequestCreate(string regionName, string target, bool cancelIfExists = false);
+
+        RequestCreateResult RequestCreate(string regionName, string target, NavigationParameters parameters, bool cancelIfExists = false);
     }
 }

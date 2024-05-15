@@ -24,6 +24,16 @@
     <RepositoryUrl>https://github.com/yumikou/Yumikou.Prism</RepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);_Wpf_</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Regions\Region.cs" />
+    <Compile Remove="Regions\RegionNavigationContentLoader.cs" />
+    <Compile Remove="Regions\RegionNavigationService.cs" />
+  </ItemGroup>
+  
   <ItemGroup>
     <None Remove="Services\Dialogs\DialogWindow.xaml" />
   </ItemGroup>

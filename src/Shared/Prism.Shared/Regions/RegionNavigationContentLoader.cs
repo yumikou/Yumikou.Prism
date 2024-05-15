@@ -7,14 +7,11 @@ using Prism.Ioc;
 using Prism.Ioc.Internals;
 using Prism.Properties;
 
-#if HAS_UWP
-using Windows.UI.Xaml;
-#elif HAS_WINUI
-using Microsoft.UI.Xaml;
-#else
+#if _Avalonia_
+using Avalonia.Controls;
+#elif _Wpf_
 using System.Windows;
 #endif
-
 
 namespace Prism.Regions
 {
@@ -56,8 +53,8 @@ namespace Prism.Regions
             if (navigationContext == null)
                 throw new ArgumentNullException(nameof(navigationContext));
 
-            if (navigationContext.NavigationType == NavigationType.GoBack
-                && navigationContext.AssociatedView is not null && navigationContext.AssociatedView.IsAlive
+            if (navigationContext.NavigationType == NavigationType.GoBack 
+                && navigationContext.AssociatedView is not null && navigationContext.AssociatedView.IsAlive 
                 && RegionHelper.GetLifetimeType(navigationContext.AssociatedView.Target) == RegionMemberLifetimeType.Stack)
             {
                 if (region.Views.Contains(navigationContext.AssociatedView.Target))
@@ -78,67 +75,42 @@ namespace Prism.Regions
                                 return false;
                             }
 
+#if _Avalonia_
+                            if (!(v is Control control))
+#elif _Wpf_
                             if (!(v is FrameworkElement frameworkElement))
+#endif
                             {
                                 return true;
                             }
 
+#if _Avalonia_
+                            navigationAware = control.DataContext as INavigationAware;
+#elif _Wpf_
                             navigationAware = frameworkElement.DataContext as INavigationAware;
+#endif
                             return navigationAware == null || navigationAware.IsNavigationTarget(navigationContext);
                         });
-
 
                 var view = acceptingCandidates.FirstOrDefault();
 
                 if (view != null)
                 {
+                    navigationContext.AssociatedView = new WeakReference(view);
                     return view;
                 }
 
-                view = CreateNewRegionItem(candidateTargetContract);
-
-                AddViewToRegion(region, view);
-
-                return view;
-            }
-        }
-
-        /// <summary>
-        /// Adds the view to the region.
-        /// </summary>
-        /// <param name="region">The region to add the view to</param>
-        /// <param name="view">The view to add to the region</param>
-        protected virtual void AddViewToRegion(IRegion region, object view)
-        {
-            region.CanActivate = false; // 导航期间的视图激活行为在RegionNavigationService里手动处理，因此这里禁用了Region在添加视图时的自动激活行为
-            region.CanDeactivate = false;
-            region.Add(view);
-            region.CanDeactivate = true;
-            region.CanActivate = true;
-        }
-
-        /// <summary>
-        /// Provides a new item for the region based on the supplied candidate target contract name.
-        /// </summary>
-        /// <param name="candidateTargetContract">The target contract to build.</param>
-        /// <returns>An instance of an item to put into the <see cref="IRegion"/>.</returns>
-        protected virtual object CreateNewRegionItem(string candidateTargetContract)
-        {
-            try
-            {
-                var newRegionItem = _container.Resolve<object>(candidateTargetContract);
-                MvvmHelpers.AutowireViewModel(newRegionItem);
-                return newRegionItem;
-            }
-            catch (ContainerResolutionException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException(
-                    string.Format(CultureInfo.CurrentCulture, Resources.CannotCreateNavigationTarget, candidateTargetContract),
-                    e);
+                // Add a new view to region
+                var createResult = region.RequestCreateService.RequestCreate(navigationContext.Uri, navigationContext.SourceParameters, false);
+                if (createResult.Result && createResult.Context.AssociatedView.IsAlive)
+                {
+                    navigationContext.AssociatedView = createResult.Context.AssociatedView;
+                    return createResult.Context.AssociatedView.Target;
+                }
+                else
+                {
+                    throw createResult.Error ?? new Exception("An unknown error occurred while creating a view for the region!");
+                }
             }
         }
 
@@ -150,41 +122,7 @@ namespace Prism.Regions
         /// <returns>An enumerable of candidate objects from the <see cref="IRegion"/></returns>
         protected virtual IEnumerable<object> GetCandidatesFromRegion(IRegion region, string candidateNavigationContract)
         {
-            if (region is null)
-            {
-                throw new ArgumentNullException(nameof(region));
-            }
-
-            if (string.IsNullOrEmpty(candidateNavigationContract))
-            {
-                throw new ArgumentNullException(nameof(candidateNavigationContract));
-            }
-
-            var contractCandidates = GetCandidatesFromRegionViews(region, candidateNavigationContract);
-
-            if (!contractCandidates.Any())
-            {
-                var matchingType = _container.GetRegistrationType(candidateNavigationContract);
-                if (matchingType is null)
-                {
-                    return ArrayEx.Empty<object>();
-                }
-
-                return GetCandidatesFromRegionViews(region, matchingType.FullName);
-            }
-
-            return contractCandidates;
-        }
-
-        private IEnumerable<object> GetCandidatesFromRegionViews(IRegion region, string candidateNavigationContract)
-        {
-            return region.Views.Where(v => ViewIsMatch(v.GetType(), candidateNavigationContract));
-        }
-
-        private static bool ViewIsMatch(Type viewType, string navigationSegment)
-        {
-            var names = new[] { viewType.Name, viewType.FullName };
-            return names.Any(x => x.Equals(navigationSegment, StringComparison.Ordinal));
+            return RegionHelper.GetNavigationCandidates(region, candidateNavigationContract);
         }
     }
 }

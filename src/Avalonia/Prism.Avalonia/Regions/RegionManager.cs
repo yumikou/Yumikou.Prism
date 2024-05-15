@@ -461,6 +461,40 @@ namespace Prism.Regions
             RequestNavigate(regionName, new Uri(target, UriKind.RelativeOrAbsolute), nr => { }, navigationParameters, navigationType);
         }
 
+        public RequestCreateResult RequestCreate(string regionName, Uri target, bool cancelIfExists = false)
+        {
+            if (Regions.ContainsRegionWithName(regionName))
+            {
+                return Regions[regionName].RequestCreate(target, cancelIfExists);
+            }
+            else
+            {
+                return new RequestCreateResult(new RequestCreateContext(null, target), false);
+            }
+        }
+
+        public RequestCreateResult RequestCreate(string regionName, Uri target, NavigationParameters parameters, bool cancelIfExists = false)
+        {
+            if (Regions.ContainsRegionWithName(regionName))
+            {
+                return Regions[regionName].RequestCreate(target, parameters, cancelIfExists);
+            }
+            else
+            {
+                return new RequestCreateResult(new RequestCreateContext(null, target, parameters), false);
+            }
+        }
+
+        public RequestCreateResult RequestCreate(string regionName, string target, bool cancelIfExists = false)
+        {
+            return RequestCreate(regionName, new Uri(target, UriKind.RelativeOrAbsolute), cancelIfExists);
+        }
+
+        public RequestCreateResult RequestCreate(string regionName, string target, NavigationParameters parameters, bool cancelIfExists = false)
+        {
+            return RequestCreate(regionName, new Uri(target, UriKind.RelativeOrAbsolute), parameters, cancelIfExists);
+        }
+
         /// <summary>
         /// Provides a new item for the region based on the supplied candidate target contract name.
         /// </summary>

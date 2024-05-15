@@ -4,10 +4,17 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using Avalonia;
 using Prism.Common;
 using Prism.Ioc;
 using Prism.Properties;
+
+#if _Avalonia_
+using Avalonia;
+#elif _Wpf_
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+#endif
 
 namespace Prism.Regions
 {
@@ -22,6 +29,7 @@ namespace Prism.Regions
         private ViewsCollection _activeViews;
         private object _context;
         private IRegionManager _regionManager;
+        private IRegionRequestCreateService _regionRequestCreateService;
         private IRegionNavigationService _regionNavigationService;
 
         private Comparison<object> _sort;
@@ -185,6 +193,25 @@ namespace Prism.Regions
         }
 
         /// <summary>
+        /// Gets or sets the request add view to region service.
+        /// </summary>
+        public IRegionRequestCreateService RequestCreateService
+        {
+            get
+            {
+                if (_regionRequestCreateService == null)
+                {
+                    _regionRequestCreateService = ContainerLocator.Container.Resolve<IRegionRequestCreateService>();
+                    _regionRequestCreateService.Region = this;
+                }
+
+                return _regionRequestCreateService;
+            }
+
+            set => _regionRequestCreateService = value;
+        }
+
+        /// <summary>
         /// Gets the navigation service.
         /// </summary>
         /// <value>The navigation service.</value>
@@ -226,7 +253,11 @@ namespace Prism.Regions
         /// Adds a new view to the region.
         /// </summary>
         /// <param name="view">The view to add.</param>
+#if _Avalonia_
         /// <returns>The <see cref="IRegionManager"/> that is set on the view if it is a <see cref="AvaloniaObject"/>. It will be the current region manager when using this overload.</returns>
+#elif _Wpf_
+        /// <returns>The <see cref="IRegionManager"/> that is set on the view if it is a <see cref="DependencyObject"/>. It will be the current region manager when using this overload.</returns>
+#endif
         public IRegionManager Add(object view)
         {
             return this.Add(view, null, false);
@@ -237,7 +268,11 @@ namespace Prism.Regions
         /// </summary>
         /// <param name="view">The view to add.</param>
         /// <param name="viewName">The name of the view. This can be used to retrieve it later by calling <see cref="IRegion.GetView"/>.</param>
+#if _Avalonia_
         /// <returns>The <see cref="IRegionManager"/> that is set on the view if it is a <see cref="AvaloniaObject"/>. It will be the current region manager when using this overload.</returns>
+#elif _Wpf_
+        /// <returns>The <see cref="IRegionManager"/> that is set on the view if it is a <see cref="DependencyObject"/>. It will be the current region manager when using this overload.</returns>
+#endif
         public IRegionManager Add(object view, string viewName)
         {
             if (string.IsNullOrEmpty(viewName))
@@ -254,7 +289,11 @@ namespace Prism.Regions
         /// <param name="view">The view to add.</param>
         /// <param name="viewName">The name of the view. This can be used to retrieve it later by calling <see cref="IRegion.GetView"/>.</param>
         /// <param name="createRegionManagerScope">When <see langword="true"/>, the added view will receive a new instance of <see cref="IRegionManager"/>, otherwise it will use the current region manager for this region.</param>
+#if _Avalonia_
         /// <returns>The <see cref="IRegionManager"/> that is set on the view if it is a <see cref="AvaloniaObject"/>.</returns>
+#elif _Wpf_
+        /// <returns>The <see cref="IRegionManager"/> that is set on the view if it is a <see cref="DependencyObject"/>.</returns>
+#endif
         public virtual IRegionManager Add(object view, string viewName, bool createRegionManagerScope)
         {
             IRegionManager manager = createRegionManagerScope ? this.RegionManager.CreateRegionManager() : this.RegionManager;
@@ -272,10 +311,17 @@ namespace Prism.Regions
 
             ItemMetadataCollection.Remove(itemMetadata);
 
+#if _Avalonia_
             if (view is AvaloniaObject avaloniaObject && Regions.RegionManager.GetRegionManager(avaloniaObject) == this.RegionManager)
             {
                 avaloniaObject.ClearValue(Regions.RegionManager.RegionManagerProperty);
             }
+#elif _Wpf_
+            if (view is DependencyObject dependencyObject && Regions.RegionManager.GetRegionManager(dependencyObject) == this.RegionManager)
+            {
+                dependencyObject.ClearValue(Regions.RegionManager.RegionManagerProperty);
+            }
+#endif
         }
 
         /// <summary>
@@ -373,6 +419,16 @@ namespace Prism.Regions
             this.NavigationService.RequestNavigate(target, navigationCallback, navigationParameters, associatedView, navigationType);
         }
 
+        public RequestCreateResult RequestCreate(Uri target, bool cancelIfExists)
+        {
+            return this.RequestCreate(target, null, cancelIfExists);
+        }
+
+        public RequestCreateResult RequestCreate(Uri target, NavigationParameters parameters, bool cancelIfExists)
+        { 
+            return this.RequestCreateService.RequestCreate(target, parameters, cancelIfExists);
+        }
+
         private void InnerAdd(object view, string viewName, IRegionManager scopedRegionManager)
         {
             if (this.ItemMetadataCollection.FirstOrDefault(x => x.Item == view) != null)
@@ -391,10 +447,17 @@ namespace Prism.Regions
                 itemMetadata.Name = viewName;
             }
 
+#if _Avalonia_
             if (view is AvaloniaObject avaloniaObject)
             {
                 Regions.RegionManager.SetRegionManager(avaloniaObject, scopedRegionManager);
             }
+#elif _Wpf_
+            if (view is DependencyObject dependencyObject)
+            {
+                Regions.RegionManager.SetRegionManager(dependencyObject, scopedRegionManager);
+            }
+#endif
 
             this.ItemMetadataCollection.Add(itemMetadata);
         }

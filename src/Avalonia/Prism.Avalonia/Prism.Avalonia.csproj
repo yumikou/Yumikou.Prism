@@ -23,6 +23,10 @@
     <RepositoryUrl>https://github.com/yumikou/Yumikou.Prism</RepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);_Avalonia_</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net4')) ">
     <Reference Include="System.Configuration" />
   </ItemGroup>

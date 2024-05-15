@@ -4,6 +4,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NestedRegion.Avalonia.MainWindow"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:vm="using:NestedRegion.ViewModel"
         Title="NestedRegion.Avalonia">
- 
+    <i:Interaction.Behaviors>
+      <ia:EventTriggerBehavior EventName="Loaded">
+        <ia:InvokeCommandAction Command="{Binding ViewLoadedCommand}"></ia:InvokeCommandAction>
+      </ia:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+    <TabControl prism:RegionManager.RegionName="{x:Static vm:RegionNames.MainRegion}"></TabControl>
 </Window>

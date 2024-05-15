@@ -10,8 +10,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Common\RegionHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Regions\Region.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Regions\RegionNavigationContentLoader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Regions\RegionNavigationJournal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Regions\RegionNavigationJournalEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Regions\RegionNavigationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Regions\RegionRequestCreateService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Regions\ViewsCollection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Regions\Behaviors\" />
   </ItemGroup>
 </Project>

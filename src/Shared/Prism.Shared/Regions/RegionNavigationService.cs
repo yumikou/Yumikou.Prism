@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Linq;
 using Prism.Common;
-using Prism.Properties;
 using Prism.Ioc;
+using Prism.Properties;
 
-#if HAS_UWP
-using Windows.UI.Xaml;
-#elif HAS_WINUI
-using Microsoft.UI.Xaml;
-#else
+#if _Avalonia_
+using Avalonia.Controls;
+#elif _Wpf_
 using System.Windows;
 #endif
 
@@ -89,7 +88,18 @@ namespace Prism.Regions
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Exception is marshalled to callback")]
         public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationType navigationType = NavigationType.Navigate)
         {
-            RequestNavigate(target, navigationCallback, null, null, navigationType);
+            RequestNavigate(target, navigationCallback, null, navigationType);
+        }
+
+        /// <summary>
+        /// Initiates navigation to the specified target.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="navigationCallback">A callback to execute when the navigation request is completed.</param>
+        /// <param name="navigationParameters">The navigation parameters specific to the navigation request.</param>
+        public void RequestNavigate(Uri target, Action<NavigationResult> navigationCallback, NavigationParameters navigationParameters, NavigationType navigationType = NavigationType.Navigate)
+        {
+            RequestNavigate(target, navigationCallback, navigationParameters, null, navigationType);
         }
 
         /// <summary>
@@ -132,10 +142,10 @@ namespace Prism.Regions
         }
 
         private void RequestCanNavigateFromOnCurrentlyActiveView(
-            NavigationContext navigationContext,
-            Action<NavigationResult> navigationCallback,
-            object[] activeViews,
-            int currentViewIndex)
+                    NavigationContext navigationContext,
+                    Action<NavigationResult> navigationCallback,
+                    object[] activeViews,
+                    int currentViewIndex)
         {
             if (currentViewIndex < activeViews.Length)
             {
@@ -182,9 +192,13 @@ namespace Prism.Regions
             object[] activeViews,
             int currentViewIndex)
         {
-            if (activeViews[currentViewIndex] is FrameworkElement frameworkElement)
+#if _Avalonia_
+            if (activeViews[currentViewIndex] is Control control)
+#elif _Wpf_
+            if (activeViews[currentViewIndex] is FrameworkElement control)
+#endif
             {
-                if (frameworkElement.DataContext is IConfirmNavigationRequest vetoingViewModel)
+                if (control.DataContext is IConfirmNavigationRequest vetoingViewModel)
                 {
                     // the data model for the current active view implements IConfirmNavigationRequest, request confirmation
                     // providing a callback to resume the navigation request
@@ -224,9 +238,11 @@ namespace Prism.Regions
             {
                 NotifyActiveViewsNavigatingFrom(navigationContext, activeViews);
 
+                Region.CanActivate = false; // 导航期间的视图激活行为在RegionNavigationService里手动处理，因此这里禁用了LoadContent内部在添加视图时的自动激活行为
+                Region.CanDeactivate = false;
                 object view = _regionNavigationContentLoader.LoadContent(Region, navigationContext);
-
-                navigationContext.AssociatedView = new WeakReference(view);
+                Region.CanDeactivate = true;
+                Region.CanActivate = true;
 
                 // Raise the navigating event just before activating the view.
                 RaiseNavigating(navigationContext);

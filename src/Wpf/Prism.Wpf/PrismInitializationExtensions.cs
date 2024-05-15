@@ -44,6 +44,7 @@ namespace Prism
             containerRegistry.Register<IRegionNavigationJournalEntry, RegionNavigationJournalEntry>();
             containerRegistry.Register<IRegionNavigationJournal, RegionNavigationJournal>();
             containerRegistry.Register<IRegionNavigationService, RegionNavigationService>();
+            containerRegistry.Register<IRegionRequestCreateService, RegionRequestCreateService>();
             containerRegistry.Register<IDialogWindow, DialogWindow>(); //default dialog host
         }
 

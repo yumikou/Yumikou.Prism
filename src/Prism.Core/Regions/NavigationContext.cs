@@ -30,10 +30,11 @@ namespace Prism.Regions
         {
             NavigationService = navigationService;
             Uri = uri;
+            SourceParameters = (navigationParameters ?? new NavigationParameters());
             Parameters = uri != null ? UriParsingHelper.ParseQuery(uri) : null;
+            GetNavigationParameters(navigationParameters);
             AssociatedView = associatedView;
             NavigationType = navigationType;
-            GetNavigationParameters(navigationParameters);
         }
 
         /// <summary>
@@ -47,6 +48,11 @@ namespace Prism.Regions
         /// </summary>
         /// <value>The navigation URI.</value>
         public Uri Uri { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="NavigationParameters"/> unmodified parameters.
+        /// </summary>
+        public NavigationParameters SourceParameters { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="NavigationParameters"/> extracted from the URI and the object parameters passed in navigation.
