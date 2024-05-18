@@ -6,6 +6,6 @@ namespace Prism.Regions
 {
     public interface IRequestCreateAware
     {
-        void OnCreated(RequestCreateContext requestCreateContext);
+        void OnCreate(RequestCreateContext requestCreateContext);
     }
 }

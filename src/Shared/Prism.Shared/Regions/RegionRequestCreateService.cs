@@ -64,7 +64,7 @@ namespace Prism.Regions
         private void NotifyNewRegionItemCreated(object view, RequestCreateContext context)
         {
             Action<IRequestCreateAware> action =
-                (n) => n.OnCreated(context);
+                (n) => n.OnCreate(context);
             MvvmHelpers.ViewAndViewModelAction(view, action);
         }
 

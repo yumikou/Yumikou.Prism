@@ -1,0 +1,28 @@
+﻿<Window x:Class="NestedRegion.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:local="clr-namespace:NestedRegion.Wpf"
+        xmlns:vm="clr-namespace:NestedRegion.ViewModel;assembly=NestedRegion.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="Header" Value="{Binding Path=Content.DataContext.Title, RelativeSource={RelativeSource Mode=Self}}">
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <prism:InvokeCommandAction Command="{Binding ViewLoadedCommand}"></prism:InvokeCommandAction>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+    <Grid>
+        <TabControl prism:RegionManager.RegionName="{x:Static vm:RegionNames.MainRegion}">
+        </TabControl>
+    </Grid>
+</Window>

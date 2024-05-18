@@ -15,5 +15,13 @@
         <ia:InvokeCommandAction Command="{Binding ViewLoadedCommand}"></ia:InvokeCommandAction>
       </ia:EventTriggerBehavior>
     </i:Interaction.Behaviors>
-    <TabControl prism:RegionManager.RegionName="{x:Static vm:RegionNames.MainRegion}"></TabControl>
+
+  <Grid RowDefinitions="Auto,*">
+    <TabStrip ItemsSource="{Binding TabHeaders}" SelectedItem="{Binding TabSelectedItem, Mode=TwoWay}">
+      
+    </TabStrip>
+    <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static vm:RegionNames.MainRegion}">
+    </ContentControl>
+  </Grid>
+  
 </Window>

@@ -43,6 +43,8 @@ namespace NestedRegion.Avalonia
             containerRegistry.RegisterForNavigation<BN3View>();
             containerRegistry.RegisterForNavigation<BN1N1View>();
             containerRegistry.RegisterForNavigation<BN1N2View>();
+
+            containerRegistry.RegisterDialog<DialogView>();
         }
 
         protected override void ConfigureViewModelLocator()

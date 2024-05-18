@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NestedRegion.ViewModel
 {
-    internal class BN1N1ViewModel
+    public class BN1N1ViewModel : ViewModelHeaderBase
     {
     }
 }

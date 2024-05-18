@@ -6,7 +6,7 @@ namespace Prism.Regions
     /// <summary>
     /// Provides a way for objects involved in navigation to be notified of navigation activities.
     /// </summary>
-    public interface INavigationAware : IRequestCreateAware
+    public interface INavigationAware
     {
         /// <summary>
         /// Called when the implementer has been navigated to.

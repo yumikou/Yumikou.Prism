@@ -8,7 +8,8 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:vm="using:NestedRegion.ViewModel"
-             x:Class="NestedRegion.Avalonia.Views.BView">
+             Width="500" Height="500"
+             x:Class="NestedRegion.Avalonia.Views.DialogView">
   <UserControl.Styles>
     <Style Selector="TabItem">
       <Setter Property="Header" Value="{Binding $self.Content.DataContext.Title}">
@@ -20,5 +21,6 @@
       <ia:InvokeCommandAction Command="{Binding ViewLoadedCommand}"></ia:InvokeCommandAction>
     </ia:EventTriggerBehavior>
   </i:Interaction.Behaviors>
-  <TabControl prism:RegionManager.RegionName="{x:Static vm:RegionNames.NestedBRegion}"></TabControl>
+  <TabControl prism:RegionManager.RegionManager="{Binding RegionManager}"
+              prism:RegionManager.RegionName="{x:Static vm:RegionNames.DialogMainRegion}"></TabControl>
 </UserControl>
